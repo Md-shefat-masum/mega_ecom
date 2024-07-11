@@ -63,6 +63,7 @@ class Model extends EloquentModel
     {
         return $this->hasOne(self::$productImageModel, 'product_id', 'id');
     }
+
     public function product_images()
     {
         return $this->hasMany(self::$productImageModel, 'product_id', 'id');

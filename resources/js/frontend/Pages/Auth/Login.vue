@@ -26,7 +26,7 @@
 
                                 </div>
                                 <button class="btn btn-normal">Login</button>
-                                <a class="float-end txt-default mt-2" href="forget-pwd.html">
+                                <a class="float-end txt-default mt-2" href="#">
                                     Forgot your password?
                                 </a>
                             </form>

@@ -12,8 +12,11 @@ class GetProductDetails
 
 
             if (request()->has('initial') && request()->input('initial')) {
-                self::getProductInitialData(request(), $slug);
+                return self::getProductInitialData(request(), $slug);
             }
+
+
+
 
 
             $with = [
@@ -144,15 +147,18 @@ class GetProductDetails
     {
         try {
 
+
             $with = [
-                'product_images:id,product_id,url',
-                'product_image:id,product_id,url',
+                // 'product_images' => function ($query) {
+                //     $query->select('id', 'product_id', 'url')->skip(1);
+                // },
                 'product_image:id,product_id,url',
                 'product_categories:id,title',
                 'product_brand:id,title',
                 'product_region',
                 'product_region.country',
             ];
+
 
             $fields = request()->input('fields') ?? ['*'];
             if (empty($fields)) {
@@ -164,6 +170,8 @@ class GetProductDetails
                 ->select($fields)
                 ->where('slug', $slug)
                 ->first();
+
+            $data->product_images = $data->product_images()->select('id', 'product_id', 'url')->skip(1)->take(10)->get();
 
             if (!$data) {
                 return messageResponse('Data not found...', $data, 404, 'error');

@@ -9,6 +9,7 @@ class SalesEcommerceOrderProductModel extends EloquentModel
 {
 
     static $stockLogModel = \App\Modules\StockManagement\ProductStock\Models\StockLogModel::class;
+    static $productModel = \App\Modules\ProductManagement\Product\Models\Model::class;
 
     protected $table = "sales_ecommerce_order_products";
     protected $guarded = [];
@@ -48,5 +49,10 @@ class SalesEcommerceOrderProductModel extends EloquentModel
         } else {
             return $avalable;
         }
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(self::$productModel, 'product_id', 'id');
     }
 }

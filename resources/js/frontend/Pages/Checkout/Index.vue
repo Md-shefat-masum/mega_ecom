@@ -296,7 +296,7 @@ export default {
 
         checkoutFormSubmit: async function ($event) {
             let formData = new FormData($event.target);
-            let response = await window.privateAxios('/customer-ecommerce-order', 'post', formData);
+            let response = await window.privateAxios('/customer-ecommerce-order-placed', 'post', formData);
 
             if (response.status === "success") {
                 window.s_alert(response.message);

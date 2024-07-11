@@ -821,7 +821,7 @@
                     </a>
                 </div>
             </div>
-            <div class="p-2 alert-danger mx-2 my-4">Please login for perform this action</div>
+            <div class="p-2 alert-danger mx-2 my-4">Please login to perform this action</div>
             <form class="theme-form" @submit.prevent="loginFormHandler($event)" method="post">
                 <div class="form-group">
                     <label>Email</label>
@@ -835,7 +835,7 @@
 
                 </div>
                 <button class="btn btn-normal">Login</button>
-                <a class="float-end txt-default mt-3" href="forget-pwd.html">
+                <a class="float-end txt-default mt-3" href="#">
                     Forgot your password?
                 </a>
                 <div class="accout-fwd">

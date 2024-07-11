@@ -29,7 +29,7 @@
                         <div class="search_item" v-for="product in search_data.product.data" :key="product.id">
                             <a href="#">
                                 <div class="left">
-                                    <img :src="`${product.product_image?.url}`" alt="">
+                                    <img :src="`/${product.product_image?.url}`" alt="">
                                 </div>
                                 <div class="right">
                                     <h3 class="product_title">
@@ -57,7 +57,7 @@
                         <div class="search_item" v-for="category in search_data.category.data" :key="category.id">
                             <a href="#">
                                 <div class="left">
-                                    <img :src="`${category.image}`" alt="">
+                                    <img :src="`/${category.image}`" alt="">
                                 </div>
                                 <div class="right">
                                     <h3 class="product_title">
@@ -76,7 +76,16 @@
                         <div class="search_item" v-for="brand in search_data.brand?.data" :key="brand.id">
                             <a href="#">
                                 <div class="left">
-                                    <img :src="`${brand.image}`" alt="">
+                                    <template v-if="brand.image">
+                                        <img :src="`${brand.image}`" :alt="brand.title">
+                                    </template>
+
+                                    <template v-else>
+                                        <div class="no-image d-flex align-items-center justify-content-center">
+                                            {{ brand.title }}
+                                        </div>
+                                    </template>
+
                                 </div>
                                 <div class="right">
                                     <h3 class="product_title">
@@ -95,7 +104,7 @@
                         <div class="search_item" v-for="tag in search_data.tag" :key="tag.id">
                             <a href="#">
                                 <div class="left">
-                                    <img :src="`${tag.image}`" alt="">
+                                    <img :src="`/${tag.image}`" alt="">
                                 </div>
                                 <div class="right">
                                     <h3 class="product_title">
