@@ -96,7 +96,12 @@ export default {
             get_top_products: "get_top_products",
             set_slug: "set_slug",
         }),
+<<<<<<< HEAD
     },
+=======
+
+    // },
+>>>>>>> 2d5b010 (ok)
     data: () => ({
         loaded: false,
     }),

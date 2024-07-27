@@ -134,9 +134,6 @@ export const useProductDetailsStore = defineStore("useProductDetailsStore", {
         setReview(review) {
             this.review = review;
         },
-        set_slug(slug) {
-            this.slug = slug
-        },
         /**
         ## Review section
         ## end
