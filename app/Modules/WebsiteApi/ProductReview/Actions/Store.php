@@ -14,7 +14,6 @@ class Store
             // dd(request()->all());
             $requestData = request()->all();
             $product = self::$productModel::where('slug', $requestData['slug'])->first();
-            $product = self::$productModel::where('slug', $requestData['slug'])->first();
             // dd($product);
             if (!$product) {
                 return messageResponse('Product not found...', $product, 404, 'error');
@@ -32,6 +31,7 @@ class Store
                         $imageName = uploader($image, 'uploads/product/review_images');
                         self::$reviewImageModel::query()->create([
                             'user_id' => auth()->id(),
+                            'product_review_id' => $data->id,
                             'product_id' => $product->id,
                             'image' => $imageName
                         ]);

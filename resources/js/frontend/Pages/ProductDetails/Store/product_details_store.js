@@ -10,12 +10,12 @@ export const useProductDetailsStore = defineStore("useProductDetailsStore", {
         related_porducts: [],
 
         product_question_and_answers: [],
+        is_question_form_show: false,
 
         rating: '',
         review: '',
         imageFiles: [],
         imagePreviews: [],
-
 
         fields: [
             "id",
@@ -36,16 +36,16 @@ export const useProductDetailsStore = defineStore("useProductDetailsStore", {
         ## Product information
         ## start
         **/
-        get_single_product_initial_data: async function () {
-            const fieldsQuery = this.fields.map(field => `fields[]=${field}`).join('&');
-            let response = await axios.get(`/get-product-details/${this.slug}?initial=true&${fieldsQuery}`)
+        get_single_product_initial_data: async function (slug) {
+            const fieldsQuery = this.fields.map((field, index) => `fields[${index}]=${field}`).join('&');
+            let response = await axios.get(`/get-initial-product-details/${slug}?${fieldsQuery}`)
             if (response.data.status === "success") {
                 this.product_initial_data = response.data.data
             }
-            // console.log(this.product_details);
+            // console.log(this.product_initial_data);
         },
-        get_single_product_details: async function () {
-            let response = await axios.get('/get-product-details/' + this.slug)
+        get_single_product_details: async function (slug) {
+            let response = await axios.get('/get-product-details/' + slug)
             if (response.data.status === "success") {
                 this.product_details = response.data.data
             }
@@ -64,11 +64,37 @@ export const useProductDetailsStore = defineStore("useProductDetailsStore", {
         **/
 
         /**
-       ## Review section
+       ## questions section
        ## start
        */
+        toggle_question_form: function () {
+            this.is_question_form_show = !this.is_question_form_show
+        },
+        submit_question: async function (data) {
+            let formData = new FormData(data);
+            formData.append('slug', this.slug);
+            let response = await window.privateAxios('/customer-ecommerce-question', 'post', formData);
+            if (response.status === "success") {
+                window.s_alert(response.message);
+                this.toggle_question_form()
+                this.get_all_question_and_answers();
+            }
+        },
 
-        async submitReview() {
+        get_all_question_and_answers: async function (slug) {
+            let is_auth = localStorage.getItem("token") ? true : false;
+            if (is_auth) {
+                let response = await axios.get('/get-customer-ecommerce-question-and-answers?slug=' + slug);
+                if (response.data.status === "success") {
+                    this.product_question_and_answers = response.data.data
+                }
+            }
+        },
+        /**
+             ## Review section
+             ## start
+             */
+        submitReview: async function () {
             const formData = new FormData();
             formData.append('rating', this.rating);
             formData.append('review', this.review);
@@ -93,6 +119,7 @@ export const useProductDetailsStore = defineStore("useProductDetailsStore", {
             }
         },
         setRating(rating) {
+            console.log(rating);
             this.rating = rating;
         },
         addImageFile(file) {

@@ -4,7 +4,7 @@
             <div class="product-imgbox">
                 <div class="product-front">
                     <Link :href="`/product-details/${product.slug}`">
-                    <img :src="check_image_url(`${product.product_image?.url}`)
+                    <img :src="load_image(`${product.product_image?.url}`)
                         " class="img-fluid" alt="product" />
                     </Link>
                     <a v-if="product.is_available" @click="is_auth ? buyNow(product.id) : openAccount()"
@@ -46,11 +46,11 @@
                         </svg>
                     </a>
                 </div>
-                <div class="new-label" v-if="parseInt(Math.random() * 9) % 2 == 0">
+                <div class="new-label" v-if="product.is_new">
                     <div>new</div>
                 </div>
-                <div class="on-sale">
-                    save $ {{ (Math.random() * 9).toFixed(2) }}
+                <div class="on-sale" v-if="product.discount_amount > 0">
+                    save {{ product.discount_amount }} ৳
                 </div>
             </div>
             <div class="product-detail">
@@ -66,20 +66,21 @@
                     <div class="detail-right" v-if="product.is_available">
                         <template v-if="product.is_discount">
                             <div class="price">
-                                $ {{ product.current_price }}
+                               {{ Math.round(product.current_price) }} ৳
+                            </div>
+                            <div class="check-price">
+                                {{ Math.round(product.customer_sales_price) }} ৳
                             </div>
                         </template>
                         <template v-else>
-                            <div class="check-price">
-                                $ {{ product.customer_sales_price }}
+                            <div class="price">
+                                {{ Math.round(product.current_price) }} ৳
                             </div>
                         </template>
-
-
                     </div>
 
-                    <div v-else class="out-of-stock text-center text-warning border py-2">
-                        Unavailable
+                    <div v-else class="out-of-stock text-center text-black fw-bold border py-2">
+                        stock out
                     </div>
                 </div>
             </div>
@@ -90,7 +91,7 @@
 <script>
 
 import { mapActions, mapState } from "pinia";
-import { common_store } from "../Store/common_store";
+import { common_store } from '../Store/common_store';
 export default {
     props: ["product"],
 
@@ -103,6 +104,7 @@ export default {
     },
 
     methods: {
+        load_image: window.load_image,
         check_image_url: function (url) {
             try {
                 new URL(url);

@@ -26,6 +26,17 @@ class Controller extends ControllersController
         return $data;
     }
 
+    public function get_all()
+    {
+        $data = \App\Modules\ProductManagement\ProductCategory\Models\Model::query()
+            ->where([
+                "parent_id" => 0,
+            ])
+            ->with('all_childrens')
+            ->get();
+        return $data;
+    }
+
     public function store(Validation $request)
     {
         $data = Store::execute($request);
@@ -69,5 +80,4 @@ class Controller extends ControllersController
         $data = BulkActions::execute($request);
         return $data;
     }
-
 }

@@ -12,22 +12,84 @@
 </template>
 <script>
 import noUiSlider from 'nouislider';
+import { mapState, mapActions } from 'pinia';
+import { product_store } from '../Store/product_store';
 export default {
-    created: function () {
-        setTimeout(this.init_range, 1000);
+    data: () => ({
+        slider: null
+    }),
+    mounted: async function () {
+        // setTimeout(this.init_range, 1000);
+        // await this.get_min_max_price(this.slug);
+        // console.log(this.min_price, this.max_price);
+        this.init_range(this.min_price, this.max_price);
     },
     methods: {
-        init_range: function () {
-            noUiSlider.create(this.$refs.range, {
-                start: [4000, 8000],
+        ...mapActions(product_store, {
+            get_min_max_price: "get_min_max_price",
+            set_min_max_price_range: "set_min_max_price_range",
+        }),
+        init_range: function (min, max) {
+            this.slider = document.getElementById('range');
+            let that = this
+            noUiSlider.create(this.slider, {
+                start: [(min + 100), (max - 100)],
                 tooltips: [true, true],
                 range: {
-                    'min': [2000],
-                    'max': [10000]
+                    'min': [min],
+                    'max': [max]
                 }
             });
+            this.slider.noUiSlider.on('change.one', function ([min_price, max_price]) {
+                // console.log(this.slider.noUiSlider.get());
+                that.set_min_max_price_range(min_price, max_price);
+            });
         }
+    },
+
+    watch: {
+        min_price: function (v) {
+            // console.log(this.min_price, this.max_price);
+            this.slider.noUiSlider.updateOptions(
+                {
+                    start: [(this.price_range.min_price ), this.price_range.max_price],
+                    tooltips: [true, true],
+                    range: {
+                        'min': [this.min_price],
+                        'max': [this.max_price]
+                    }
+                }, // Object
+                true // Boolean 'fireSetEvent'
+            );
+            // this.slider.noUiSlider.set([v, this.max_price]);
+        },
+        max_price: function (v) {
+            // console.log(this.min_price, this.max_price);
+            this.slider.noUiSlider.updateOptions(
+                {
+                    start: [(this.price_range.min_price ), (this.price_range.max_price)],
+                    tooltips: [true, true],
+                    range: {
+                        'min': [this.min_price],
+                        'max': [this.max_price]
+                    }
+                }, // Object
+                true // Boolean 'fireSetEvent'
+            );
+            // this.slider.noUiSlider.set([this.min_price, v]);
+        },
+    },
+
+    computed: {
+        ...mapState(product_store, {
+            min_price: 'min_price',
+            max_price: 'max_price',
+            slug: 'slug',
+            price_range: 'price_range',
+
+        })
     }
+
 }
 </script>
 <style lang="">

@@ -16,6 +16,8 @@ class Model extends EloquentModel
     static $relatedCompareProductModel = \App\Modules\ProductManagement\Product\Models\RelatedCompareProductModel::class;
     static $ProductModel = \App\Modules\ProductManagement\Product\Models\Model::class;
     static $ProductReviewModel = \App\Modules\WebsiteApi\ProductReview\Models\Model::class;
+    static $productCategoryBrandModel = \App\Modules\ProductManagement\Product\Models\ProductCategoryBrandModel::class;
+    static $ProductReviewImageModel = \App\Modules\WebsiteApi\ProductReview\Models\ReviewImageModel::class;
 
 
     protected $table = "products";
@@ -46,9 +48,14 @@ class Model extends EloquentModel
         return $q->where('status', 'active');
     }
 
+    public function scopeInactive($q)
+    {
+        return $q->where('status', 'inactive');
+    }
+
     public function product_categories()
     {
-        return $this->belongsToMany(self::$productCategoryModel, 'product_category_products', 'product_id', 'product_category_group_id', 'product_category_id', 'id');
+        return $this->belongsToMany(self::$productCategoryModel, 'product_category_products', 'product_id', 'product_category_id');
     }
     public function product_category_group_products()
     {
@@ -79,8 +86,9 @@ class Model extends EloquentModel
     }
     public function product_reviews()
     {
-        return $this->hasMany(self::$ProductReviewModel, 'product_id');
+        return $this->hasMany(self::$ProductReviewModel, 'product_id','id');
     }
+
 
     public function related_compare_products()
     {
@@ -124,7 +132,10 @@ class Model extends EloquentModel
     {
         return $this->hasMany(self::$productVariantPriceModel, 'product_id', 'id');
     }
-
+    public function product_category_brands()
+    {
+        return $this->hasMany(self::$productCategoryBrandModel, 'product_brand_id');
+    }
     /**
      * accessors.
      */

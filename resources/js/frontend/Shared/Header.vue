@@ -69,7 +69,7 @@
                     <div class="header-left">
                         <div class="brand-logo logo-sm-center">
                             <Link href="/">
-                            <img src="/frontend/images/etek_logo.png" class="img-fluid  " alt="logo">
+                                <img src="/cache/frontend/images/etek_logo.png" class="img-fluid" alt="ETEK Enterprise Logo">
                             </Link>
                         </div>
                     </div>
@@ -216,10 +216,10 @@
                             </div>
                             <div class="category-right">
                                 <div class="contact-block">
-                                    <div>
+                                    <a href="tel:+8801793199803">
                                         <i class="fa fa-volume-control-phone"></i>
-                                        <span>call us<span>123-456-76890</span></span>
-                                    </div>
+                                        <span>call us<span>01793-199803</span></span>
+                                    </a>
                                 </div>
                             </div>
                         </div>

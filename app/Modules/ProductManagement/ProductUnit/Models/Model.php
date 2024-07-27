@@ -4,6 +4,7 @@ namespace App\Modules\ProductManagement\ProductUnit\Models;
 
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Support\Str;
+use App\Modules\ProductManagement\ProductUnitGroup\Models\Model as ProductUnitGroup;
 
 class Model extends EloquentModel
 {
@@ -26,8 +27,18 @@ class Model extends EloquentModel
         });
     }
 
+    public function group()
+    {
+        return $this->belongsTo(ProductUnitGroup::class, 'product_unit_group_id');
+    }
+
     public function scopeActive($q)
     {
         return $q->where('status', 'active');
+    }
+
+    public function scopeInactive($q)
+    {
+        return $q->where('status', 'inactive');
     }
 }

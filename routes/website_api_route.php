@@ -28,10 +28,12 @@ Route::get('/pget', function () {
 });
 
 Route::get('/fixed-discount-product', function () {
-    $products = DB::table('products')->whereColumn('customer_sales_price', 'discount_amount')->get();
+    $products = DB::table('products')->select('id', 'customer_sales_price', 'discount_amount')->get();
 
     foreach ($products as $product) {
+
         $new_discount_amount = ($product->customer_sales_price * 5 / 100);
+
         DB::table('products')
             ->where('id', $product->id)
             ->update(['discount_amount' => $new_discount_amount]);
@@ -81,4 +83,42 @@ Route::get('/offer-product-create', function () {
             'product_offer_id' => rand(1, 4),
         ]);
     }
+});
+
+
+Route::get('/product-category-brands', function () {
+    $model = \App\Modules\ProductManagement\ProductCategory\Models\Model::class;
+    DB::table('product_category_brand')->truncate();
+    $category = $model::with('products')->first();
+
+    if ($category) {
+        foreach ($category->products as $item) {
+            $product_brand = DB::table('product_category_brand')
+                ->where('product_brand_id', $item->product_brand_id)->first();
+            if (!$product_brand) {
+                DB::table('product_category_brand')->insert([
+                    'product_category_id' => $category->id,
+                    'product_brand_id' => $item->product_brand_id,
+                    // 'total_product' => $item->product_brand_id
+                ]);
+
+                $productsCount = $category->products()
+                    ->where('products.product_brand_id', $item->product_brand_id)
+                    // ->where('customer_sales_price', '>', '0')
+                    ->count();
+                DB::table('product_category_brand')
+                    ->where('product_category_id', $category->id)
+                    ->where('product_brand_id', $item->product_brand_id)
+                    ->update([
+                        'total_product' => $productsCount
+                    ]);
+            }
+        }
+    }
+});
+
+Route::get('/product_category_varient', function () {
+    DB::table('product_category_varient')->where('product_category_id', 2)->update([
+        'product_category_id' => 1
+    ]);
 });

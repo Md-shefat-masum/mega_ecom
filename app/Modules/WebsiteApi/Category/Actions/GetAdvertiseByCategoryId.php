@@ -46,7 +46,10 @@ class GetAdvertiseByCategoryId
                     ->paginate($pageLimit);
             }
 
-            return entityResponse($data);
+            $response = entityResponse($data);
+            $response->header('Cache-Control', 'public, max-age=300')
+                ->header('Expires', now()->addMinutes(5)->toRfc7231String());
+            return $response;
 
         } catch (\Exception $e) {
             return messageResponse($e->getMessage(), [], 500, 'server_error');

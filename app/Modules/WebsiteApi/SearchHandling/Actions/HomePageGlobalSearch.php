@@ -13,18 +13,28 @@ class HomePageGlobalSearch
         try {
             // dd(request()->all());
 
-
             $searchKey = request()->input('search_key');
 
             $product = self::$productModel::with('product_image:product_id,url')
                 ->where(function ($q) use ($searchKey) {
                     $q->where('title', $searchKey)
                         ->orWhere('title', 'like', '%' . $searchKey . '%')
-                        ->orWhere('description', 'like', '%' . $searchKey . '%')
-                        ->orWhere('short_description', 'like', '%' . $searchKey . '%');
+                        ->orWhere('search_keywords', 'like', '%' . $searchKey . '%');
                 })
+                ->select([
+                    'id',
+                    'title',
+                    'is_available',
+                    'customer_sales_price',
+                    'discount_type',
+                    'discount_amount',
+                    'slug',
+                    'is_new',
+                ])
                 ->where("status", "active")
-                ->paginate(10, ['id', 'title', 'slug', 'purchase_price']);
+                ->paginate(24);
+
+            $product->appends('search_key', $searchKey);
 
             $category = self::$productCategoryModel::where(function ($q) use ($searchKey) {
                 $q->where('title', $searchKey);
@@ -34,12 +44,16 @@ class HomePageGlobalSearch
                 ->where("status", "active")
                 ->paginate(10, ['title', 'slug', 'image']);
 
+            $category->appends('search_key', $searchKey);
+
             $brand = self::$productBrandModel::where(function ($q) use ($searchKey) {
                 $q->where('title', $searchKey);
                 $q->orWhere('title', 'like', '%' . $searchKey . '%');
             })->limit(10)
                 ->where("status", "active")
                 ->paginate(10, ['title', 'slug', 'image']);
+
+            $brand->appends('search_key', $searchKey);
 
             $data = [
                 "product" => $product,

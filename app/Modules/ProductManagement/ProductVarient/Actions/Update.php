@@ -13,6 +13,7 @@ class Update
                 return messageResponse('Data not found...',$data, 404, 'error');
             }
             $requestData = $request->validated();
+            $requestData['product_varient_group_id'] = json_decode(request()->product_varient_group_id)[0];
             $data->update($requestData);
             return messageResponse('Item updated successfully',$data, 201);
         } catch (\Exception $e) {

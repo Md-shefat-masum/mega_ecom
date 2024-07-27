@@ -12,20 +12,22 @@
                         {{ product.title }}
                     </h3>
                     <div class="single-product-price display-flex-center mb-24">
-                        <div class="product-price-widget regular-price">
+                        <div v-if="product.customer_sales_price" class="product-price-widget regular-price">
                             <span class="regular-price-title">Regular price:</span>
                             <span class="regular-main-price">
                                 {{ product.customer_sales_price }} BDT
                             </span>
                         </div>
-                        <div class="product-price-widget offer-price">
+                        <div v-if="product.current_price" class="product-price-widget offer-price">
                             <span class="offer-price-title">Offer price: </span>
                             <span class="offer-main-price">
                                 {{ product.current_price }} BDT
                             </span>
                         </div>
-                        <span class="product-price-save">-{{ Math.floor(product.discount_amount) }} {{
-                    product.discount_type == 'percent' ? '%' : 'BDT' }} SAVE</span>
+                        <span v-if="product.discount_amount" class="product-price-save">
+                            -{{ Math.floor(product.discount_amount) }}
+                            {{ product.discount_type == 'percent' ? '%' : 'BDT' }} SAVE
+                        </span>
                     </div>
                 </div>
                 <div class="product-core-info-list">
@@ -119,8 +121,8 @@ import ColorVarient from '../Components/ColorVarient.vue'
 import CommonVarient from '../Components/CommonVarient.vue'
 import ProductImage from '../Components/ProductImage.vue'
 
-import { mapActions } from "pinia";
-import { common_store } from "../../../Store/common_store";
+// import { mapActions } from "pinia";
+// import { common_store } from "../../../Store/common_store";
 
 export default {
     components: { ProductImage, ColorVarient, CommonVarient },
@@ -131,16 +133,13 @@ export default {
         quantity: 1,
     }),
     created: async function () {
-        console.log("ff", this.product);
         this.is_auth = localStorage.getItem("token") ? true : false;
     },
     methods: {
-        ...mapActions(common_store, {
-            add_to_wish_list: "add_to_wish_list",
-            get_all_cart_data: "get_all_cart_data",
-        }),
-
-
+        // ...mapActions(common_store, {
+        //     add_to_wish_list: "add_to_wish_list",
+        //     get_all_cart_data: "get_all_cart_data",
+        // }),
         openAccount() {
             document.getElementById("myAccount").classList.add('open-side');
         },

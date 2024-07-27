@@ -1,5 +1,5 @@
 <template>
-    <div v-if="is_auth">
+    <div>
         <form class="theme-form" @submit.prevent="submitReview">
             <div class="row">
                 <div class="col-md-12">
@@ -40,9 +40,6 @@
                 <div class="col-md-12">
                     <button class="btn btn-normal" type="submit">Submit Your Review</button>
                 </div>
-
-
-
             </div>
         </form>
     </div>
@@ -106,6 +103,9 @@ export default {
         });
 
         const submitReview = () => {
+            if(!this.is_auth){
+                return alert('Please Login to write your review.');
+            }
             reviewStore.submitReview();
         };
 

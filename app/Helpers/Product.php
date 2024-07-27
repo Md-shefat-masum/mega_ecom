@@ -12,7 +12,7 @@ function StoreProductCategoryVarients($varients = [], $product_categories = [])
 {
     $ProductModel = \App\Modules\ProductManagement\Product\Models\Model::class;
     $productCategoryVarientModel = \App\Modules\ProductManagement\Product\Models\ProductCategoryVarientModel::class;
-    
+
     foreach ($product_categories as $catId) {
 
         foreach ($varients as $item) {

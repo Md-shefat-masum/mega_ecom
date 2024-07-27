@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @inertiaHead
-    {{-- <title>
-        {{ isset($page['props']['event']['title']) ? 'ETEK | ' . $page['props']['event']['title'] : 'ETEK' }}
-    </title> --}}
     @if (isset($page['props']['event']))
+    <title>
+        {{ isset($page['props']['event']['title']) ? $page['props']['event']['title'] : 'ETEK Enterprise' }}
+    </title>
     <meta name="twitter:card"
         content="{{ isset($page['props']['event']['card']) ? $page['props']['event']['card'] : 'summary' }}" />
     <meta name="twitter:site" content="@sitename" />
@@ -26,7 +26,7 @@
     <meta name="description" content="etek">
     <meta name="keywords" content="etek enterprise">
     <meta name="author" content="etek">
-    <link rel="shortcut icon" href="/frontend/images/etek_favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="/cache/frontend/images/etek_favicon.png" type="image/x-icon">
 
     <meta property="og:title" content="ETEK Enterprise" />
     <meta property="og:site_name" content="ETEK Enterprise" />
@@ -44,24 +44,26 @@
     <meta name="twitter:image" content="https://etek.com.bd/frontend/images/etek_logo.png">
     <meta name="twitter:card" content="summary_large_image">
 
-    <link rel="stylesheet" href="{{ asset('frontend') }}/assets/css/website.css">
-    <link rel="stylesheet" href="{{ asset('frontend') }}/assets/css/lightbox.css">
-    <script src="{{ asset('frontend') }}/assets/js/jquery-3.3.1.min.js.download"></script>
-    <script src="{{ asset('frontend') }}/assets/js/popper.min.js.download"></script>
-    <script src="{{ asset('frontend') }}/assets/js/bootstrap.js.download"></script>
-    <script src="{{ asset('frontend') }}/assets/js/lightbox.min.js"></script>
-    <script defer src="{{ asset('frontend') }}/assets/js/script.js"></script>
-    <script defer src="{{ asset('frontend') }}/assets/js/modal.js"></script>
-    <script defer src="{{ asset('plugins/sweet_alert.js') }}"></script>
-
-
-    @vite(['resources/js/frontend/app.js'])
-
-    <link rel="stylesheet" href="{{ asset('frontend') }}/assets/css/custom.css">
+    <link rel="stylesheet" href="/cache/frontend/assets/css/website.css">
+    <link rel="stylesheet" href="/cache/frontend/assets/css/lightbox.css">
+    <link rel="stylesheet" href="/cache/frontend/assets/css/custom.css">
 
     <script>
         if(window.innerWidth < 991){
             location.href = "https://m.etek.com.bd";
+        }
+        window.load_image = function (url, cache = true) {
+            try {
+                new URL(url);
+                return url;
+            } catch (error) {
+                let full_url = `{{env('IMAGE_HOST')}}` + '/' + url;
+                if(cache){
+                    full_url = `{{env('IMAGE_HOST')}}` + '/cache/' + url;
+                }
+                full_url.replaceAll('//', '/');
+                return full_url;
+            }
         }
     </script>
 </head>
@@ -69,6 +71,15 @@
 <body>
     @inertia
     {{-- <h1>loaded</h1> --}}
+    <script src="/cache/frontend/assets/js/jquery-3.3.1.min.js.download"></script>
+    <script src="/cache/frontend/assets/js/popper.min.js.download"></script>
+    <script src="/cache/frontend/assets/js/bootstrap.js.download"></script>
+    <script src="/cache/frontend/assets/js/lightbox.min.js"></script>
+    <script defer src="/cache/frontend/assets/js/script.js"></script>
+    <script defer src="/cache/frontend/assets/js/modal.js"></script>
+    <script defer src="/cache/plugins/sweet_alert.js"></script>
+
+    @vite(['resources/js/frontend/app.js'])
 </body>
 
 </html>

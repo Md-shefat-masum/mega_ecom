@@ -1,7 +1,7 @@
 <template>
     <section class="tab-product tab-exes creative-card creative-inner">
         <div class="row">
-            <div class="col-xl-8">
+            <div class="col-xl-8" :class="{'col-xl-12': product.related_products?.length == 0}">
                 <ul class="nav nav-tabs nav-material" id="top-tab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="top-home-tab" data-bs-toggle="tab" href="#top-home" role="tab"
@@ -11,7 +11,7 @@
                         </a>
                         <div class="material-border"></div>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" v-if="product.description">
                         <a class="nav-link " id="profile-top-tab" data-bs-toggle="tab" href="#top-profile" role="tab"
                             aria-selected="true">
                             <i class="icofont icofont-man-in-glasses"></i>
@@ -19,7 +19,7 @@
                         </a>
                         <div class="material-border"></div>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" v-if="product.video_url">
                         <a class="nav-link" id="contact-top-tab" data-bs-toggle="tab" href="#top-contact" role="tab"
                             aria-selected="false">
                             <i class="icofont icofont-contacts"></i>
@@ -43,7 +43,7 @@
                         </a>
                         <div class="material-border"></div>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" v-if="product.warranty_policy">
                         <a class="nav-link" id="policy-top-tab" data-bs-toggle="tab" href="#top-policy" role="tab"
                             aria-selected="false">
                             <i class="icofont icofont-contacts"></i>
@@ -51,7 +51,7 @@
                         </a>
                         <div class="material-border"></div>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" v-if="product?.related_compare_products_filter?.length && product?.related_compare_products_filter[0]?.length > 1">
                         <a class="nav-link" id="bestproduct-top-tab" data-bs-toggle="tab" href="#top-bestproduct"
                             role="tab" aria-selected="false">
                             <i class="icofont icofont-contacts"></i>
@@ -59,7 +59,7 @@
                         </a>
                         <div class="material-border"></div>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" v-if="product.related_price_review?.length">
                         <a class="nav-link" id="pricereview-top-tab" data-bs-toggle="tab" href="#top-pricereview"
                             role="tab" aria-selected="false">
                             <i class="icofont icofont-contacts"></i>
@@ -68,9 +68,10 @@
                         <div class="material-border"></div>
                     </li>
                 </ul>
+
                 <div class="tab-content nav-material" id="top-tabContent">
 
-                    <div class="tab-pane fade active show" id="top-home" role="tabpanel" aria-labelledby="top-home-tab">
+                    <div class="tab-pane fade active show" v-if="product.product_varient_price?.length" id="top-home" role="tabpanel" aria-labelledby="top-home-tab">
                         <table class="table data-table flex-table" cellpadding="0" cellspacing="0">
                             <tbody>
                                 <tr v-for="item in product.product_varient_price" :key="item.id">
@@ -81,10 +82,12 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane fade " id="top-profile" role="tabpanel" aria-labelledby="profile-top-tab">
+
+                    <div class="tab-pane fade" v-if="product.description" id="top-profile" role="tabpanel" aria-labelledby="profile-top-tab">
                         <div v-html="product.description"></div>
                     </div>
-                    <div class="tab-pane fade" id="top-contact" role="tabpanel" aria-labelledby="contact-top-tab">
+
+                    <div class="tab-pane fade" v-if="video_url" id="top-contact" role="tabpanel" aria-labelledby="contact-top-tab">
                         <div class="mt-3 text-center " v-if="video_url">
                             <iframe width="560" height="315" :src="video_url" allow="autoplay; encrypted-media"
                                 allowfullscreen=""></iframe>
@@ -93,12 +96,15 @@
                             No video found
                         </div>
                     </div>
+
                     <div class="tab-pane fade" id="top-review" role="tabpanel" aria-labelledby="review-top-tab">
                         <write-review></write-review>
                     </div>
+
                     <div class="tab-pane fade" id="top-question" role="tabpanel" aria-labelledby="question-top-tab">
                         <question :product="product"></question>
                     </div>
+
                     <div class="tab-pane fade" id="top-policy" role="tabpanel" aria-labelledby="policy-top-tab">
                         <p>
                             {{ product.warranty_policy }}
@@ -181,7 +187,7 @@
                 <review-show :product="product"></review-show>
             </div>
 
-            <div class="col-xl-4">
+            <div class="col-xl-4" v-if="product.related_products?.length">
                 <related-products :product="product"></related-products>
             </div>
         </div>

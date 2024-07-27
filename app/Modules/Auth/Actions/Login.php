@@ -14,27 +14,46 @@ class Login
     {
         try {
             // dd($request->all());
-            // $check_auth_user = self::$model::where('email', $request->email)->first();
-            $check_auth_user = self::$model::where('status', 'active')->whereAny(['user_name', 'email', 'phone_number'], request()->email)->first();
-
-            // if ($check_auth_user->is_blocked) {
-            //     return response()->json(['status' => 'error', 'message' => 'Sorry,you are blocked'], 404);
-            // }
-
-            if ($check_auth_user && Hash::check($request->password, $check_auth_user->password)) {
-                DB::table('oauth_access_tokens')->where("user_id", $check_auth_user->id)->update(['revoked' => 1]);
-                $data['access_token'] = $check_auth_user->createToken('accessToken')->accessToken;
-                $data['user'] = $check_auth_user;
-                return messageResponse('Successfully Loged In', $data, 200, 'success');
-            } else {
-                // if ($check_auth_user->no_of_attempt > 2) {
-                //     $check_auth_user->is_blocked = 1;
-                // }
-
-                return response()->json(['status' => 'error', 'message' => 'Sorry,user not found'], 404);
+            $requestData = $request->validated();
+            $otp = self::generateOTPCode();
+            $isExist = DB::table('otp_codes')->where('phone_number', $requestData['phone_number'])->exists();
+            if ($isExist) {
+                DB::table('otp_codes')->where('phone_number', $requestData['phone_number'])->delete();
             }
+            DB::table('otp_codes')->insert([
+                'phone_number' => $requestData['phone_number'],
+                'type' => 'register',
+                'otp' => $otp,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
         } catch (\Exception $e) {
             return messageResponse($e->getMessage(), [], 500, 'server_error');
         }
     }
+    public static function generateOTPCode()
+    {
+        return rand(100000, 9999999);
+    }
 }
+
+// $check_auth_user = self::$model::where('email', $request->email)->first();
+
+// if ($check_auth_user->is_blocked) {
+//     return response()->json(['status' => 'error', 'message' => 'Sorry,you are blocked'], 404);
+// }
+
+// if ($check_auth_user->is_blocked) {
+//     return response()->json(['status' => 'error', 'message' => 'Sorry,you are blocked'], 404);
+// }
+
+
+// $check_auth_user = self::$model::where('status', 'active')->whereAny(['user_name', 'email', 'phone_number'], request()->email)->first();
+// if ($check_auth_user && Hash::check($request->password, $check_auth_user->password)) {
+//     DB::table('oauth_access_tokens')->where("user_id", $check_auth_user->id)->update(['revoked' => 1]);
+//     $data['access_token'] = $check_auth_user->createToken('accessToken')->accessToken;
+//     $data['user'] = $check_auth_user;
+//     return messageResponse('Successfully Loged In', $data, 200, 'success');
+// } else {
+//     return response()->json(['status' => 'error', 'message' => 'Sorry,user not found'], 404);
+// }

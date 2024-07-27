@@ -10,11 +10,15 @@ class Store
     {
         try {
             $requestData = $request->validated();
+
+            $req_data = request()->except(['image']);
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
-                $requestData['image'] = uploader($image, 'uploads/product_category');
+                $req_data['image'] = uploader($image, 'uploads/product_category');
             }
-            if ($data = self::$model::query()->create($requestData)) {
+
+            $data = self::$model::query()->create($req_data);
+            if ($data) {
                 return messageResponse('Item added successfully', $data, 201);
             }
 

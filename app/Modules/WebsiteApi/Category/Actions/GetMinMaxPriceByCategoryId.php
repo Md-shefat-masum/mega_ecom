@@ -20,25 +20,23 @@ class GetMinMaxPriceByCategoryId
             }
 
 
-            $minPrice = self::$ProductModel::query()
+            $prices = self::$ProductModel::query()
                 ->whereHas('product_categories', function ($query) use ($Category) {
                     $query->where('product_category_id', $Category->id);
                 })
-                ->min('customer_sales_price');
+                ->selectRaw('MIN(customer_sales_price) as min_price, MAX(customer_sales_price) as max_price')
+                ->first();
 
-            $maxPrice = self::$ProductModel::query()
-                ->whereHas('product_categories', function ($query) use ($Category) {
-                    $query->where('product_category_id', $Category->id);
-                })
-                ->max('customer_sales_price');
-
+            // Prepare the response data
             $data = [
-                'min_price' => $minPrice,
-                'max_price' => $maxPrice,
+                'min_price' => $prices->min_price,
+                'max_price' => $prices->max_price,
             ];
 
-            return entityResponse($data);
-            
+            $response = entityResponse($data);
+            $response->header('Cache-Control', 'public, max-age=300')
+                ->header('Expires', now()->addMinutes(30)->toRfc7231String());
+            return $response;
         } catch (\Exception $e) {
             return messageResponse($e->getMessage(), [], 500, 'server_error');
         }

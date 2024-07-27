@@ -11,6 +11,7 @@ Route::prefix('v1')->group(function () {
         Route::post('update/{id}', [Controller::class, 'update']);
         Route::post('soft-delete', [Controller::class, 'softDelete']);
         Route::delete('destroy/{slug}', [Controller::class, 'destroy']);
+        Route::post('destroy/{slug}', [Controller::class, 'destroy']);
         Route::post('restore', [Controller::class, 'restore']);
         Route::post('import', [Controller::class, 'import']);
         Route::post('bulk-action', [Controller::class, 'bulkAction']);
@@ -20,7 +21,7 @@ Route::prefix('v1')->group(function () {
         Route::get('{slug}/stock', [Controller::class, 'bulkAction']);
         Route::get('{categorySlug}/count', [Controller::class, 'bulkAction']);
         Route::get('{barandSlug}/count', [Controller::class, 'bulkAction']);
-        
+
         Route::get('{barandSlug}/count', [Controller::class, 'bulkAction']);
         Route::get('{barandSlug}/count', [Controller::class, 'bulkAction']);
 

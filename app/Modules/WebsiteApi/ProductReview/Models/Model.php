@@ -43,7 +43,7 @@ class Model extends EloquentModel
 
     public function product_review_images()
     {
-        return $this->hasMany(self::$ProductReviewImageModel, 'product_id');
+        return $this->hasMany(self::$ProductReviewImageModel, 'product_review_id', 'id');
     }
 
     public function user()

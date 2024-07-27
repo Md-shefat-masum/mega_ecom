@@ -14,31 +14,33 @@
                                 <div>
                                     <div class="product-detail">
                                         <ul class="rating">
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star-o"></i></li>
+
+                                            <li>
+                                                <i class="fa fa-star" v-for="n in 5" :key="n"
+                                                    :class="{ active: n <= item.average_rating }">
+                                                </i>
+                                            </li>
+
                                         </ul>
                                         <Link :href="`product-details/${item.slug}`" tabindex="0">
                                         <p>{{ item.title }}</p>
                                         </Link>
-                                        <h6>$ {{ item.current_price }} <span>$ {{ item.customer_sales_price }}</span>
-                                        </h6>
+                                        <template v-if="item.current_price > 0">
+                                            <h6>$ {{ item.current_price }} <span>$ {{ item.customer_sales_price
+                                                    }}</span>
+                                            </h6>
+                                        </template>
+
                                     </div>
                                     <div class="cart-info">
-                                        <button class="tooltip-top add-cartnoty">
+                                        <button class="tooltip-top add-cartnoty" @click="add_to_cart(item.id)">
                                             <i class="fa fa-shopping-cart"></i>
                                         </button>
-                                        <a href="javascript:void(0)" class="add-to-wish tooltip-top">
-                                            <i class="add-to-wish fa fa-heart-o"></i>
-                                        </a>
-                                        <a href="javascript:void(0)" class="tooltip-top">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                        <a href="#" class="tooltip-top" data-tippy-content="Compare">
-                                            <i class="fa fa-recycle"></i>
-                                        </a>
+                                        <Link :href="`/product-details/${item.slug}`" tabindex="0">
+                                        <i class="fa fa-eye"></i>
+                                        </Link>
+
+
                                     </div>
                                 </div>
                             </div>
@@ -46,19 +48,36 @@
                     </div>
                 </div>
             </template>
-            <template v-else>
-                <h4 class="text-warning">No Related Product found</h4>
-            </template>
+
         </div>
     </div>
 </template>
 
 <script>
+import { mapActions } from 'pinia';
+import { common_store } from '../../../Store/common_store';
 export default {
     props: {
         product: Object
     },
+
+    methods: {
+        ...mapActions(common_store, {
+            add_to_cart: "add_to_cart",
+        })
+    }
 }
 </script>
 
-<style></style>
+<style>
+.product-detail .fa-star {
+    cursor: pointer;
+    color: #d3d3d3 !important;
+    font-size: 20px !important;
+}
+
+.product-detail .fa-star.active {
+    color: #ffc107 !important;
+    font-size: 20px !important;
+}
+</style>

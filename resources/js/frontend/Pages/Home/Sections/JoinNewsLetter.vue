@@ -1,8 +1,6 @@
 <template>
     <section class="subscribe1  bg-size"
-        style="background-image: url(&quot;https://themes.pixelstrap.com/bigdeal/assets/images/marketplace/subscribe2.png&quot;); background-size: cover; background-position: center center; display: block;">
-        <img src="	https://themes.pixelstrap.com/bigdeal/assets/images/marketplace/subscribe2.png" alt="subscribe" class="bg-img img-fluid"
-            style="display: none;">
+        style="background-image: url('https://files.etek.com.bd/cache/uploads/banner/subscribe2.png'); background-size: cover; background-position: center center; display: block;">
         <div class="container">
             <div class="row">
                 <div class="col-12">

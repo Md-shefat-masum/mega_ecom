@@ -50,11 +50,11 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="top-banner-wrapper mb-2">
-                                            <img v-if="category_group_products?.productOfferDetails"
-                                                :src="category_group_products?.productOfferDetails?.image" class="img-fluid"
-                                                :alt="category_group_products?.productOfferDetails?.title">
+                                            <img v-if="products?.productOfferDetails"
+                                                :src="products?.productOfferDetails?.image" class="img-fluid"
+                                                :alt="products?.productOfferDetails?.title">
                                             <img v-else
-                                                src="https://digitalshopbd.com/public/uploads/all/2Zz2l45NAIEvYAGfBzfggucVEuk1UIg3pvpRer1c.png"
+                                                src="https://files.etek.com.bd/cache/uploads/categories/etek-category.png"
                                                 class="img-fluid">
                                             <!-- <div class="top-banner-content small-section">
                                                 <h1 class="category_page_heading">
@@ -106,8 +106,8 @@
 
                                             <div class=" py-5">
                                                 <div class="product_list"
-                                                    :class="{ product_left: category_group_products?.data?.data?.length < 5 }">
-                                                    <div v-for="i in category_group_products?.data?.data" :key="i.name">
+                                                    :class="{ product_left: products?.data?.data?.length < 5 }">
+                                                    <div v-for="i in products?.data?.data" :key="i.name">
                                                         <ProductItem :product="i" />
                                                     </div>
                                                 </div>
@@ -120,7 +120,7 @@
                                                                 <ul class="pagination">
                                                                     <li class="page-item"
                                                                         :class="{ active: link.active }"
-                                                                        v-for="(link, index) in category_group_products?.data?.links"
+                                                                        v-for="(link, index) in products?.data?.links"
                                                                         :key="index">
                                                                         <a :href="link.url"
                                                                             @click.prevent="loadProduct(link)"
@@ -132,12 +132,13 @@
                                                             </nav>
                                                         </div>
                                                         <div class="col-xl-6 col-md-6 col-sm-12">
-                                                            <div class="product-search-count-bottom">
-                                                                <h5>Showing Products {{ category_group_products?.data?.from
-                                                                    }}-{{ search_result?.to }} of {{
-                    search_result?.total }}
+                                                            <!-- <div class="product-search-count-bottom">
+                                                                <h5>Showing Products {{
+                    products?.data?.from
+                }}-{{ search_result?.to }} of {{
+                                                                    search_result?.total }}
                                                                     Result</h5>
-                                                            </div>
+                                                            </div> -->
                                                         </div>
                                                     </div>
                                                 </div>
@@ -176,7 +177,7 @@ import ProductItem from "../../Components/ProductItem.vue";
 import BreadCumb from '../../Components/BreadCumb.vue';
 
 import { product_store } from "./Store/product_store.js"
-import { computed, onMounted } from 'vue';
+import { mapActions, mapState } from 'pinia';
 
 
 
@@ -187,19 +188,28 @@ export default {
     props: {
         slug: String,
     },
-
+    data: () => ({
+        bread_cumb: [
+            {
+                title: 'offer-products',
+                url: '#',
+                active: false,
+            },
+        ],
+    }),
     setup(props) {
-        const top_offer_store = product_store();
-        top_offer_store.slug = props.slug;
-        const category_group_products = computed(() => top_offer_store.category_group_products);
-        onMounted(async () => {
-            await top_offer_store.get_all_products_and_single_group_by_category_group_id();
-        })
+        const use_product_store = product_store();
+        use_product_store.slug = props.slug;
+
 
         const loadProduct = async (link) => {
             try {
                 let url = new URL(link.url, window.location.origin);
-                await top_offer_store.get_all_products_and_single_group_by_category_group_id(url.href);
+                window.scrollTo({
+                    top: 300,
+                    behavior: 'smooth'
+                });
+                await use_product_store.get_all_products_and_single_group_by_category_group_id(url.href);
             } catch (error) {
                 console.error('Error loading product:', error);
             }
@@ -207,10 +217,22 @@ export default {
 
         return {
             loadProduct,
-            category_group_products
         };
 
     },
+    created: async function () {
+        await this.get_all_products_and_single_group_by_category_group_id();
+    },
+    methods: {
+        ...mapActions(product_store, {
+            get_all_products_and_single_group_by_category_group_id: 'get_all_products_and_single_group_by_category_group_id',
+        })
+    },
+    computed: {
+        ...mapState(product_store, {
+            products: 'products',
+        })
+    }
 
 
 };

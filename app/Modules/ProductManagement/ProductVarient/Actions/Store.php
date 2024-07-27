@@ -10,6 +10,7 @@ class Store
     {
         try {
             $requestData = $request->validated();
+            $requestData['product_varient_group_id'] = json_decode(request()->product_varient_group_id)[0];
             if ($data = self::$model::query()->create($requestData)) {
                 return messageResponse('Item added successfully', $data, 201);
             }

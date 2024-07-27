@@ -31,6 +31,9 @@ import employee_routes from "./views/pages/employee/partials/routes";
 import retailer_routes from "./views/pages/retailer/partials/routes";
 import sales_routes from "./views/pages/sales/partials/routes";
 import supplier_routes from "./views/pages/supplier/partials/routes";
+import app_config from "./app_config.js";
+
+
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -63,6 +66,7 @@ router.beforeEach((to, from, next) => {
 
 const pinia = createPinia();
 const app = createApp({});
+
 // Vue.prototype.number_format = (number = 0) => new Intl.NumberFormat().format(number);
 app.component("app", App);
 app.component("common-input", CommonInput);

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Modules\ProductManagement\ProductVarientValue\Actions;
+use \App\Modules\ProductManagement\ProductVarient\Models\Model as ProductVarient;
 
 class Update
 {
@@ -13,6 +14,12 @@ class Update
                 return messageResponse('Data not found...',$data, 404, 'error');
             }
             $requestData = $request->validated();
+            $requestData['product_varient_group_id'] = null;
+            $requestData['product_varient_id'] = json_decode(request()->product_varient_id)[0];
+            $v = ProductVarient::where('id',$requestData['product_varient_id'])->first();
+            if($v){
+                $requestData['product_varient_group_id'] = $v->product_varient_group_id;
+            }
             $data->update($requestData);
             return messageResponse('Item updated successfully',$data, 201);
         } catch (\Exception $e) {

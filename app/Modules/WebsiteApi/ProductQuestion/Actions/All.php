@@ -5,6 +5,7 @@ namespace App\Modules\WebsiteApi\ProductQuestion\Actions;
 class All
 {
     static $model = \App\Modules\WebsiteApi\ProductQuestion\Models\Model::class;
+    static $productModel = \App\Modules\ProductManagement\Product\Models\Model::class;
 
     public static function execute()
     {
@@ -17,11 +18,12 @@ class All
             $with = ['user'];
             $condition = [];
 
-            $data = self::$model::query()->where('is_approved', 1);
+            $product = self::$productModel::where('slug', request()->input('slug'))->first();
 
-            if (request()->has('slug') && request()->input('slug')) {
-               $condition['slug'] = request()->input('slug');
-            }
+            $data = self::$model::query()->where('product_id', $product->id);
+
+
+
             if (request()->has('search') && request()->input('search')) {
                 $searchKey = request()->input('search');
                 $data = $data->where(function ($q) use ($searchKey) {
@@ -48,7 +50,10 @@ class All
                     ->orderBy($orderByColumn, $orderByType)
                     ->paginate($pageLimit);
             }
-            return entityResponse($data);
+            $response = entityResponse($data);
+            $response->header('Cache-Control', 'public, max-age=300')
+                ->header('Expires', now()->addMinutes(60)->toRfc7231String());
+            return $response;
         } catch (\Exception $e) {
             return messageResponse($e->getMessage(), [], 500, 'server_error');
         }

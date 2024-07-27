@@ -13,7 +13,10 @@ use App\Modules\WebsiteApi\Product\Actions\GetAllProductsByCategoryId;
 use App\Modules\WebsiteApi\Product\Actions\GetProductDetails;
 use App\Modules\WebsiteApi\Product\Actions\GetAllProductOffers;
 use App\Modules\WebsiteApi\Product\Actions\GetAllOfferProductsByOfferId;
+use App\Modules\WebsiteApi\Product\Actions\GetInitialProductDetails;
 use App\Modules\WebsiteApi\Product\Actions\GetSingleCategoryGroupWithProduct;
+use App\Modules\WebsiteApi\Product\Actions\GetProductCategoryVarients;
+use App\Modules\WebsiteApi\Product\Actions\GetProductCategoryWiseBrands;
 
 class Controller extends ControllersController
 {
@@ -53,6 +56,11 @@ class Controller extends ControllersController
         $data = GetProductDetails::execute($slug);
         return $data;
     }
+    public function GetInitialProductDetails($slug)
+    {
+        $data = GetInitialProductDetails::execute($slug);
+        return $data;
+    }
     public function GetAllProductOffers()
     {
         $data = GetAllProductOffers::execute();
@@ -68,5 +76,14 @@ class Controller extends ControllersController
         $data = GetSingleCategoryGroupWithProduct::execute($slug);
         return $data;
     }
-
+    public function GetProductCategoryVarients($slug)
+    {
+        $data = GetProductCategoryVarients::execute($slug);
+        return $data;
+    }
+    public function GetProductCategoryBrands($slug)
+    {
+        $data = GetProductCategoryWiseBrands::execute($slug);
+        return $data;
+    }
 }

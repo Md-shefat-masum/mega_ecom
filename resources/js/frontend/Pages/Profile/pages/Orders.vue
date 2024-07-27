@@ -9,18 +9,26 @@
             <div class="box-account box-info">
 
                 <div class="card order_history_card my-3" v-for="order in order_list.data" :key="order.id">
-                    <div class="card-header">
+                    <div class="card-header align-items-center">
                         <div class="left">
                             <b>Order# {{ order.order_id }}</b>
                             <p>Date Added: {{ new Date(order.created_at).toDateString() }}</p>
                         </div>
+                        <div>
+                            <p> <b>Total :</b>
+                                <span class="mx-2 fw-bold">{{ order.total }} TK</span>
+                            </p>
+                        </div>
                         <div class="right">
                             <div class="text-center">
                                 <i class="fa fa-check"></i>
-                                <span class="text-capitalize" :class="order.order_status == 'pending' ? 'text-info' : 'text-success'">{{ order.order_status }}</span>
+                                <span class="text-capitalize"
+                                    :class="order.order_status == 'pending' ? 'text-info' : 'text-success'">{{
+        order.order_status }}</span>
                             </div>
 
-                            <a href="" class="btn btn-primary text-light">Order Details</a>
+                            <Link :href="`/profile/order-details/${order.order_id}`" class="btn btn-primary text-light">
+                            Order Details</Link>
                         </div>
                     </div>
                     <div class="card-body p-0">
@@ -28,10 +36,9 @@
                             <table class="product_info_table table border-0 mb-0">
                                 <tr v-for="item in order.order_products" :key="item.id">
                                     <td>
-                                        <img :src="`/${item.product.product_image.url}`"
-                                            alt="">
+                                        <img :src="`/${item.product.product_image.url}`" alt="">
                                         <span>
-                                            Remax RPP-88 10000mAh DOT Series Power Bank
+                                            {{ item.product.title }}
                                         </span>
                                     </td>
                                     <td>

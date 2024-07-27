@@ -19,8 +19,9 @@ class All
 
             $data = self::$model::query();
 
+            $searchKey = request()->input('search');
+
             if (request()->has('search') && request()->input('search')) {
-                $searchKey = request()->input('search');
                 $data = $data->where(function ($q) use ($searchKey) {
                     $q->where('title', $searchKey);
                     $q->orWhere('description', 'like', '%' . $searchKey . '%');
@@ -44,8 +45,13 @@ class All
                     ->where('status', $status)
                     ->orderBy($orderByColumn, $orderByType)
                     ->paginate($pageLimit);
+                $data->appends('search_key',$searchKey);
+                
             }
-            return entityResponse($data);
+            $response = entityResponse($data);
+            $response->header('Cache-Control', 'public, max-age=300')
+                ->header('Expires', now()->addMinutes(5)->toRfc7231String());
+            return $response;
         } catch (\Exception $e) {
             return messageResponse($e->getMessage(),[], 500, 'server_error');
         }

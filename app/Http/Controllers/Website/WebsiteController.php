@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\modules\ProductManagement\Product\Models\Model as ProductModel;
+use Illuminate\Support\Facades\DB;
 
 class WebsiteController extends Controller
 {
@@ -13,8 +14,8 @@ class WebsiteController extends Controller
     {
         return Inertia::render('Home/Index', [
             'event' => [
-                'title' => 'ETEK Enterprise',
-                'image' => 'https://etek.com.bd/frontend/images/etek_logo.png',
+                'title' => 'ETEK Enterprise - Leading Electronics and Gadgets',
+                'image' => 'https://etek.com.bd/cache/frontend/images/etek_logo.png',
                 'description' => 'Best eCommerce in bangladesh'
             ]
         ]);
@@ -25,7 +26,7 @@ class WebsiteController extends Controller
         return Inertia::render('Blogs/Index', [
             'event' => [
                 'title' => 'ETEK Blogs',
-                'image' => 'https://etek.com.bd/frontend/images/etek_logo.png',
+                'image' => 'https://etek.com.bd/cache/frontend/images/etek_logo.png',
                 'description' => 'Best eCommerce in bangladesh'
             ]
         ]);
@@ -35,7 +36,7 @@ class WebsiteController extends Controller
         return Inertia::render('Blogs/Details', [
             'event' => [
                 'title' => 'ETEK Blog Details',
-                'image' => 'https://etek.com.bd/frontend/images/etek_logo.png',
+                'image' => 'https://etek.com.bd/cache/frontend/images/etek_logo.png',
                 'description' => 'Best eCommerce in bangladesh'
             ]
         ]);
@@ -43,13 +44,14 @@ class WebsiteController extends Controller
 
     public function products($slug)
     {
+        $category = DB::table('product_categories')->select('title','slug')->where('slug',$slug)->first();
         $page = request()->page ? request()->page : 1;
         return Inertia::render('Products/Index', [
             'slug' => $slug,
             'page' => $page,
             'event' => [
-                'title' => 'ETEK Products',
-                'image' => 'https://etek.com.bd/frontend/images/etek_logo.png',
+                'title' => $category->title .' price in bangladesh',
+                'image' => 'https://etek.com.bd/cache/frontend/images/etek_logo.png',
                 'description' => 'Best eCommerce in bangladesh'
             ]
         ]);

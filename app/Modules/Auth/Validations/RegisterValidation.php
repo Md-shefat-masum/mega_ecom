@@ -44,9 +44,9 @@ class RegisterValidation extends FormRequest
         return [
             'name' => 'required | sometimes',
             'email' => 'required | sometimes|unique:users',
-            'password' => 'required | sometimes|min:8',
+            'password' => ' sometimes|min:8',
             'confirmed' => 'sometimes|required|same:password',
-            'phone' => 'required | sometimes',
+            'phone_number' => 'required',
             'photo' => 'sometimes',
         ];
     }

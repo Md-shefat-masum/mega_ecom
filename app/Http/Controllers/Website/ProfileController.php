@@ -35,6 +35,17 @@ class ProfileController extends Controller
             ]
         ]);
     }
+    public function order_details($orderId)
+    {
+        return Inertia::render('Profile/pages/OrderDetails', [
+            'order_id' => $orderId,
+            'event' => [
+                'title' => 'Order History',
+                'image' => 'https://etek.com.bd/frontend/images/etek_logo.png',
+                'description' => 'Best eCommerce in bangladesh'
+            ]
+        ]);
+    }
     public function wish_list()
     {
         return Inertia::render('Profile/pages/Wishlist', [
@@ -88,13 +99,14 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function edit_account(){
-        dd(request()->all(),auth()->user()->id);
+    public function edit_account()
+    {
+        dd(request()->all(), auth()->user()->id);
         $this->validate(request(), [
             "name" => ['required'],
             "user_name" => ['required'],
-            "email" => ['required', 'unique:users,email,'.auth()->user()->id],
-            "phone_number" => ['required','unique:users,phone_number,'.auth()->user()->id],
+            "email" => ['required', 'unique:users,email,' . auth()->user()->id],
+            "phone_number" => ['required', 'unique:users,phone_number,' . auth()->user()->id],
         ]);
 
         $user = User::find(auth()->user()->id);
@@ -103,9 +115,9 @@ class ProfileController extends Controller
         $user->save();
 
         return redirect()->back();
-
     }
-    public function edit_address(){
+    public function edit_address()
+    {
         // dd(request()->all());
         $this->validate(request(), [
             "address" => ['required'],
@@ -115,12 +127,11 @@ class ProfileController extends Controller
             "station_id" => ['required'],
         ]);
 
-        $address = UserAddressModel::where('user_id',auth()->user()->id)->where('id',request()->id)->first();
+        $address = UserAddressModel::where('user_id', auth()->user()->id)->where('id', request()->id)->first();
         // dd($address);
         $address->fill(request()->all());
         $address->save();
 
         return redirect()->back();
-
     }
 }

@@ -4,23 +4,21 @@
 <script>
 import axios from 'axios';
 import SingleVarient from './SingleVarient.vue';
+
+import { mapState } from 'pinia';
+import { product_store } from '../Store/product_store.js';
 export default {
     components: { SingleVarient },
-    data: () => ({
-        varients: [],
-    }),
-    created: function () {
-        this.get_varients();
-    },
     methods: {
-        get_varients: async function () {
-            let res = await axios.get('/varients');
-            let data = res.data;
-            this.varients = data;
-        },
         toggle_list: function () {
             $(this.$refs.items).slideToggle();
         }
+    },
+    computed: {
+        ...mapState(product_store, {
+            varients: 'product_category_varients',
+
+        })
     }
 }
 </script>

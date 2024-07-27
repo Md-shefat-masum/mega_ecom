@@ -11,7 +11,7 @@ class Show
     public static function execute($slug)
     {
         try {
-            $with = [];
+            $with = ['group'];
             $fields = request()->input('fields') ?? [];
             if (empty($fields)) {
                 $fields = ['*'];

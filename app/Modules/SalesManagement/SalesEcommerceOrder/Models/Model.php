@@ -9,6 +9,9 @@ class Model extends EloquentModel
 {
 
     static $OrderProductModel = \App\Modules\SalesManagement\SalesEcommerceOrder\Models\SalesEcommerceOrderProductModel::class;
+    static $userAddressModel = \App\Modules\UserManagement\User\Models\UserAddressModel::class;
+    static $userModel = \App\Modules\UserManagement\User\Models\Model::class;
+
 
     protected $table = "sales_ecommerce_orders";
     protected $guarded = [];
@@ -38,4 +41,13 @@ class Model extends EloquentModel
     {
         return $this->hasMany(self::$OrderProductModel, 'sales_ecommerce_order_id', 'id');
     }
+    public function order_delivery_address()
+    {
+        return $this->belongsTo(self::$userAddressModel, 'delivery_address_id', 'id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(self::$userModel, 'user_id', 'id');
+    }
+
 }

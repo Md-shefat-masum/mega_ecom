@@ -7,14 +7,14 @@
                     <div class="title-n-action">
                         <h2 class="ask_question_heading">Questions & Answare Section</h2>
                     </div>
-                    <div class="q-action" v-if="is_auth">
-                        <a class="btn btn-info" @click="is_question_form_show = !is_question_form_show">Ask
-                            Question</a>
+                    <div class="q-action">
+                        <a class="btn btn-info" @click="toggle_question_form">
+                            Ask Question</a>
                     </div>
                 </div>
 
                 <div v-if="is_question_form_show">
-                    <form @submit.prevent="submitQuestion($event)">
+                    <form @submit.prevent="submitQuestionForm($event)">
                         <div class="col-md-12">
 
                             <textarea class="form-control my-2" name="question" id="question"
@@ -26,10 +26,11 @@
                     </form>
                 </div>
             </div>
-            <hr>
-            <template v-if="product_question_and_answers.data?.length">
-                <template v-for="(item, index) in product_question_and_answers.data" :key="item.id">
-                    <div class="card-header d-flex gap-3 justify-content-between">
+        </div>
+        <template v-if="product_question_and_answers.data?.length">
+            <template v-for="(item, index) in product_question_and_answers.data" :key="item.id">
+                <div class="card mt-4">
+                    <div class="card-header d-flex gap-3  justify-content-between">
                         <div class="title-n-action">
                             <h2 class="ask_question_heading">Questions ({{ index + 1 }})</h2>
                             <p class="ask_question_pg p-0 mt-1">
@@ -40,7 +41,7 @@
                     <div class="card-body">
                         <div class="questions">
                             <div class="question-wrap">
-                                <p class="author"><span class="name">{{ item.user?.name }} </span> on
+                                <p class="author p-0"><span class="name">{{ item.user?.name }} </span> on
                                     {{ new Date(item.created_at).toDateString() }}
                                 </p>
                                 <h3 class="question text-sm">
@@ -52,7 +53,7 @@
                                 <p class="answer">
                                     <span class="hint">A:</span>
                                     <span>
-                                        {{ item.answare }}
+                                        {{ item.answare ?? "No Answer" }}
                                     </span>
                                 </p>
                                 <p class="author" v-if="item.answare">
@@ -64,61 +65,60 @@
                             <div class="text-right"></div>
                         </div>
                     </div>
-                </template>
+                </div>
+
             </template>
-            <template v-else>
+        </template>
+        <!-- <template v-else>
                 <div class="card-body">
                     <h3 class="text-center">No Question Found</h3>
                 </div>
-            </template>
-        </div>
+            </template> -->
     </section>
 </template>
 
 <script>
+import { mapActions, mapState } from 'pinia';
 import { useProductDetailsStore } from '../Store/product_details_store.js';
 export default {
-
+    props: {
+        slug: String,
+    },
     data: () => ({
         is_auth: false,
-        is_question_form_show: false,
-        slug: '',
-        product_question_and_answers: [],
     }),
 
 
 
-    created() {
+    created: async function () {
         this.is_auth = localStorage.getItem("token") ? true : false;
-        let ProductDetailsStore = useProductDetailsStore();
-        this.slug = ProductDetailsStore.slug;
-        this.get_all_question_and_answers();
+
     },
 
-    methods: {
 
-        submitQuestion: async function (event) {
-            let formData = new FormData(event.target);
-            formData.append('slug', this.slug);
-            let response = await window.privateAxios('/customer-ecommerce-question', 'post', formData);
-            if (response.status === "success") {
-                window.s_alert(response.message);
-                this.is_question_form_show = false
-                this.get_all_question_and_answers();
+    methods: {
+        ...mapActions(useProductDetailsStore, {
+            submit_question: "submit_question",
+            get_all_question_and_answers: "get_all_question_and_answers",
+            toggle_question_form: "toggle_question_form",
+        }),
+
+        submitQuestionForm: async function (event) {
+            if(!this.is_auth){
+                return alert('Please Login to ask your question.');
             }
+            this.submit_question(event.target);
         },
 
-        get_all_question_and_answers: async function () {
-
-            let response = await axios.get('/get-customer-ecommerce-question-and-answers?slug=' + this.slug);
-            if (response.data.status === "success") {
-                this.product_question_and_answers = response.data.data
-            }
+    },
 
 
-        }
-
-    }
+    computed: {
+        ...mapState(useProductDetailsStore, {
+            product_question_and_answers: 'product_question_and_answers',
+            is_question_form_show: 'is_question_form_show',
+        }),
+    },
 }
 </script>
 

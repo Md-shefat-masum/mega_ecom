@@ -10,20 +10,47 @@ class Register
 {
     static $model = \App\Modules\UserManagement\User\Models\Model::class;
 
-    public static function execute(RegisterValidation $request)
+    public static function generateOTP(RegisterValidation $request)
     {
         try {
-
-
             $requestData = $request->validated();
-            $requestData['password'] = Hash::make($request->password);
-            unset($requestData['confirmed']);
-            $user = self::$model::create($requestData);
-            $data['access_token'] = $user->createToken('accessToken')->accessToken;
-            $data['user'] = $user;
-            return messageResponse('Successfully Registered', $data, 200, 'success');
+            $otp = self::generateOTPCode();
+            $isExist = DB::table('otp_codes')->where('phone_number', $requestData['phone_number'])->exists();
+            if ($isExist) {
+                DB::table('otp_codes')->where('phone_number', $requestData['phone_number'])->delete();
+            }
+            DB::table('otp_codes')->insert([
+                'phone_number' => $requestData['phone_number'],
+                'type' => 'register',
+                'otp' => $otp,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            // self::sendOTP($requestData['phone_number'], $otp);
+
+            return messageResponse('OTP sent successfully', ['phone_number' => $requestData['phone_number'],]);
         } catch (\Exception $e) {
-            return messageResponse($e->getMessage(), [],500, 'server_error');
+            return messageResponse($e->getMessage(), [], 500, 'server_error');
         }
     }
+
+    public static function generateOTPCode()
+    {
+        return rand(100000, 9999999);
+    }
+
+
 }
+
+
+
+
+
+
+
+
+// $user = self::$model::create($requestData);
+// $data['access_token'] = $user->createToken('accessToken')->accessToken;
+// $data['user'] = $user;
+// return messageResponse('Successfully Registered', $data, 200, 'success');

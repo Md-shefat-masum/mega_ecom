@@ -30,4 +30,9 @@ class Model extends EloquentModel
     {
         return $q->where('status', 'active');
     }
+
+    public function scopeInactive($q)
+    {
+        return $q->where('status', 'inactive');
+    }
 }

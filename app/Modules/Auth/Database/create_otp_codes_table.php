@@ -14,9 +14,10 @@ return new class extends Migration
     {
         Schema::create('otp_codes', function (Blueprint $table) {
             $table->id();
-            $table->string('phone')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->string('email')->nullable();
             $table->enum('type', ['register', 'reset'])->nullable()->default('register');
-            $table->string('code')->nullable();
+            $table->string('otp')->nullable();
             $table->boolean('verify_status')->nullable()->default(0);
             $table->dateTime('validate_till')->nullable();
             $table->timestamps();

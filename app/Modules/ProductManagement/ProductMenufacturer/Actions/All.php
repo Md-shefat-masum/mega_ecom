@@ -45,7 +45,11 @@ class All
                     ->orderBy($orderByColumn, $orderByType)
                     ->paginate($pageLimit);
             }
-            return entityResponse($data);
+            return entityResponse([
+                ...$data->toArray(),
+                "active_data_count" => self::$model::active()->count(),
+                "inactive_data_count" => self::$model::inactive()->count(),
+            ]);
         } catch (\Exception $e) {
             return messageResponse($e->getMessage(),[], 500, 'server_error');
         }

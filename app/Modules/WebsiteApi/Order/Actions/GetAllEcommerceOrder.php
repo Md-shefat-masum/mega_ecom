@@ -12,31 +12,29 @@ class GetAllEcommerceOrder
     public static function execute()
     {
         try {
-     
 
-            $orderInfo = self::$model::with(
+
+            $data = self::$model::with(
                 'order_products',
                 'order_products.product',
-                'order_products.product.product_image')
+                'order_products.product.product_image'
+            )
                 ->where('user_id', auth()->id())
                 ->paginate(10);
-            if (!$orderInfo) {
+            if (!$data) {
                 return messageResponse('No order found', [], 200, 'success');
             }
 
-            return entityResponse($orderInfo);
+
+            $response = entityResponse($data);
+            $response->header('Cache-Control', 'public, max-age=300')
+                ->header('Expires', now()->addMinutes(1)->toRfc7231String());
+            return $response;
         } catch (\Exception $e) {
 
             return messageResponse($e->getMessage(), [], 500, 'server_error');
         }
     }
 
-    public static function generateUniqueOrderId()
-    {
-        $orderId = 'ETEK' . rand(1000000, 999999999);
-        while (self::$model::where('order_id', $orderId)->exists()) {
-            $orderId = 'ETEK' . rand(1000000, 999999999);
-        }
-        return $orderId;
-    }
+
 }

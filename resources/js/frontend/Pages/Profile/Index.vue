@@ -15,23 +15,20 @@
             <div class="box-account box-info">
                 <div class="dashboard_cards">
                     <div class="item">
-                        <h4 class="count">21</h4>
+                        <h4 class="count">{{ user_dashboard_info.total_orders ?? 0 }}</h4>
                         <h5 class="title">Total Orders</h5>
                     </div>
                     <div class="item">
-                        <h4 class="count">2</h4>
+                        <h4 class="count">{{ user_dashboard_info.total_pending_orders ?? 0 }}</h4>
                         <h5 class="title">Pending Orders</h5>
                     </div>
                     <div class="item">
-                        <h4 class="count">10</h4>
+                        <h4 class="count">{{ user_dashboard_info.total_confirmed_orders ?? 0 }}</h4>
                         <h5 class="title">Confirmed Orders</h5>
                     </div>
+
                     <div class="item">
-                        <h4 class="count">5</h4>
-                        <h5 class="title">Billing Orders</h5>
-                    </div>
-                    <div class="item">
-                        <h4 class="count">4</h4>
+                        <h4 class="count">{{ user_dashboard_info.total_finished_orders ?? 0 }}</h4>
                         <h5 class="title">finished Orders</h5>
                     </div>
                 </div>
@@ -46,15 +43,22 @@ import { auth_store } from "../../Store/auth_store.js";
 import { ref, onMounted, watch } from 'vue';
 export default {
     components: { ProfileLayout },
-    data: ()=>({
+    data: () => ({
         bread_cumb: [
             {
                 title: 'profile',
                 url: '/profile',
                 active: true,
             },
-        ]
+        ],
+
+        user_dashboard_info: {},
     }),
+
+    created: async function () {
+        await this.get_user_dashboard_info();
+    },
+
     setup() {
         const authStore = auth_store();
         const user_info = ref(authStore.auth_info);
@@ -72,6 +76,14 @@ export default {
         return {
             user_info,
         };
+    },
+
+    methods: {
+
+        async get_user_dashboard_info() {
+            let response = await window.privateAxios('/get-user-dashboard-info');
+            this.user_dashboard_info = response.data;
+        }
     },
 };
 </script>

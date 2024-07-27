@@ -9,15 +9,7 @@ export const auth_store = defineStore("auth_store", {
     }),
     getters: {},
     actions: {
-        user_login: async function (data) {
-            let formData = new FormData(data);
-            let response = await axios.post('/login', formData)
-            if (response.data?.status === "success") {
-                window.s_alert(response.data?.message);
-                localStorage.setItem("token", response.data?.data?.access_token);
-                window.location.href = "/profile";
-            }
-        },
+       
         set_is_auth: function (status) {
             this.is_auth = status;
         },
@@ -36,7 +28,7 @@ export const auth_store = defineStore("auth_store", {
                 this.role = response.data.role;
             }
         },
-     
+
 
     },
 });

@@ -14,12 +14,17 @@
                 <div class="collection-collapse-block-content">
                     <div class="collection-brand-filter">
 
-                        <div v-for="brand in brands" :key="brand.id"
-                            class="custom-control custom-checkbox form-check collection-filter-checkbox">
+                        <div v-for="brand in product_category_wise_brands" :key="brand.id"
+                            class="custom-control custom-checkbox form-check collection-filter-checkbox d-flex">
                             <input type="checkbox" class="custom-control-input form-check-input mt-0"
-                                :id="`brand` + brand.id">
-                            <label class="custom-control-label form-check-label" :for="`brand` + brand.id">
-                                {{ brand.title }}
+                                :id="`brand` + brand.id" @change="set_brand_id(brand.id)">
+                            <label class="custom-control-label form-check-label" style="flex: 1;"
+                                :for="`brand` + brand.id">
+                                <span class="d-flex justify-content-between">
+                                    <span>{{ brand.title }}</span>
+                                    <span>({{ brand.product_category_brands_sum_total_product }})</span>
+                                </span>
+
                             </label>
                         </div>
 
@@ -32,22 +37,26 @@
 <script>
 import axios from 'axios';
 
+import { mapActions, mapState } from 'pinia';
+import { product_store } from '../Store/product_store.js';
+
 export default {
-    data: () => ({
-        brands: [],
-    }),
-    created: function () {
-        this.get_brands();
-    },
     methods: {
-        get_brands: async function () {
-            let res = await axios.get('/brands');
-            let data = res.data;
-            this.brands = data;
-        },
-        toggle_list: function(){
+
+        ...mapActions(product_store, {
+            set_brand_id: "set_brand_id",
+        }),
+
+        toggle_list: function () {
             $(this.$refs.items).slideToggle();
         }
+
+    },
+
+    computed: {
+        ...mapState(product_store, {
+            product_category_wise_brands: 'product_category_wise_brands',
+        })
     }
 }
 </script>

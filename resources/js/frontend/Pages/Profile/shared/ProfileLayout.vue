@@ -1,14 +1,14 @@
 <template>
     <Layout>
         <div style="min-height: 500px">
-            <div id="customer-dashboard" v-if="loaded">
+            <div id="customer-dashboard " v-if="loaded">
                 <div class="breadcrumb-main py-3">
                     <div class="container">
                         <BreadCumb :bread_cumb="bread_cumb" />
                     </div>
                 </div>
-                <section class="section-big-py-space b-g-light">
-                    <div class="container">
+                <section class="section-big-py-space b-g-light ">
+                    <div class="container card py-4">
                         <div class="row">
                             <div class="col-lg-3">
                                 <ProfileNav :userInfo="userInfo" />

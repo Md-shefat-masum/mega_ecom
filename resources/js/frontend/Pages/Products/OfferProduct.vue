@@ -50,11 +50,11 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="top-banner-wrapper mb-2">
-                                            <img v-if="product_offer_data?.productOfferDetails"
-                                                :src="product_offer_data?.productOfferDetails?.image" class="img-fluid"
-                                                :alt="product_offer_data?.productOfferDetails?.title">
+                                            <img v-if="products?.productOfferDetails"
+                                                :src="products?.productOfferDetails?.image" class="img-fluid"
+                                                :alt="products?.productOfferDetails?.title">
                                             <img v-else
-                                                src="https://digitalshopbd.com/public/uploads/all/2Zz2l45NAIEvYAGfBzfggucVEuk1UIg3pvpRer1c.png"
+                                                src="https://files.etek.com.bd/cache/uploads/categories/etek-category.png"
                                                 class="img-fluid">
                                             <!-- <div class="top-banner-content small-section">
                                                 <h1 class="category_page_heading">
@@ -106,8 +106,8 @@
 
                                             <div class=" py-5">
                                                 <div class="product_list"
-                                                    :class="{ product_left: product_offer_data?.data?.data?.length < 5 }">
-                                                    <div v-for="i in product_offer_data?.data?.data" :key="i.name">
+                                                    :class="{ product_left: products?.data?.data?.length < 5 }">
+                                                    <div v-for="i in products?.data?.data" :key="i.name">
                                                         <ProductItem :product="i" />
                                                     </div>
                                                 </div>
@@ -120,7 +120,7 @@
                                                                 <ul class="pagination">
                                                                     <li class="page-item"
                                                                         :class="{ active: link.active }"
-                                                                        v-for="(link, index) in product_offer_data?.data?.links"
+                                                                        v-for="(link, index) in products?.data?.links"
                                                                         :key="index">
                                                                         <a :href="link.url"
                                                                             @click.prevent="loadProduct(link)"
@@ -133,10 +133,10 @@
                                                         </div>
                                                         <div class="col-xl-6 col-md-6 col-sm-12">
                                                             <div class="product-search-count-bottom">
-                                                                <h5>Showing Products {{ product_offer_data?.data?.from
+                                                                <!-- <h5>Showing Products {{ products?.data?.from
                                                                     }}-{{ search_result?.to }} of {{
                                                                     search_result?.total }}
-                                                                    Result</h5>
+                                                                    Result</h5> -->
                                                             </div>
                                                         </div>
                                                     </div>
@@ -176,7 +176,7 @@ import ProductItem from "../../Components/ProductItem.vue";
 import BreadCumb from '../../Components/BreadCumb.vue';
 
 import { product_store } from "./Store/product_store.js"
-import { computed, onMounted, watch } from 'vue';
+import { mapActions, mapState } from 'pinia';
 
 
 
@@ -186,14 +186,20 @@ export default {
         slug: String,
     },
 
+    data: () => ({
+        bread_cumb: [
+            {
+                title: 'offer-products',
+                url: '#',
+                active: false,
+            },
+        ],
+    }),
+
     setup(props) {
 
         const top_offer_store = product_store();
         top_offer_store.slug = props.slug;
-        const product_offer_data = computed(() => top_offer_store.offer_products);
-        onMounted(async () => {
-            await top_offer_store.get_all_top_offer_products_by_offer_id();
-        })
 
         const loadProduct = async (link) => {
             try {
@@ -206,10 +212,23 @@ export default {
 
         return {
             loadProduct,
-            product_offer_data
         };
 
     },
+
+    created: async function () {
+        await this.get_all_top_offer_products_by_offer_id();
+    },
+    methods: {
+        ...mapActions(product_store, {
+            get_all_top_offer_products_by_offer_id: 'get_all_top_offer_products_by_offer_id',
+        })
+    },
+    computed: {
+        ...mapState(product_store, {
+            products: 'products',
+        })
+    }
 
 
 };

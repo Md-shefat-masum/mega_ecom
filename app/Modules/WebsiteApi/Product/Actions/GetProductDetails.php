@@ -16,12 +16,9 @@ class GetProductDetails
             }
 
 
-
-
-
             $with = [
                 'product_images:id,product_id,url',
-                'product_categories:id,title',
+                'product_categories:id,title,slug',
                 'product_brand:id,title',
                 'product_region',
                 'product_region.country',
@@ -34,7 +31,7 @@ class GetProductDetails
 
                 'product_reviews',
                 'product_reviews.user:id,name',
-                'product_reviews.product_review_images:id,product_id,image',
+                'product_reviews.product_review_images:id,product_review_id,image',
 
                 'product_varient_price.product_varient_group_title:id,title',
                 'product_varient_price.product_varient_values:id,title',
@@ -54,6 +51,7 @@ class GetProductDetails
             if (!$data) {
                 return messageResponse('Data not found...', $data, 404, 'error');
             }
+
 
             // Prepare related compare products data
             $relatedProductArray = self::prepareRelatedCompareProducts($data);

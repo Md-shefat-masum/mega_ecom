@@ -11,7 +11,7 @@ class Show
     public static function execute($slug)
     {
         try {
-            $with = [];
+            $with = ['product_varient_group'];
             $fields = request()->input('fields') ?? [];
             if (empty($fields)) {
                 $fields = ['*'];

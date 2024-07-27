@@ -13,11 +13,9 @@ use Inertia\Inertia;
 
 class AuthController extends Controller
 {
-    public function __construct()
-    {
-    }
     public function login()
     {
+
         session()->put('prev_url', url()->previous());
         return Inertia::render('Auth/Login', [
             'event' => [
@@ -27,23 +25,17 @@ class AuthController extends Controller
             ]
         ]);
     }
-
-    public function login_submit()
+    public function register()
     {
-        $this->validate(request(), [
-            "email" => ['required', 'exists:users,email'],
-            "password" => ['required'],
+
+        session()->put('prev_url', url()->previous());
+
+        return Inertia::render('Auth/Register', [
+            'event' => [
+                'title' => 'ETEK Login',
+                'image' => 'https://etek.com.bd/frontend/images/etek_logo.png',
+                'description' => 'Best eCommerce in bangladesh'
+            ]
         ]);
-
-        $user = User::whereAny(['user_name', 'email', 'phone_number'], request()->email)->first();
-
-        $check_pass = Hash::check(request()->password, $user->password);
-        if (!$check_pass) {
-            return redirect()->back()->withErrors(["password"=>"incorrect password"]);
-        }
-
-        auth()->login($user);
-        return redirect()->route('website_profile')->with('auth',auth()->user());
-
     }
 }

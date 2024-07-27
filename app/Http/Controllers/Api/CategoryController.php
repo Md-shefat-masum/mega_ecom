@@ -21,7 +21,8 @@ class CategoryController extends Controller
             ->where('status', 'active')
             ->orderBy('serial', 'ASC')
             ->get();
-        return response()->json($data);
+        return response()->json($data)->header('Cache-Control', 'public, max-age=300')
+            ->header('Expires', now()->addMinutes(120)->toRfc7231String());
     }
 
     public function sub_categories($slug)
@@ -32,9 +33,11 @@ class CategoryController extends Controller
 
         if ($data->count()) {
             $data->prepend($category);
-            return response()->json($data);
+            return response()->json($data)->header('Cache-Control', 'public, max-age=300')
+                ->header('Expires', now()->addMinutes(120)->toRfc7231String());
         } else {
-            return response()->json([$category]);
+            return response()->json([$category])->header('Cache-Control', 'public, max-age=300')
+                ->header('Expires', now()->addMinutes(120)->toRfc7231String());
         }
     }
 
@@ -48,7 +51,8 @@ class CategoryController extends Controller
             ->where('status', 'active')
             ->orderBy('serial', 'ASC')
             ->get();
-        return response()->json($data);
+        return response()->json($data)->header('Cache-Control', 'public, max-age=300')
+            ->header('Expires', now()->addMinutes(120)->toRfc7231String());
     }
 
     public function brands()
@@ -58,9 +62,12 @@ class CategoryController extends Controller
         ])
             ->where('status', 'active')
             ->orderBy('serial', 'ASC')
-            ->limit(10)
+            ->take(10)
             ->get();
-        return response()->json($data);
+        $response = entityResponse($data);
+        $response->header('Cache-Control', 'public, max-age=300')
+            ->header('Expires', now()->addMinutes(120)->toRfc7231String());
+        return $response;
     }
 
     public function varients()
@@ -69,26 +76,62 @@ class CategoryController extends Controller
             'id', 'title',
         ])->take(10)->get()->map(function ($i) {
             $i->values = ProductVarientValue::where('product_varient_id', $i->id)
-                ->select('id', 'product_varient_id', 'title')->get();
+                ->select('id', 'product_varient_id', 'title')->take(10)->get();
             return $i;
         });
-        return response()->json($data);
+        return response()->json($data)->header('Cache-Control', 'public, max-age=300')
+            ->header('Expires', now()->addMinutes(120)->toRfc7231String());
     }
 
     public function category($slug)
     {
+        $varient_value_id = null;
+        $brand_id = null;
+        if (request()->variant_values_id) {
+            $varient_value_id = explode(',', request()->variant_values_id);
+        }
+        if (request()->brand_id) {
+            $brand_id = explode(',', request()->brand_id);
+        }
+
         $category = Category::where('slug', $slug)->first();
-        $products = $category->products()->with('product_image')->paginate(30);
+        $products = $category->products()
+            ->with('product_image');
+        if ($varient_value_id) {
+            $products->whereHas('product_verient_price', function ($q) use ($varient_value_id) {
+                if ($varient_value_id) {
+                    $q->whereIn('product_varient_value_id', $varient_value_id);
+                }
+            });
+        }
+        if ($brand_id) {
+            $products->whereIn('product_brand_id', $brand_id);
+        }
+
+        $min_price = $products->clone()->orderBy('customer_sales_price', 'ASC')->where("customer_sales_price", ">", 0)->first()->customer_sales_price ?? 0;
+        $max_price = $products->clone()->orderBy('customer_sales_price', 'DESC')->where("customer_sales_price", ">", 0)->first()->customer_sales_price ?? 0;
+
+        if (request()->min && request()->max) {
+            $products->whereBetween('customer_sales_price', [request()->min, request()->max])
+                ->orderBy("customer_sales_price", "ASC");
+            // ->where("customer_sales_price", ">", 0);
+        }
+
+
+        $products = $products->paginate(30);
         $advertise = $category->advertises()->where('status', 'active')->first();
         $childrens = $category->childrens()->get();
 
-        $products->setPath('/category/'.$slug);
+        $products->setPath('/category/' . $slug);
 
         return response()->json([
             "category" => $category,
             "products" => $products,
             "advertise" => $advertise,
             "childrens" => $childrens,
-        ]);
+            "min_price" => $min_price,
+            "max_price" => $max_price,
+        ])->header('Cache-Control', 'public, max-age=300')
+            ->header('Expires', now()->addMinutes(60)->toRfc7231String());
     }
 }

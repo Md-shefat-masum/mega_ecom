@@ -24,7 +24,7 @@
     <section class="my-5 py-5">
         <div class="custom-container">
             <div class="product_list">
-                <div v-for="product in products" :key="product.name">
+                <div v-for="product in feature_products" :key="product.name">
                     <ProductItem :product="product" />
                 </div>
             </div>
@@ -36,25 +36,17 @@
 <script>
 
 import ProductItem from "../../../Components/ProductItem.vue";
-
+import { use_home_page_store } from "../Store/home_page_store.js";
+import { mapState } from "pinia";
 export default {
 
     components: {
         ProductItem,
     },
-    data: () => ({
-        products: [],
-    }),
-    created: async function () {
-        setTimeout(async () => {
-            await this.get_featured_products();
-        }, 500);
-    },
-    methods: {
-        get_featured_products: async function () {
-            let res = await window.publicAxios("/featured-products");
-            this.products = res;
-        },
+    computed: {
+        ...mapState(use_home_page_store, {
+            feature_products: "feature_products",
+        }),
     },
 };
 </script>

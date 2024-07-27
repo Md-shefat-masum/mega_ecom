@@ -102,6 +102,12 @@ if (!function_exists('uploader')) {
         }
         $full_name = $path . '/' . $file_name;
         $image->save(public_path($full_name));
+
+        try {
+            Storage::disk('etek')->putFileAs($path, public_path($full_name),$file_name);
+        } catch (\Throwable $th) {
+        }
+
         return $full_name;
     }
 }

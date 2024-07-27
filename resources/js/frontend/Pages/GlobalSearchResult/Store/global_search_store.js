@@ -3,11 +3,26 @@ import { defineStore } from "pinia";
 
 export const use_global_search_store = defineStore("use_global_search_store", {
     state: () => ({
-        search_result_data: [],
+        search_result_data: {
+            category: {},
+            brand: {},
+            product: {},
+        },
         search_key: '',
     }),
 
     actions: {
+        reset_search: function(){
+            this.search_key = "",
+            this.search_result_data = {
+                category: {},
+                brand: {},
+                product: {},
+            };
+        },
+        set_search_key: function(v){
+            this.search_key = v;
+        },
         global_search: async function (url) {
             if (url) {
                 let response = await axios.get(url);
@@ -18,8 +33,6 @@ export const use_global_search_store = defineStore("use_global_search_store", {
                     this.search_result_data = response.data.data
                 }
             }
-
-            console.log(this.search_data)
         },
     },
 });

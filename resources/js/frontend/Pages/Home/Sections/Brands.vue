@@ -20,22 +20,13 @@
     </section>
 </template>
 <script>
-import axios from 'axios';
+
+import { mapState } from 'pinia';
+import { use_home_page_store } from '../Store/home_page_store.js';
 
 export default {
-    data: () => ({
-        brands: []
-    }),
-    created: function () {
-        this.get_brands();
-    },
+
     methods: {
-        get_brands: function () {
-            axios.get('/brands')
-                .then(res => {
-                    this.brands = res.data;
-                })
-        },
         check_image_url: function (url) {
             try {
                 new URL(url);
@@ -44,7 +35,13 @@ export default {
                 return "/" + url;
             }
         },
-    }
+    },
+
+    computed: {
+        ...mapState(use_home_page_store, {
+            brands: "all_brands",
+        }),
+    },
 }
 </script>
 

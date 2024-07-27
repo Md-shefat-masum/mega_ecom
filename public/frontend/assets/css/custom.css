@@ -180,7 +180,7 @@
 }
 
 .product {
-    background-color: white;
+    background-color: #ede9e9;
     position: relative;
     padding: 2px;
     overflow: hidden;
@@ -252,6 +252,7 @@
 
             img {
                 transition-duration: .3s;
+                min-height: 169px;
             }
 
             .product-front {
@@ -313,11 +314,11 @@
                     padding-top: 15px;
 
                     .check-price {
-                        font-size: unset;
+                        font-size: 18px;
                     }
 
                     .price {
-                        font-size: unset;
+                        font-size: 18px;
                     }
                 }
             }

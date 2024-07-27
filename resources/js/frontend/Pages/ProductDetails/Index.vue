@@ -6,12 +6,18 @@
         </title>
     </Head>
     <Layout>
+        <div class="breadcrumb-main py-3">
+            <div class="custom-container">
+                <BreadCumb :bread_cumb="bread_cumb" />
+            </div>
+        </div>
         <section v-if="loaded" class="section-big-pt-space b-g-light">
             <div class="collection-wrapper">
                 <div class="custom-container">
                     <div class="container-fluid">
                         <ProductBasicInfo :product="product_initial_data"></ProductBasicInfo>
                     </div>
+
                     <ProductBottomDetails :product="product_details"></ProductBottomDetails>
                 </div>
             </div>
@@ -26,36 +32,67 @@
 </template>
 
 <script>
-import { onMounted, computed } from 'vue';
+
 import Layout from "../../Shared/Layout.vue";
 import { useProductDetailsStore } from './Store/product_details_store.js';
 import ProductBasicInfo from './Components/ProductBasicInfo.vue';
 import ProductBottomDetails from './Components/ProductBottomDetails.vue';
 import TopProducts from './Components/TopProducts.vue';
-import { mapActions, mapState } from 'pinia';
+import { mapActions, mapState, mapWritableState } from 'pinia';
+import ProductImage from './Components/ProductImage.vue';
+import BreadCumb from '../../Components/BreadCumb.vue';
 
 export default {
-    components: { Layout, ProductBasicInfo, ProductBottomDetails, TopProducts },
+    components: {BreadCumb, Layout, ProductBasicInfo, ProductBottomDetails, TopProducts, ProductImage },
     props: {
         slug: String,
     },
-    // setup(props) {
+    data: () =>({
+        loaded: false,
+        product: null,
+        bread_cumb: [
+            {
+                title: 'product-details',
+                url: '#',
+                active: false,
+            },
+        ],
+    }),
+    created: async function () {
+        // console.log(this.slug);
 
-    //     // const productDetailsStore = useProductDetailsStore();
-    //     // productDetailsStore.slug = props.slug;
+        this.product_initial_data = {};
 
-    //     // const product_initial_data = computed(() => productDetailsStore.product_initial_data);
-    //     // const product_details = computed(() => productDetailsStore.product_details);
-    //     // const top_products = computed(() => productDetailsStore.top_products);
+        await this.get_single_product_initial_data(this.slug);
+        this.loaded = true;
 
-    //     onMounted(async () => {
-    //         // await productDetailsStore.get_single_product_initial_data();
-    //         // await productDetailsStore.get_single_product_details();
-    //         // await productDetailsStore.get_top_products();
-    //     });
+        await this.get_single_product_details(this.slug);
 
+        let bread_cumb = [];
+        this.product_details?.product_categories?.forEach(i=>{
+            bread_cumb.push({
+                title: i.title,
+                url: '/products/'+i.slug,
+                active: false,
+            })
+        });
+        bread_cumb.push({
+            title: this.product_details.title,
+            url: '/product-details/'+this.product_details.slug,
+            active: true,
+        });
+        this.bread_cumb = [...this.bread_cumb, ...bread_cumb];
 
-    //     return {};
+        await this.get_all_question_and_answers(this.slug);
+        await this.get_top_products();
+    },
+    methods: {
+        ...mapActions(useProductDetailsStore, {
+            get_single_product_initial_data: "get_single_product_initial_data",
+            get_single_product_details: "get_single_product_details",
+            get_all_question_and_answers: "get_all_question_and_answers",
+            get_top_products: "get_top_products",
+        }),
 
     // },
     data: () => ({
@@ -68,24 +105,19 @@ export default {
         await this.get_single_product_details();
         // await this.get_top_products();
     },
-    methods: {
-        ...mapActions(useProductDetailsStore, [
-            'get_single_product_initial_data',
-            'get_single_product_details',
-            'get_top_products',
-            'set_slug',
-        ])
-    },
+
     computed: {
-        ...mapState(
-            useProductDetailsStore,
-            [
-                'product_initial_data',
-                'product_details',
-                'top_products',
-            ]
-        ),
+        ...mapState(useProductDetailsStore, {
+            top_products: "top_products",
+        }),
+        ...mapWritableState(useProductDetailsStore, {
+            product_details: 'product_details',
+            store_slug: 'slug',
+            product_initial_data: 'product_initial_data',
+        })
     }
+
+
 };
 </script>
 

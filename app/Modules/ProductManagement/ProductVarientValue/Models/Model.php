@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 class Model extends EloquentModel
 {
     static $ProductVarientmodel = \App\Modules\ProductManagement\ProductVarient\Models\Model::class;
+    static $ProductVarientGroupmodel = \App\Modules\ProductManagement\ProductVarientGroup\Models\Model::class;
 
     protected $table = "product_varient_values";
     protected $guarded = [];
@@ -33,7 +34,15 @@ class Model extends EloquentModel
         return $q->where('status', 'active');
     }
 
+    public function scopeInactive($q)
+    {
+        return $q->where('status', 'inactive');
+    }
+
     public function product_varient(){
         return $this->belongsTo(self::$ProductVarientmodel,'product_varient_id');
+    }
+    public function product_varient_group(){
+        return $this->belongsTo(self::$ProductVarientGroupmodel,'product_varient_group_id');
     }
 }

@@ -16,6 +16,7 @@ Route::prefix('v1')->middleware('auth:api')->group(function () {
         Route::post('update/{id}', [UserController::class, 'update']);
         Route::post('soft-delete', [UserController::class, 'softDelete']);
         Route::delete('destroy', [UserController::class, 'destroy']);
+        Route::post('destroy', [UserController::class, 'destroy']);
         Route::post('restore', [UserController::class, 'restore']);
         Route::post('import', [UserController::class, 'import']);
         Route::post('bulk-actions', [UserController::class, 'bulkAction']);

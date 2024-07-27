@@ -4,11 +4,10 @@
             <slide v-for="slider in home_hero_sliders" :key="slider.id">
                 <div>
                     <div class="slider-banner">
-                        <img :src="`/${slider.image}`" class="w-100" />
+                        <img :src="`${load_image(slider.image, true)}`" alt="top gadgets in bd" class="w-100" />
                     </div>
                 </div>
             </slide>
-
             <!-- <template #addons>
                 <navigation />
                 <pagination />
@@ -38,6 +37,10 @@
 
 import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
+
+import { use_home_page_store } from '../../Store/home_page_store.js';
+import { mapState } from 'pinia';
+
 export default {
     components: {
         Carousel,
@@ -45,21 +48,22 @@ export default {
         Pagination,
         Navigation,
     },
+
     data: () => ({
-        home_hero_sliders: [],
+        is_loaded: false
     }),
-    created: async function () {
-        await this.get_all_home_hero_sliders()
-    },
+
     methods: {
+        load_image: window.load_image,
+    },
 
-        get_all_home_hero_sliders: async function () {
-            let response = await axios.get('/get-home-page-hero-sliders?get_all=1&is_show=1')
-            if (response.data.status === "success") {
-                this.home_hero_sliders = response.data.data
-            }
-        },
+    computed: {
 
-    }
+        ...mapState(use_home_page_store, {
+            home_hero_sliders: 'home_hero_sliders',
+        })
+
+    },
+
 };
 </script>

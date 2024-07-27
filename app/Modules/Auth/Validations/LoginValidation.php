@@ -42,8 +42,9 @@ class LoginValidation extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required | sometimes',
-            'password' => 'required | sometimes|min:8',
+            'phone_number' => 'required | sometimes',
+            // 'email' => 'required | sometimes',
+            // 'password' => 'required | sometimes|min:8',
         ];
     }
 }

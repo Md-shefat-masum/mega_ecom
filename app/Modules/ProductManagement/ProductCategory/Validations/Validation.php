@@ -42,12 +42,11 @@ class Validation extends FormRequest
     public function rules(): array
     {
         return [
-            'product_category_group_id' => 'required | sometimes',
-            'title' => 'required | sometimes',
-            'parent_id' => 'required | sometimes',
-            'serial' => 'required | sometimes',
-            'image' => 'required | sometimes',
-            'status' => ['sometimes', Rule::in(['active', 'inactive'])],
+            'title' => 'required',
+            'product_category_group_id' => ['required', 'numeric'],
+            'parent_id' => 'required',
+            'image' => ['required', 'sometimes'],
+            // 'status' => ['sometimes', Rule::in(['active', 'inactive'])],
         ];
     }
 }

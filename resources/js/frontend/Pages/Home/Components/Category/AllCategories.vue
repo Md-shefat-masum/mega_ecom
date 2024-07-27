@@ -17,7 +17,7 @@
                             <div class="cat_item"
                                 @click="selected = category"
                                 :class="{active: selected.id == category.id}">
-                                <img :src="`${'/'+category.image}`" :alt="category.title">
+                                <img :src="load_image(`${category.image}`)" :alt="category.title">
                                 <span class="link_title">
                                     {{ category.title }}
                                 </span>
@@ -29,9 +29,17 @@
                     <li class="category_modal_close" @click="close_category">
                         <i class="fa fa-close"></i>
                     </li>
-                    <li v-for="category in nav_categories" :key="category.id">
+                    <li v-if="sub_categories.length" v-for="category in sub_categories" :key="category.id">
                         <div @click="visit_category(category.slug)">
-                            <img :src="'/'+`${category.image}`" :alt="category.title">
+                            <img :src="load_image(`${category.image}`)" :alt="category.title">
+                            <span class="link_title">
+                                {{ category.title }}
+                            </span>
+                        </div>
+                    </li>
+                    <li v-else v-for="category in nav_categories" :key="category.id">
+                        <div @click="visit_category(category.slug)">
+                            <img :src="load_image(`/${category.image}`)" :alt="category.title">
                             <span class="link_title">
                                 {{ category.title }}
                             </span>
@@ -44,41 +52,22 @@
 </template>
 <script>
 import { router } from '@inertiajs/vue3'
+import { use_home_page_store } from "../../Store/home_page_store";
+import { mapState } from 'pinia';
+import axios from 'axios';
 export default {
 
     data: () => ({
-        parent_categories: [],
-        nav_categories: [],
         selected: {},
+        sub_categories: [],
     }),
-    created: async function () {
-        let that = this;
-        // setTimeout(function(){
-            that.get_nav_categories();
-            that.get_categories();
-    //     }, 500)
-    },
     watch: {
         selected: function () {
             this.get_sub_categories();
         }
     },
     methods: {
-        get_sub_categories: async function () {
-            let res = await axios.get(`/category/${this.selected.slug}/subcategories`);
-            let data = res.data;
-            this.nav_categories = data;
-        },
-        get_nav_categories: async function () {
-            let res = await axios.get('/nav-categories');
-            let data = res.data;
-            this.nav_categories = data;
-        },
-        get_categories: async function () {
-            let res = await axios.get('/all-categories');
-            let data = res.data;
-            this.parent_categories = data;
-        },
+        load_image: window.load_image,
         close_category: function () {
             document.querySelector('.modal_category_all_page').classList.toggle('active');
         },
@@ -88,8 +77,20 @@ export default {
         visit_category: function (slug) {
             this.close_category();
             router.visit(`/category/${slug}`);
+        },
+        get_sub_categories: function(){
+            axios.get(`/category/${this.selected.slug}/subcategories`)
+                .then(res=>{
+                    this.sub_categories = res.data;
+                });
         }
-    }
+    },
+    computed: {
+        ...mapState(use_home_page_store, {
+            parent_categories: "parent_categories",
+            nav_categories: "side_nav_categories",
+        }),
+    },
 }
 </script>
 <style lang="">

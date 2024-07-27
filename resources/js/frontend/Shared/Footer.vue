@@ -12,14 +12,22 @@
                                 </div>
                                 <div class="footer-contant">
                                     <div class="footer-logo">
-                                        <a href="/">
-                                            <img src="/frontend/images/etek_logo.png" class="img-fluid" alt="logo">
-                                        </a>
+                                        <Link href="/">
+                                            <img src="/cache/frontend/images/etek_logo.png" class="img-fluid" alt="logo">
+                                        </Link>
                                     </div>
-                                    <p>
-                                        It is a long established fact that a reader will be distracted by the readable
-                                        content.
-                                    </p>
+                                    <div>
+                                        <h2 class="mb-3" style="font-size: 20px;">
+                                            ETEK Enterprise: Your One-Stop Shop for Electronics, Gadgets, and Medicines
+                                        </h2>
+                                        <p style="text-align: justify;">
+                                            Discover the best in electronics, cutting-edge gadgets, and essential medicines at ETEK Enterprise.
+                                            Our wide range of high-quality products ensures you find exactly what you need,
+                                            whether it's the latest tech innovations or reliable health solutions. Shop with confidence,
+                                            enjoy great deals, and experience exceptional customer service.
+                                            Stay connected with ETEK Enterprise - where technology meets healthcare.
+                                        </P>
+                                    </div>
                                     <ul class="sosiyal">
                                         <li><a href="javascript:void(0)"><i class="fa fa-facebook"></i></a></li>
                                         <li><a href="javascript:void(0)"><i class="fa fa-google-plus"></i></a></li>
@@ -111,27 +119,27 @@
                             <ul class="payment">
                                 <li>
                                     <a href="javascript:void(0)">
-                                        <img src="/frontend/assets/images/1(7).png" class="img-fluid" alt="pay">
+                                        <img src="/cache/frontend/assets/images/1(7).png" class="img-fluid" alt="pay">
                                     </a>
                                 </li>
                                 <li>
                                     <a href="javascript:void(0)">
-                                        <img src="/frontend/assets/images/2(7).png" class="img-fluid" alt="pay">
+                                        <img src="/cache/frontend/assets/images/2(7).png" class="img-fluid" alt="pay">
                                     </a>
                                 </li>
                                 <li>
                                     <a href="javascript:void(0)">
-                                        <img src="/frontend/assets/images/3(7).png" class="img-fluid" alt="pay">
+                                        <img src="/cache/frontend/assets/images/3(7).png" class="img-fluid" alt="pay">
                                     </a>
                                 </li>
                                 <li>
                                     <a href="javascript:void(0)">
-                                        <img src="/frontend/assets/images/4(4).png" class="img-fluid" alt="pay">
+                                        <img src="/cache/frontend/assets/images/4(4).png" class="img-fluid" alt="pay">
                                     </a>
                                 </li>
                                 <li>
                                     <a href="javascript:void(0)">
-                                        <img src="/frontend/assets/images/5(5).png" class="img-fluid" alt="pay">
+                                        <img src="/cache/frontend/assets/images/5(5).png" class="img-fluid" alt="pay">
                                     </a>
                                 </li>
                             </ul>
@@ -156,7 +164,7 @@
                     <span></span>
                     </div>
                     <div class="offer-content ">
-                    <img src="/frontend/assets/images/black-friday.jpg" class="img-fluid bg-img" alt="">
+                    <img src="/cache/frontend/assets/images/black-friday.jpg" class="img-fluid bg-img" alt="">
                     <div>
                         <div>
                             <h2><span>up to </span>80%</h2>
@@ -212,7 +220,7 @@
                                 </div>
                                 <div class="imd-wrraper bg-size"
                                     style="background-image: url(&quot;../frontend/assets/images/2.jpg&quot;); background-size: cover; background-position: center center; display: block;">
-                                    <img src="/frontend/assets/images/2(8).jpg" alt="newsletterimg"
+                                    <img src="/cache/frontend/assets/images/2(8).jpg" alt="newsletterimg"
                                         class="img-fluid bg-img" style="display: none;">
                                 </div>
                             </div>
@@ -235,7 +243,7 @@
                         <div class="col-lg-6 col-xs-12">
                             <div class="quick-view-img bg-size"
                                 style="background-image: url(&quot;../assets/images/layout-1/product/3.jpg&quot;); background-size: cover; background-position: center center; display: block;">
-                                <img src="/frontend/assets/images/3(8).jpg" alt="" class="img-fluid bg-img"
+                                <img src="/cache/frontend/assets/images/3(8).jpg" alt="" class="img-fluid bg-img"
                                     style="display: none;">
                             </div>
                         </div>
@@ -394,7 +402,7 @@
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body"><img
-                                                        src="/frontend/assets/images/size-chart.jpg" alt=""
+                                                        src="/cache/frontend/assets/images/size-chart.jpg" alt=""
                                                         class="img-fluid "></div>
                                             </div>
                                         </div>
@@ -477,7 +485,7 @@
                                 <div class="img-wraper">
                                     <a
                                         href="https://themes.pixelstrap.com/bigdeal/html/product-page(left-sidebar).html">
-                                        <img src="/frontend/assets/images/1(8).jpg" alt="">
+                                        <img src="/cache/frontend/assets/images/1(8).jpg" alt="">
                                     </a>
                                 </div>
                                 <div class="media-body">
@@ -889,7 +897,7 @@
     <!-- <div class="product-notification" id="dismiss">
     <span onclick="dismiss();" class="btn-close" aria-hidden="true"></span>
     <div class="media">
-      <img class="me-2" src="/frontend/assets/images/5(6).jpg" alt="Generic placeholder image">
+      <img class="me-2" src="/cache/frontend/assets/images/5(6).jpg" alt="Generic placeholder image">
       <div class="media-body">
         <h5 class="mt-0 mb-1">Latest trending</h5>
         Cras sit amet nibh libero, in gravida nulla.
@@ -902,8 +910,9 @@
 <script>
 import { mapActions, mapState } from "pinia";
 import { common_store } from "../Store/common_store";
+
 import { auth_store } from "../Store/auth_store.js";
-import AllCategories from '../Components/AllCategories.vue';
+import AllCategories from '../Pages/Home/Components/Category/AllCategories.vue';
 
 export default {
     components: { AllCategories },
@@ -936,6 +945,7 @@ export default {
             all_cart_data: "all_cart_data",
             total_cart_price: "total_cart_price",
         }),
+
 
     },
 };

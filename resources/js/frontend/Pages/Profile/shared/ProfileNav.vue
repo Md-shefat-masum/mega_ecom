@@ -23,6 +23,7 @@
                             <input class="d-none" type="file" ref="fileInput" accept="image/*" @change="previewImage">
 
                         </div>
+
                         <div>
                             <h4>
                                 {{ user.name }}

@@ -37,4 +37,13 @@ class Model extends EloquentModel
     {
         return $this->belongsTo(self::$ProductVerientGroupModel, 'product_varient_group_id');
     }
+
+    public function values(){
+        return $this->hasMany(\App\Modules\ProductManagement\ProductVarientValue\Models\Model::class,'product_varient_id');
+    }
+
+    public function scopeInactive($q)
+    {
+        return $q->where('status', 'inactive');
+    }
 }

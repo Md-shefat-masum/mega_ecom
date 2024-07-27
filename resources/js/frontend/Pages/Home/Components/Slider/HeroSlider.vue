@@ -18,7 +18,7 @@
                             </Suspense>
                         </div>
                         <div class="top_banner_right">
-                            <img :src="`${home_hero_slider_side_banner.banner_one}`" class="w-100" />
+                            <img :src="`${load_image(home_hero_slider_side_banner.banner_one, true)}`" alt="headphone collection" class="w-100" />
                             <!-- <div class="offer-banner-img">
                                 <img src="https://themes.pixelstrap.com/bigdeal/assets/images/layout-1/offer-banner.png" alt="offer-banner" class="img-fluid" />
                             </div>
@@ -38,15 +38,15 @@
                     <div class="bottom_banner">
                         <div class="bottom_banner_left">
                             <div class="img">
-                                <img :src="`${home_hero_slider_side_banner.banner_two}`" />
+                                <img :src="`${load_image(home_hero_slider_side_banner.banner_two, true)}`" alt="gadget collection" />
                             </div>
                             <div class="img">
-                                <img :src="`${home_hero_slider_side_banner.banner_three}`" />
+                                <img :src="`${load_image(home_hero_slider_side_banner.banner_three, true)}`" alt="watch collection" />
                             </div>
                         </div>
                         <div class="bottom_banner_right">
                             <div class="img">
-                                <img :src="`${home_hero_slider_side_banner.banner_four}`" />
+                                <img :src="`${load_image(home_hero_slider_side_banner.banner_four, true)}`" alt="camera collection" />
                             </div>
                         </div>
                     </div>
@@ -57,12 +57,12 @@
 </template>
 
 <script>
-import { computed, defineAsyncComponent, onMounted } from 'vue';
 import 'vue3-carousel/dist/carousel.css'
+import { defineAsyncComponent } from 'vue';
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
-import LeftCategoryList from './LeftCategoryList.vue';
-
-import { use_home_page_store } from '../Pages/Home/Store/home_page_store.js';
+import LeftCategoryList from '../Category/LeftCategoryList.vue';
+import { mapState } from 'pinia';
+import { use_home_page_store } from '../../Store/home_page_store.js';
 
 export default {
     components: {
@@ -75,17 +75,16 @@ export default {
             import('./Slider.vue')
         ),
     },
-    setup() {
-        const homePageStore = use_home_page_store()
-        const home_hero_slider_side_banner = computed(() => homePageStore.home_hero_slider_side_banner);
 
-        onMounted(async () => {
-            await homePageStore.get_all_home_slider_side_banners()
-        })
+    methods: {
+        load_image: window.load_image,
+    },
 
-        return {
-            home_hero_slider_side_banner
-        }
+    computed: {
+        ...mapState(use_home_page_store, {
+            home_hero_slider_side_banner: 'home_hero_slider_side_banner',
+        }),
+
     },
 
 };

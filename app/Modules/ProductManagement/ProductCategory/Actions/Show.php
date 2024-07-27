@@ -11,17 +11,26 @@ class Show
     public static function execute($slug)
     {
         try {
-            $with = [];
+            $with = [
+                'parent:id,title',
+                'group:id,title',
+            ];
             $fields = request()->input('fields') ?? [];
             if (empty($fields)) {
                 $fields = ['*'];
             }
-            if (!$data = self::$model::query()->with($with)->select($fields)->where('slug', $slug)->first()) {
-                return messageResponse('Data not found...',$data, 404, 'error');
+            $data = self::$model::query()
+                ->with($with)
+                ->select($fields)
+                ->where('slug', $slug)
+                ->first();
+            if (!$data) {
+                return messageResponse('Data not found...', $data, 404, 'error');
             }
+            $data->total_products = $data->products()->count();
             return entityResponse($data);
         } catch (\Exception $e) {
-            return messageResponse($e->getMessage(),[], 500, 'server_error');
+            return messageResponse($e->getMessage(), [], 500, 'server_error');
         }
     }
 }
