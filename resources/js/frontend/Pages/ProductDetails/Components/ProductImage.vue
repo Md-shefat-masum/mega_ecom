@@ -25,6 +25,15 @@ export default {
     created() {
         this.imageUrl = this.check_image_url(this.product.product_images[0].url);
     },
+    watch: {
+        product: {
+            handler: function(v){
+                this.imageUrl = this.check_image_url(this.product.product_images[0].url);
+            },
+            deep: true,
+
+        }
+    },
     methods: {
         check_image_url: function (url) {
             try {

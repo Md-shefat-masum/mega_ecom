@@ -21,7 +21,9 @@ export default {
         top_categories: [],
     }),
     created: function () {
-        this.get_categories();
+        setTimeout(() => {
+            this.get_categories();
+        }, 500);
     },
     methods: {
         get_categories: async function () {

@@ -67,7 +67,7 @@ class CategoryController extends Controller
     {
         $data = ProductVarient::select([
             'id', 'title',
-        ])->get()->map(function ($i) {
+        ])->take(10)->get()->map(function ($i) {
             $i->values = ProductVarientValue::where('product_varient_id', $i->id)
                 ->select('id', 'product_varient_id', 'title')->get();
             return $i;

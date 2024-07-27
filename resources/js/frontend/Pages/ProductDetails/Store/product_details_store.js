@@ -106,11 +106,13 @@ export const useProductDetailsStore = defineStore("useProductDetailsStore", {
         },
         setReview(review) {
             this.review = review;
-        }
+        },
         /**
         ## Review section
         ## end
         */
-
+        set_slug: function(data){
+            this.slug = data;
+        }
     }
 });

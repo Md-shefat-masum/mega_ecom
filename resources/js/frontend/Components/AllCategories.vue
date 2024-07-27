@@ -51,9 +51,12 @@ export default {
         nav_categories: [],
         selected: {},
     }),
-    created: function () {
-        this.get_categories();
-        this.get_nav_categories();
+    created: async function () {
+        let that = this;
+        // setTimeout(function(){
+            that.get_nav_categories();
+            that.get_categories();
+    //     }, 500)
     },
     watch: {
         selected: function () {

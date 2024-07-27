@@ -1,7 +1,7 @@
 <template>
     <section class="section-big-py-space  ratio_asos b-g-light">
         <div class="custom-container">
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-12 product-related">
                     <h2>Top products</h2>
                 </div>
@@ -16,7 +16,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </section>
 </template>

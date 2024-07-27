@@ -46,7 +46,9 @@ export default {
         products: [],
     }),
     created: async function () {
-        await this.get_featured_products();
+        setTimeout(async () => {
+            await this.get_featured_products();
+        }, 500);
     },
     methods: {
         get_featured_products: async function () {
