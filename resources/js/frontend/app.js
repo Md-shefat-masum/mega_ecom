@@ -2,7 +2,6 @@ import "../frontend/plugins/sweet_alert.js";
 import "../frontend/plugins/axios_setup.js";
 import "../frontend/plugins/helper_functions.js";
 
-
 import { createApp, h } from "vue";
 import { createInertiaApp, Head, Link } from "@inertiajs/vue3";
 import { createPinia } from "pinia";

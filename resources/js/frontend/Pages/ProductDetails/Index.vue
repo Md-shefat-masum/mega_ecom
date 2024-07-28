@@ -93,8 +93,7 @@ export default {
             get_all_question_and_answers: "get_all_question_and_answers",
             get_top_products: "get_top_products",
         }),
-
-    // },
+    },
     data: () => ({
         loaded: false,
     }),
@@ -116,9 +115,7 @@ export default {
             product_initial_data: 'product_initial_data',
         })
     }
-
-
-};
+}
 </script>
 
 <style scoped>
