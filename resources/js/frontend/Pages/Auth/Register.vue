@@ -15,7 +15,7 @@
                             <form class="theme-form" @submit.prevent="registerFormHandler($event)" method="post">
                                 <div class="form-group">
                                     <label>Enter your Full name</label>
-                                    <input type="text" v-model="name" id="name" class="form-control"
+                                    <input type="text" v-model="name" name="name" id="name" class="form-control"
                                         placeholder="Enter your full name" />
                                 </div>
                                 <div class="form-group">

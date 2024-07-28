@@ -146,5 +146,15 @@ export const common_store = defineStore("common_store", {
                 }
             }
         },
+         //website settigns
+        //website settigns
+        //comparelist
+        //comparelist
+        get_all_app_settings: async function () {
+            let response = await window.privateAxios(`/get-compare-list-items?get_all=1`);
+            if (response.status == "success") {
+                this.all_compare_list_data = response.data;
+            }
+        },
     },
 });

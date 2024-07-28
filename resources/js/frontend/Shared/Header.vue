@@ -8,6 +8,7 @@
                         <div class="top-header-left">
                             <div class="shpping-order">
                                 <h6>free shipping on order over $99 </h6>
+
                             </div>
                             <div class="app-link">
                                 <h6>
@@ -24,9 +25,21 @@
                         <div class="top-header-right">
                             <div class="top-menu-block">
                                 <ul>
-                                    <li><a href="javascript:void(0)">help &amp; contact</a></li>
-                                    <li><a href="javascript:void(0)">todays deal</a></li>
-                                    <li><a href="javascript:void(0)">track order</a></li>
+                                    <li>
+                                        <a href="javascript:void(0)">help &amp; contact</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)">todays deal</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)">track order</a>
+                                    </li>
+                                    <li>
+                                        <Link href="/login">login</Link>
+                                    </li>
+                                    <li>
+                                        <Link href="/register">register</Link>
+                                    </li>
                                     <!-- <li><a href="javascript:void(0)">Notifications</a></li> -->
                                     <!-- <li><a href="javascript:void(0)">gift cards</a></li> -->
                                     <!-- <li><a href="javascript:void(0)">shipping </a></li> -->
@@ -69,7 +82,8 @@
                     <div class="header-left">
                         <div class="brand-logo logo-sm-center">
                             <Link href="/">
-                                <img src="/cache/frontend/images/etek_logo.png" class="img-fluid" alt="ETEK Enterprise Logo">
+                            <img src="/cache/frontend/images/etek_logo.png" class="img-fluid"
+                                alt="ETEK Enterprise Logo">
                             </Link>
                         </div>
                     </div>
@@ -187,7 +201,7 @@
                                             </div>
                                         </li>
                                         <li>
-                                            <Link href="/" class="dark-menu-item" >
+                                            <Link href="/" class="dark-menu-item">
                                             Home
                                             </Link>
                                         </li>
@@ -197,8 +211,8 @@
                                             </Link>
                                         </li> -->
                                         <li>
-                                            <Link  href="/contact" class="dark-menu-item" >
-                                                Contact us
+                                            <Link href="/contact" class="dark-menu-item">
+                                            Contact us
                                             </Link>
                                         </li>
                                         <!-- <li>
@@ -231,7 +245,7 @@
 </template>
 
 <script>
-import { Link } from "@inertiajs/vue3";
+import { Link, usePage } from "@inertiajs/vue3";
 import SearchBar from "../Components/SearchBar.vue";
 import { common_store } from "../Store/common_store";
 import { mapActions, mapState } from "pinia";
@@ -239,6 +253,7 @@ export default {
     components: { Link, SearchBar },
     created: async function () {
         await this.get_all_cart_data();
+        await this.get_all_app_settings();
     },
     methods: {
         toggle_nav: function () {
@@ -247,6 +262,7 @@ export default {
 
         ...mapActions(common_store, {
             get_all_cart_data: "get_all_cart_data",
+            get_all_app_settings: "get_all_app_settings",
         }),
 
         toggle_category: function () {
@@ -256,6 +272,7 @@ export default {
     computed: {
         ...mapState(common_store, {
             all_cart_data: "all_cart_data",
+            app_settings_data: "app_settings_data",
         }),
     },
 };

@@ -35,12 +35,15 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $SettingValueModel = \App\Modules\ConfigurationManagement\WebsiteConfiguration\Models\SettingValueModel::class;
+
         return array_merge(parent::share($request), [
             'auth' => function () use ($request) {
                 return $request->user()
                     ? $request->user()->only('slug', 'name', 'user_name', 'email', 'phone_number', 'photo') // Add more fields as needed
                     : null;
             },
+
         ]);
     }
 }
