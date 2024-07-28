@@ -32,16 +32,18 @@ export const common_store = defineStore("common_store", {
         },
 
         add_to_cart: async function (productId) {
+            console.log(productId);
             const response = await window.privateAxios(`/add-to-cart`, 'post',
                 {
                     product_id: productId,
                 }
             );
 
-            if (response.status === "success") {
+            if (response?.status === "success") {
                 window.s_alert(response.message);
                 this.get_all_cart_data();
             }
+
         },
 
         cart_quantity_update: async function (cartId, action, quantity) {

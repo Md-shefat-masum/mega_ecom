@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -55,9 +57,11 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('/upload_product_list', 'Website\TestController@upload_product_list');
     Route::get('/upload_product', 'Website\TestController@upload_product');
 
-    Route::get('/undefined',function(){});
-    Route::get('/null',function(){});
-    Route::get('/f',function(){
+    Route::get('/undefined', function () {
+    });
+    Route::get('/null', function () {
+    });
+    Route::get('/f', function () {
         // Storage::disk('etek')->putFile("", public_path("uploads/products/-CW-9060039-WW-Gallery-H100i-RGB-PLATINUM-01-228x228.png"));
     });
 });
@@ -66,8 +70,8 @@ Route::group([
     'prefix' => '',
     'namespace' => 'App\Http\Controllers',
 ], function () {
-    Route::view('cache-check','cache');
-    Route::get('/cache/{file_name}', 'AssetController@cache')->where('file_name','.*');
+    Route::view('cache-check', 'cache');
+    Route::get('/cache/{file_name}', 'AssetController@cache')->where('file_name', '.*');
 });
 
 // Route::get("/about", function () {
@@ -79,7 +83,3 @@ Route::group([
 //         ]
 //     ]);
 // });
-
-Route::get('/test', function () {
-    dd(auth()->user());
-});

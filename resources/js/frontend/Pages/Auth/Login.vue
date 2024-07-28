@@ -29,9 +29,9 @@
                                 </div> -->
 
                                 <button class="btn btn-normal mt-2">Login</button>
-                                <a class="float-end txt-default mt-2" href="#">
+                                <!-- <a class="float-end txt-default mt-2" href="#">
                                     Forgot your password?
-                                </a>
+                                </a> -->
                             </form>
                             <p class="mt-3">Sign up for a free account at our store. Registration is quick and easy. It
                                 allows you to be able to order from our shop. To start shopping click register.</p>
@@ -94,7 +94,7 @@ export default {
             let response = await axios.post('/login', formData)
             if (response.data?.status === "success") {
                 window.s_alert(response.data?.message);
-                this.is_register = false;
+                this.is_login = false;
                 this.is_otp_verify = true;
                 this.phone_number = response.data?.data?.phone_number;
             }

@@ -66,11 +66,7 @@
             }
         }
     </script>
-</head>
 
-<body>
-    @inertia
-    {{-- <h1>loaded</h1> --}}
     <script src="/cache/frontend/assets/js/jquery-3.3.1.min.js.download"></script>
     <script src="/cache/frontend/assets/js/popper.min.js.download"></script>
     <script src="/cache/frontend/assets/js/bootstrap.js.download"></script>
@@ -80,6 +76,10 @@
     <script defer src="/cache/plugins/sweet_alert.js"></script>
 
     @vite(['resources/js/frontend/app.js'])
+</head>
+
+<body>
+    @inertia
 </body>
 
 </html>

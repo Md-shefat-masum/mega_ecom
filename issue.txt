@@ -74,3 +74,13 @@ dynamic site map
 website url slug
 
 order product exchange management
+
+
+------27-7--
+
+* - sms provider
+* - email provider
+* - telegram bot
+* - payment gateway
+* - email deye subscripber form frontend ->table name subscribers
+* - setting and setting value 

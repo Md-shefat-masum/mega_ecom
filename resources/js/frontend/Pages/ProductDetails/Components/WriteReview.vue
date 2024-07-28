@@ -50,19 +50,21 @@ import { useProductDetailsStore } from '../Store/product_details_store.js';
 import { computed } from 'vue';
 
 export default {
-    data: () => ({
-        is_auth: false
-    }),
 
-    created() {
-        this.is_auth = localStorage.getItem("token") ? true : false;
+    props: {
+        slug: String,
     },
-    setup() {
+
+    setup(props) {
+
         const reviewStore = useProductDetailsStore();
 
+        const is_auth = localStorage.getItem("token") ? true : false;
         const rating = computed(() => reviewStore.rating);
         const imageFiles = computed(() => reviewStore.imageFiles);
         const imagePreviews = computed(() => reviewStore.imagePreviews);
+
+        // reviewStore.slug = props.slug;
 
         const review = computed({
             get: () => reviewStore.review,
@@ -103,8 +105,9 @@ export default {
         });
 
         const submitReview = () => {
-            if(!this.is_auth){
-                return alert('Please Login to write your review.');
+
+            if (!is_auth) {
+                document.getElementById("myAccount").classList.add('open-side');
             }
             reviewStore.submitReview();
         };
@@ -118,7 +121,8 @@ export default {
             handleFileUpload,
             removeImage,
             fileInfo,
-            submitReview
+            submitReview,
+            is_auth
         };
     }
 };

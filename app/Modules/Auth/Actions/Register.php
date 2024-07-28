@@ -14,14 +14,23 @@ class Register
     {
         try {
             $requestData = $request->validated();
+
+
+            $isUserExist = self::$model::where('phone_number', $requestData['phone_number'])->exists();
+
+            if ($isUserExist) {
+                return messageResponse('Sorry,this phone number already exist', [], 400, 'error');
+            }
+
             $otp = self::generateOTPCode();
             $isExist = DB::table('otp_codes')->where('phone_number', $requestData['phone_number'])->exists();
+
             if ($isExist) {
                 DB::table('otp_codes')->where('phone_number', $requestData['phone_number'])->delete();
             }
+
             DB::table('otp_codes')->insert([
                 'phone_number' => $requestData['phone_number'],
-                'type' => 'register',
                 'otp' => $otp,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -39,8 +48,6 @@ class Register
     {
         return rand(100000, 9999999);
     }
-
-
 }
 
 

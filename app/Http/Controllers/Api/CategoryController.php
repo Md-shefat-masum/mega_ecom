@@ -94,7 +94,10 @@ class CategoryController extends Controller
             $brand_id = explode(',', request()->brand_id);
         }
 
-        $category = Category::where('slug', $slug)->first();
+        $category = Category::where('slug', $slug)
+            ->with('parents:id,title,parent_id,slug,image,status')
+            ->first();
+
         $products = $category->products()
             ->with('product_image');
         if ($varient_value_id) {
@@ -122,7 +125,7 @@ class CategoryController extends Controller
         $advertise = $category->advertises()->where('status', 'active')->first();
         $childrens = $category->childrens()->get();
 
-        $products->setPath('/category/' . $slug);
+        $products->setPath("/category/" . $slug);
 
         return response()->json([
             "category" => $category,

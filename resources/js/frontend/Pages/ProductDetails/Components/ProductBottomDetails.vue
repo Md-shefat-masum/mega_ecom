@@ -98,7 +98,7 @@
                     </div>
 
                     <div class="tab-pane fade" id="top-review" role="tabpanel" aria-labelledby="review-top-tab">
-                        <write-review></write-review>
+                        <write-review ></write-review>
                     </div>
 
                     <div class="tab-pane fade" id="top-question" role="tabpanel" aria-labelledby="question-top-tab">

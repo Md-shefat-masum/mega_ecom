@@ -13,7 +13,7 @@
                                 <div class="footer-contant">
                                     <div class="footer-logo">
                                         <Link href="/">
-                                            <img src="/cache/frontend/images/etek_logo.png" class="img-fluid" alt="logo">
+                                        <img src="/cache/frontend/images/etek_logo.png" class="img-fluid" alt="logo">
                                         </Link>
                                     </div>
                                     <div>
@@ -21,9 +21,12 @@
                                             ETEK Enterprise: Your One-Stop Shop for Electronics, Gadgets, and Medicines
                                         </h2>
                                         <p style="text-align: justify;">
-                                            Discover the best in electronics, cutting-edge gadgets, and essential medicines at ETEK Enterprise.
-                                            Our wide range of high-quality products ensures you find exactly what you need,
-                                            whether it's the latest tech innovations or reliable health solutions. Shop with confidence,
+                                            Discover the best in electronics, cutting-edge gadgets, and essential
+                                            medicines at ETEK Enterprise.
+                                            Our wide range of high-quality products ensures you find exactly what you
+                                            need,
+                                            whether it's the latest tech innovations or reliable health solutions. Shop
+                                            with confidence,
                                             enjoy great deals, and experience exceptional customer service.
                                             Stay connected with ETEK Enterprise - where technology meets healthcare.
                                         </P>
@@ -818,44 +821,7 @@
     <!-- wishlistbar bar end-->
 
     <!-- My account bar start-->
-    <div id="myAccount" class="add_to_cart right account-bar">
-        <a href="javascript:void(0)" class="overlay" onclick="closeAccount()"></a>
-        <div class="cart-inner">
-            <div class="cart_top">
-                <h3>my account</h3>
-                <div class="close-cart">
-                    <a href="javascript:void(0)" onclick="closeAccount()">
-                        <i class="fa fa-times" aria-hidden="true"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="p-2 alert-danger mx-2 my-4">Please login to perform this action</div>
-            <form class="theme-form" @submit.prevent="loginFormHandler($event)" method="post">
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="text" name="email" id="email" class="form-control" placeholder="Email" />
-
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" name="password" id="password" class="form-control"
-                        placeholder="Enter your password" />
-
-                </div>
-                <button class="btn btn-normal">Login</button>
-                <a class="float-end txt-default mt-3" href="#">
-                    Forgot your password?
-                </a>
-                <div class="accout-fwd">
-
-                    <Link href="/login" class="d-block">
-                    <h6>you have no account ?<span>signup now</span></h6>
-                    </Link>
-                </div>
-            </form>
-
-        </div>
-    </div>
+    <login-modal></login-modal>
     <!-- Add to account bar end-->
 
     <!-- add to  setting bar  start-->
@@ -911,11 +877,12 @@
 import { mapActions, mapState } from "pinia";
 import { common_store } from "../Store/common_store";
 
-import { auth_store } from "../Store/auth_store.js";
+
 import AllCategories from '../Pages/Home/Components/Category/AllCategories.vue';
+import LoginModal from '../Pages/Auth/Components/LoginModal.vue';
 
 export default {
-    components: { AllCategories },
+    components: { AllCategories, LoginModal },
     created: async function () {
         // Uncomment the following line if you want to call the method on creation
 
@@ -930,13 +897,7 @@ export default {
             cart_quantity_update: "cart_quantity_update",
         }),
 
-        ...mapActions(auth_store, {
-            user_login: "user_login",
-        }),
 
-        loginFormHandler: async function (event) {
-            this.user_login(event.target);
-        },
 
     },
 

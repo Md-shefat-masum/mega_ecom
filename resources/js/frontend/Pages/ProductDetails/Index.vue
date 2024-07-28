@@ -43,11 +43,11 @@ import ProductImage from './Components/ProductImage.vue';
 import BreadCumb from '../../Components/BreadCumb.vue';
 
 export default {
-    components: {BreadCumb, Layout, ProductBasicInfo, ProductBottomDetails, TopProducts, ProductImage },
+    components: { BreadCumb, Layout, ProductBasicInfo, ProductBottomDetails, TopProducts, ProductImage },
     props: {
         slug: String,
     },
-    data: () =>({
+    data: () => ({
         loaded: false,
         product: null,
         bread_cumb: [
@@ -61,6 +61,8 @@ export default {
     created: async function () {
         // console.log(this.slug);
 
+        await this.set_slug(this.slug);
+
         this.product_initial_data = {};
 
         await this.get_single_product_initial_data(this.slug);
@@ -69,16 +71,16 @@ export default {
         await this.get_single_product_details(this.slug);
 
         let bread_cumb = [];
-        this.product_details?.product_categories?.forEach(i=>{
+        this.product_details?.product_categories?.forEach(i => {
             bread_cumb.push({
                 title: i.title,
-                url: '/products/'+i.slug,
+                url: '/products/' + i.slug,
                 active: false,
             })
         });
         bread_cumb.push({
             title: this.product_details.title,
-            url: '/product-details/'+this.product_details.slug,
+            url: '/product-details/' + this.product_details.slug,
             active: true,
         });
         this.bread_cumb = [...this.bread_cumb, ...bread_cumb];
@@ -92,6 +94,7 @@ export default {
             get_single_product_details: "get_single_product_details",
             get_all_question_and_answers: "get_all_question_and_answers",
             get_top_products: "get_top_products",
+            set_slug: "set_slug",
         }),
     },
     data: () => ({

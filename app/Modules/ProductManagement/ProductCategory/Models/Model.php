@@ -39,6 +39,10 @@ class Model extends EloquentModel
     {
         return $this->belongsTo(Model::class, 'parent_id');
     }
+    public function parents()
+    {
+        return $this->belongsTo(Model::class, 'parent_id')->with('parents')->select('id','title','parent_id','slug','status','image');
+    }
 
     public function group()
     {

@@ -12,11 +12,11 @@ export const product_store = defineStore("product_store", {
         childrens: [],
         advertise: null,
         bread_cumb: [
-            {
-                title: 'category',
-                url: '#',
-                active: false,
-            },
+            // {
+            //     title: 'category',
+            //     url: '#',
+            //     active: false,
+            // },
         ],
 
         variant_values_id: [],
@@ -47,7 +47,7 @@ export const product_store = defineStore("product_store", {
                 }
             }
 
-            console.log(this.search_data)
+            // console.log(this.search_data)
         },
         get_all_products_and_single_group_by_category_group_id: async function (url) {
             if (url) {
@@ -60,7 +60,7 @@ export const product_store = defineStore("product_store", {
                 }
             }
 
-            console.log(this.search_data)
+            // console.log(this.search_data)
         },
         get_product_category_varients: async function (slug) {
             let response = await axios.get(`/get-product-category-varients/${slug}`, {
@@ -133,11 +133,41 @@ export const product_store = defineStore("product_store", {
         },
 
         set_bread_cumb: function () {
-            this.bread_cumb.push({
-                title: this.category.title,
-                url: '/category/' + this.category.slug,
-                active: true,
-            },)
+            function getParentsArray(obj, seenObjects = new Set()) {
+                let parentsArray = [];
+                function helper(currentObj) {
+                    if (seenObjects.has(currentObj)) {
+                        throw new Error("Infinite parents detected");
+                    }
+                    seenObjects.add(currentObj);
+                    parentsArray.push(currentObj);
+                    if (currentObj && typeof currentObj === 'object' && currentObj.parents) {
+                        helper(currentObj.parents);
+                    }
+                }
+                helper(obj);
+                return parentsArray;
+            }
+
+            function reverseArray(arr) {
+                let reversedArray = [];
+                for (let i = arr.length - 1; i >= 0; i--) {
+                    reversedArray.push(arr[i]);
+                }
+                return reversedArray;
+            }
+
+            let parents = getParentsArray(this.category);
+            parents = reverseArray(parents);
+
+            this.bread_cumb = [];
+            parents.forEach((parent) => {
+                this.bread_cumb.push({
+                    title: parent.title,
+                    url: '/products/' + parent.slug,
+                    active: false,
+                })
+            });
         },
 
         load_product: async function (link) {

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('phone_number')->nullable();
             $table->string('email')->nullable();
-            $table->enum('type', ['register', 'reset'])->nullable()->default('register');
+            $table->enum('type', ['register', 'login', 'reset'])->nullable();
             $table->string('otp')->nullable();
             $table->boolean('verify_status')->nullable()->default(0);
             $table->dateTime('validate_till')->nullable();
