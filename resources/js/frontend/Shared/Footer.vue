@@ -13,30 +13,28 @@
                                 <div class="footer-contant">
                                     <div class="footer-logo">
                                         <Link href="/">
-                                        <img src="/cache/frontend/images/etek_logo.png" class="img-fluid" alt="logo">
+                                        <img :src="get_setting_value('footer_logo')" class="img-fluid" alt="logo">
                                         </Link>
                                     </div>
                                     <div>
                                         <h2 class="mb-3" style="font-size: 20px;">
-                                            ETEK Enterprise: Your One-Stop Shop for Electronics, Gadgets, and Medicines
+                                            {{ get_setting_value('title') }}
                                         </h2>
                                         <p style="text-align: justify;">
-                                            Discover the best in electronics, cutting-edge gadgets, and essential
-                                            medicines at ETEK Enterprise.
-                                            Our wide range of high-quality products ensures you find exactly what you
-                                            need,
-                                            whether it's the latest tech innovations or reliable health solutions. Shop
-                                            with confidence,
-                                            enjoy great deals, and experience exceptional customer service.
-                                            Stay connected with ETEK Enterprise - where technology meets healthcare.
+                                            {{ get_setting_value('description') }}
                                         </P>
                                     </div>
                                     <ul class="sosiyal">
-                                        <li><a href="javascript:void(0)"><i class="fa fa-facebook"></i></a></li>
-                                        <li><a href="javascript:void(0)"><i class="fa fa-google-plus"></i></a></li>
-                                        <li><a href="javascript:void(0)"><i class="fa fa-twitter"></i></a></li>
-                                        <li><a href="javascript:void(0)"><i class="fa fa-instagram"></i></a></li>
-                                        <li><a href="javascript:void(0)"><i class="fa fa-rss"></i></a></li>
+                                        <li><a :href="get_setting_value('facebook')"><i class="fa fa-facebook"></i></a>
+                                        </li>
+                                        <li><a :href="get_setting_value('google')"><i
+                                                    class="fa fa-google-plus"></i></a></li>
+                                        <li><a :href="get_setting_value('twitter')"><i class="fa fa-twitter"></i></a>
+                                        </li>
+                                        <li><a :href="get_setting_value('instagram')"><i class="fa fa-instagram"></i></a>
+                                        </li>
+                                        <li><a :href="get_setting_value('telegram')"><i class="fa fa-telegram"></i></a></li>
+                                        <li><a :href="get_setting_value('youtube')"><i class="fa fa-youtube"></i></a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -70,12 +68,14 @@
                                 </div>
                                 <div class="footer-contant">
                                     <ul class="contact-list">
-                                        <li><i class="fa fa-map-marker"></i>ETEK BD
-                                            <br> bangladesh-<span>3654123</span>
+                                        <li><i class="fa fa-map-marker"></i>{{ get_setting_value('address') }}
                                         </li>
-                                        <li><i class="fa fa-phone"></i>call us: <span>123-456-7898</span></li>
-                                        <li><i class="fa fa-envelope-o"></i>email us: support@etek.com.bd</li>
-                                        <li><i class="fa fa-fax"></i>fax <span>123456</span></li>
+                                        <li><i class="fa fa-phone"></i>call us: <span>{{
+                                            get_setting_value('phone_numbers') }}</span></li>
+                                        <li><i class="fa fa-envelope-o"></i>email us: {{ get_setting_value('emails') }}
+                                        </li>
+                                        <li><i class="fa fa-fax"></i>fax <span>{{ get_setting_value('fax') }}</span>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -114,7 +114,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="footer-left">
-                            <p>2019-24 Copy Right by ETEK.com.bd</p>
+                            <p>{{ get_setting_value('copy_right') }}</p>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -599,27 +599,27 @@
                                     <div class="qty-box">
                                         <div class="input-group">
                                             <button class="qty-minus" @click="
-                        cart_quantity_update(
-                            cart.id,
-                            'minus',
-                            null
-                        )
-                        "></button>
+                                            cart_quantity_update(
+                                                cart.id,
+                                                'minus',
+                                                null
+                                            )
+                                            "></button>
                                             <input class="qty-adj form-control" type="number" min="1"
                                                 v-model="cart.quantity" @keyup="
-                        cart_quantity_update(
-                            cart.id,
-                            null,
-                            $event.target.value
-                        )
-                        " />
+                                            cart_quantity_update(
+                                                cart.id,
+                                                null,
+                                                $event.target.value
+                                            )
+                                            " />
                                             <button class="qty-plus" @click="
-                        cart_quantity_update(
-                            cart.id,
-                            'plus',
-                            null
-                        )
-                        "></button>
+                                            cart_quantity_update(
+                                                cart.id,
+                                                'plus',
+                                                null
+                                            )
+                                            "></button>
                                         </div>
                                     </div>
                                     <div class="pro-add">
@@ -905,6 +905,7 @@ export default {
         ...mapState(common_store, {
             all_cart_data: "all_cart_data",
             total_cart_price: "total_cart_price",
+            get_setting_value: "get_setting_value",
         }),
 
 

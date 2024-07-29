@@ -27,7 +27,8 @@ class Seeder extends SeederClass
                 self::$SettingValueModel::create([
                     'setting_title_id' => $setting_title->id,
                     'title' => $setting_title->title,
-                    'value' => $value['value'],
+                    'value' => isset($value['value']) ? $value['value'] : null,
+                    'values' => array_key_exists('values', $value) ? $value['values'] : null,
                 ]);
             }
         }
@@ -129,13 +130,16 @@ class Seeder extends SeederClass
                 "title" => "phone_numbers",
                 "values" => [
                     [
-                        "value" => "+8801793-199803",
+                        "value" => ["+8801793-199803", "123-456-7898"]
                     ],
                     [
                         "value" => "123-456-7898",
                     ],
+                    [
+                        "values" => ["+8801793-199803", "123-456-7898"]
+                    ],
+                ],
 
-                ]
             ],
             [
                 "group" => "contact_information",

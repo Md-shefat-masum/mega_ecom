@@ -37,10 +37,13 @@
                             </div>
                         </div>
                         <div class="subscribe-right">
-                            <div class="input-group">
-                                <input class="form-control" type="text" placeholder="Enter Your Email">
-                                <div class="input-group-text">subscribe</div>
-                            </div>
+                            <form @click.prevent="submitHandler">
+                                <div class="input-group">
+                                    <input class="form-control" type="text" placeholder="Enter Your Email">
+                                    <div class="input-group-text">subscribe</div>
+                                </div>
+                            </form>
+
                         </div>
                     </div>
                 </div>
@@ -50,7 +53,13 @@
 </template>
 
 <script>
-export default{
+export default {
 
+    methods: {
+        submitHandler() {
+           
+        },
+
+    }
 }
 </script>

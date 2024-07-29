@@ -1,16 +1,13 @@
 <?php
 
-namespace App\Modules\ConfigurationManagement\WebsiteConfiguration\Models;
+namespace App\Modules\WebsiteApi\WebsiteSubscriber\Models;
 
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Support\Str;
 
-class SettingTitleModel extends EloquentModel
+class Model extends EloquentModel
 {
-    static $SettingValueModel = \App\Modules\ConfigurationManagement\WebsiteConfiguration\Models\SettingValueModel::class;
-
-
-    protected $table = "con_setting_title";
+    protected $table = "website_subscribers";
     protected $guarded = [];
 
     protected static function booted()
@@ -32,10 +29,5 @@ class SettingTitleModel extends EloquentModel
     public function scopeActive($q)
     {
         return $q->where('status', 'active');
-    }
-
-    public function setting_values()
-    {
-        return $this->hasMany(self::$SettingValueModel, 'setting_title_id');
     }
 }

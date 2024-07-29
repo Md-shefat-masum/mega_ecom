@@ -1,13 +1,14 @@
 <template>
     <header>
         <!-- top header part -->
-        <div class="top-header">
+        <div class="top-header" v-if="loaded">
             <div class="custom-container">
                 <div class="row">
                     <div class="col-xl-5 col-md-7 col-sm-6">
                         <div class="top-header-left">
                             <div class="shpping-order">
-                                <h6>free shipping on order over $99 </h6>
+                                <h6> {{ get_setting_value('shiping_on_order') }} </h6>
+
 
                             </div>
                             <div class="app-link">
@@ -82,7 +83,7 @@
                     <div class="header-left">
                         <div class="brand-logo logo-sm-center">
                             <Link href="/">
-                            <img src="/cache/frontend/images/etek_logo.png" class="img-fluid"
+                            <img :src="get_setting_value('header_logo')" class="img-fluid"
                                 alt="ETEK Enterprise Logo">
                             </Link>
                         </div>
@@ -232,7 +233,7 @@
                                 <div class="contact-block">
                                     <a href="tel:+8801793199803">
                                         <i class="fa fa-volume-control-phone"></i>
-                                        <span>call us<span>01793-199803</span></span>
+                                        <span>call us<span>{{ get_setting_value('phone_numbers') }}</span></span>
                                     </a>
                                 </div>
                             </div>
@@ -251,9 +252,14 @@ import { common_store } from "../Store/common_store";
 import { mapActions, mapState } from "pinia";
 export default {
     components: { Link, SearchBar },
+    data: () => ({
+        loaded: false
+    }),
     created: async function () {
         await this.get_all_cart_data();
-        await this.get_all_app_settings();
+        await this.get_all_website_settings();
+
+        this.loaded = true;
     },
     methods: {
         toggle_nav: function () {
@@ -262,7 +268,7 @@ export default {
 
         ...mapActions(common_store, {
             get_all_cart_data: "get_all_cart_data",
-            get_all_app_settings: "get_all_app_settings",
+            get_all_website_settings: "get_all_website_settings",
         }),
 
         toggle_category: function () {
@@ -272,7 +278,8 @@ export default {
     computed: {
         ...mapState(common_store, {
             all_cart_data: "all_cart_data",
-            app_settings_data: "app_settings_data",
+            website_settings_data: "website_settings_data",
+            get_setting_value: "get_setting_value",
         }),
     },
 };

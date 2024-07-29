@@ -12,6 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('con_setting_title', function (Blueprint $table) {
             $table->id();
             $table->string('title', 100)->nullable();
@@ -20,11 +21,13 @@ return new class extends Migration
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });
+
         Schema::create('con_setting_title_values', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('setting_title_id')->nullable();
             $table->string('title', 100)->nullable();
-            $table->text('value')->nullable();
+            $table->json('value')->nullable();
+            // $table->json('values')->nullable();
             $table->bigInteger('creator')->unsigned()->nullable();
             $table->string('slug', 50)->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');

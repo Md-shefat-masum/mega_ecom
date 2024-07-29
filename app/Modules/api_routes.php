@@ -118,3 +118,5 @@ include_once  base_path("app/Modules/WebsiteApi/ProductQuestion/Route.php");
 
 include_once  base_path("app/Modules/TagManagement/ProductTag/Route.php");
 include_once  base_path("app/Modules/TagManagement/ProductCategoryTag/Route.php");
+
+include_once  base_path("app/Modules/WebsiteApi/WebsiteSettings/Route.php");

@@ -1,12 +1,12 @@
 import { defineStore } from "pinia";
-import axios from "axios";
+
 export const common_store = defineStore("common_store", {
     state: () => ({
         all_cart_data: [],
         all_wish_list_data: [],
         all_compare_list_data: [],
+        website_settings_data: {},
         total_cart_price: 0,
-        api_prefix: "api/v1",
     }),
 
     actions: {
@@ -146,15 +146,38 @@ export const common_store = defineStore("common_store", {
                 }
             }
         },
-         //website settigns
+
         //website settigns
-        //comparelist
-        //comparelist
-        get_all_app_settings: async function () {
-            let response = await window.privateAxios(`/get-compare-list-items?get_all=1`);
-            if (response.status == "success") {
-                this.all_compare_list_data = response.data;
+        //website settigns
+        get_all_website_settings: async function () {
+            let response = await axios.get(`/get-website-settings`);
+            if (response.data.status == "success") {
+                this.website_settings_data = response.data.data;
             }
         },
+
+
+        get_setting_value: function (key, multiple = false) {
+
+            try {
+                if (!multiple) {
+                    let data = ''
+                    let value = this.website_settings_data.find(item => item.title === key);
+                    if (value && value.setting_values.length > 0) {
+                        data = value.setting_values[0].value
+                    }
+                    return data
+                } else {
+                    let values = this.website_settings_data.filter(item => item.title === key);
+                    if (values && values.length > 0) {
+                        return values[0].setting_values;
+                    }
+                    return [];
+                }
+            } catch (error) {
+                console.error(error.message);
+            }
+        },
+
     },
 });
