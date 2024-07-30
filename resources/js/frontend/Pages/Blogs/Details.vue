@@ -27,74 +27,20 @@
                 <div class="row section-big-pb-space">
                     <div class="col-sm-12 blog-detail">
                         <div class="creative-card">
-                            <img src="/frontend/assets/images/blog/main.jpg" class="img-fluid w-100 " alt="blog">
-                            <h3>Also the leap into electronic typesetting, remaining essentially unchanged.</h3>
+                            <img :src="`${single_blog_data.thumbnail_image}`" class="img-fluid w-100 " alt="blog">
+                            <h3>{{ single_blog_data.title }}</h3>
                             <ul class="post-social">
-                                <li>25 January 2018</li>
+                                <li>{{ new Date(single_blog_data.created_at).toDateString() }}</li>
                                 <li>Posted By : Admin Admin</li>
-                                <li><i class="fa fa-heart"></i> 5 Hits</li>
-                                <li><i class="fa fa-comments"></i> 10 Comment</li>
+                                <!-- <li><i class="fa fa-heart"></i> 5 Hits</li>
+                                <li><i class="fa fa-comments"></i> 10 Comment</li> -->
                             </ul>
-                            <p>Fusce scelerisque augue a viverra semper. Etiam nisi nibh, vestibulum quis augue id,
-                                imperdiet fringilla dolor. Nulla sed nisl vel nisi cursus finibus. Vivamus ut augue nec
-                                justo viverra laoreet. Nunc efficitur, arcu ac cursus gravida, lorem elit commodo urna,
-                                id viverra libero tellus non ipsum. Fusce molestie ultrices nibh feugiat pretium. Donec
-                                pulvinar arcu metus, et dapibus odio condimentum id. Quisque malesuada mauris sit amet
-                                dui feugiat, ut pretium mauris luctus. Ut aliquam, tellus nec molestie condimentum,
-                                tellus arcu dignissim quam, a gravida nunc nulla vel magna. Sed pulvinar tortor et
-                                euismod blandit. Proin accumsan orci ac nunc fermentum vehicula.</p>
-                            <p>Cras quis neque urna. Pellentesque mollis, dui nec elementum elementum, ipsum quam
-                                suscipit ligula, sit amet lobortis dolor sem sed neque. Vivamus consequat est non
-                                sodales efficitur. Aliquam sodales eleifend sodales. Aliquam auctor ipsum quis nisl
-                                facilisis, at convallis mauris iaculis. Duis eleifend, magna ac convallis blandit, dui
-                                dui auctor leo, sed tincidunt nisi mauris ut nulla. Praesent porttitor dui ac turpis
-                                commodo porttitor. Integer ligula nisi, bibendum non sem at, porta condimentum dui.</p>
-                            <p>Proin id eleifend diam, euismod dictum nibh. Ut ullamcorper in purus at tempor. Nullam
-                                mattis risus nec velit semper lobortis. Donec accumsan ligula fermentum, ultricies massa
-                                eget, cursus leo. Suspendisse placerat elit et lacus aliquam, ut elementum leo aliquet.
-                                Integer ornare, ipsum eu lacinia viverra, lectus ipsum scelerisque nisl, nec iaculis leo
-                                elit id arcu. Aliquam id ante elit. Donec commodo purus eget lacus pharetra, et egestas
-                                metus blandit. Quisque pellentesque porta urna.</p>
+                           <div v-html="single_blog_data.description"></div>
                         </div>
                     </div>
                 </div>
-                <div class="row section-big-pb-space blog-advance ">
-                    <div class="col-lg-6 ">
-                        <div class="creative-card">
-                            <img src="/frontend/assets/images/blog/1.jpg" class="img-fluid " alt="blog">
-                            <ul>
-                                <li>Donec ut metus sit amet elit consectetur vel turpis.</li>
-                                <li>Aenean in mi eu elit mollis tincidunt.</li>
-                                <li>Etiam blandit metus vitae purus lacinia ultricies.</li>
-                                <li>Nunc quis nulla sagittis, tempus metus.</li>
-                                <li>In scelerisque libero ut mi ornare, neque pulvinar.</li>
-                                <li>Morbi molestie lacus blandit interdum sodales.</li>
-                                <li>Curabitur eleifend velit molestie eleifend interdum.</li>
-                                <li>Vestibulum fringilla tortor et lorem sagittis,</li>
-                                <li>In scelerisque libero ut mi ornare, neque pulvinar.</li>
-                                <li>Morbi molestie lacus blandit interdum sodales.</li>
-                                <li>Curabitur eleifend velit molestie eleifend interdum.</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 ">
-                        <div class="creative-card">
-                            <img src="/frontend/assets/images/blog/2.jpg" class="img-fluid  " alt="blog">
-                            <p>Nulla quam turpis, commodo et placerat eu, mollis ut odio. Donec pellentesque egestas
-                                consequat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere
-                                cubilia Curae; Nunc at urna dolor. Mauris odio nisi, rhoncus ac justo eget, lacinia
-                                iaculis lectus. </p>
-                            <p class="mt-2">Nulla quam turpis, commodo et placerat eu, mollis ut odio. Donec
-                                pellentesque egestas consequat. Vestibulum ante ipsum primis in faucibus orci luctus et
-                                ultrices posuere cubilia Curae; Nunc at urna dolor. Mauris odio nisi, rhoncus ac justo
-                                eget, lacinia iaculis lectus. rhoncus ac justo eget, lacinia iaculis lectus.</p>
-                            <p class="mt-2">Nulla quam turpis, commodo et placerat eu, mollis ut odio. Donec
-                                pellentesque egestas consequat. Vestibulum ante ipsum primis in faucibus orci luctus et
-                                ultrices.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row section-big-pb-space">
+
+                <!-- <div class="row section-big-pb-space">
                     <div class="col-sm-12 ">
                         <div class="creative-card">
                             <ul class="comment-section">
@@ -166,28 +112,34 @@
                             </form>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </section>
     </Layout>
 </template>
 
 <script>
+import { mapActions, mapState } from 'pinia';
 import Layout from "../../Shared/Layout.vue";
+import { blog_store } from "./Store/blog_store"
 export default {
-    data() {
-        return {
-            userData: [],
-        };
+    props: {
+        slug: String
     },
     components: { Layout },
-    props: ["users"],
-    created: function () {
-        this.userData = this.users;
+    created: async function () {
+        await this.get_single_blog(this.slug)
+    },
+    methods: {
+        ...mapActions(blog_store, {
+            get_single_blog: 'get_single_blog'
+        }),
 
-        console.log(this.userData);
+    },
+    computed: {
+        ...mapState(blog_store, {
+            single_blog_data: 'single_blog_data'
+        })
     }
 };
 </script>
-
-<style></style>

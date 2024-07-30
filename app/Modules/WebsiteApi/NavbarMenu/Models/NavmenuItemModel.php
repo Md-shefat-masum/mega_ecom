@@ -1,20 +1,14 @@
 <?php
 
-namespace App\Modules\BlogManagement\Blog\Models;
+namespace App\Modules\WebsiteApi\NavbarMenu\Models;
 
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Support\Str;
 
-class Model extends EloquentModel
+class NavmenuItemModel extends EloquentModel
 {
-    protected $table = "blogs";
+    protected $table = "navbar_menu_items";
     protected $guarded = [];
-    protected $casts = [
-        "image" => "array",
-    ];
-
-    static $blogCategoryModel = \App\Modules\BlogManagement\BlogCategory\Models\Model::class;
-
 
     protected static function booted()
     {
@@ -35,10 +29,5 @@ class Model extends EloquentModel
     public function scopeActive($q)
     {
         return $q->where('status', 'active');
-    }
-
-    public function blog_categories()
-    {
-        return $this->belongsToMany(self::$blogCategoryModel, 'blog_post_categories', 'blog_id', 'blog_category_id');
     }
 }

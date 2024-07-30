@@ -30,10 +30,10 @@ if (!function_exists('all')) {
             {
                 try {
                     \$pageLimit = request()->input('limit') ?? 10;
-                    \$orderByColumn = request()->input('sort_by_col');
-                    \$orderByType = request()->input('sort_type');
-                    \$status = request()->input('status');
-                    \$fields = request()->input('fields');
+                    \$orderByColumn = request()->input('sort_by_col') ?? 'id';
+                    \$orderByType = request()->input('sort_type') ?? 'asc';
+                    \$status = request()->input('status') ?? 'active';
+                    \$fields = request()->input('fields') ?? '*';
                     \$with = [];
                     \$condition = [];
 

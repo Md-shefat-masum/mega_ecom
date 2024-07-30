@@ -27,13 +27,27 @@
                             <div class="top-menu-block">
                                 <ul>
                                     <li>
-                                        <a href="javascript:void(0)">help &amp; contact</a>
+                                        <a :href="get_setting_value('facebook')"><i class="fa fa-facebook"></i></a>
+                                    </li>
+
+                                    <li>
+                                        <a :href="get_setting_value('twitter')"><i class="fa fa-twitter"></i></a>
                                     </li>
                                     <li>
-                                        <a href="javascript:void(0)">todays deal</a>
+                                        <a :href="get_setting_value('instagram')"><i class="fa fa-instagram"></i></a>
                                     </li>
                                     <li>
-                                        <a href="javascript:void(0)">track order</a>
+                                        <a :href="get_setting_value('youtube')"><i class="fa fa-youtube"></i></a>
+                                    </li>
+                                    <li class="order-track">
+                                        <a href="javascript:void(0)" @click="order_track_show = !order_track_show">track
+                                            order</a>
+                                        <form @submit.prevent="TrackOrderForm" v-if="order_track_show">
+                                            <div class="d-flex">
+                                                <input type="search" name="order_id" id="">
+                                                <button type="submit"><i class="fa fa-search"></i></button>
+                                            </div>
+                                        </form>
                                     </li>
                                     <li>
                                         <Link href="/login">login</Link>
@@ -83,8 +97,7 @@
                     <div class="header-left">
                         <div class="brand-logo logo-sm-center">
                             <Link href="/">
-                            <img :src="get_setting_value('header_logo')" class="img-fluid"
-                                alt="ETEK Enterprise Logo">
+                            <img :src="`/${get_setting_value('header_logo')}`" class="img-fluid" alt="ETEK Enterprise Logo">
                             </Link>
                         </div>
                     </div>
@@ -201,28 +214,12 @@
                                                 <i class="fa fa-angle-right ps-2" aria-hidden="true"></i>
                                             </div>
                                         </li>
-                                        <li>
-                                            <Link href="/" class="dark-menu-item">
-                                            Home
+                                        <li v-for="item in navbar_menu_data" :key="item">
+                                            <Link :href="`${item.external_link}`" class="dark-menu-item">
+                                            {{ item.title }}
                                             </Link>
                                         </li>
-                                        <!-- <li>
-                                            <Link  href="/blogs" class="dark-menu-item" >
-                                                Blog
-                                            </Link>
-                                        </li> -->
-                                        <li>
-                                            <Link href="/contact" class="dark-menu-item">
-                                            Contact us
-                                            </Link>
-                                        </li>
-                                        <!-- <li>
-                                            <a class="dark-menu-item has-submenu" href="javascript:void(0)">Home
-                                                <span class="sub-arrow"></span></a>
-                                            <ul>
-                                                <li><a href="/">mega store 1</a></li>
-                                            </ul>
-                                        </li> -->
+
                                     </ul>
                                 </nav>
                             </div>
@@ -253,11 +250,13 @@ import { mapActions, mapState } from "pinia";
 export default {
     components: { Link, SearchBar },
     data: () => ({
-        loaded: false
+        loaded: false,
+        order_track_show: false
     }),
     created: async function () {
         await this.get_all_cart_data();
         await this.get_all_website_settings();
+        await this.get_all_website_navbar_menu();
 
         this.loaded = true;
     },
@@ -269,18 +268,44 @@ export default {
         ...mapActions(common_store, {
             get_all_cart_data: "get_all_cart_data",
             get_all_website_settings: "get_all_website_settings",
+            get_all_website_navbar_menu: "get_all_website_navbar_menu",
+            track_customer_order: "track_customer_order",
         }),
 
         toggle_category: function () {
             document.querySelector('.modal_category_all_page').classList.toggle('active');
         },
+
+        TrackOrderForm: function () {
+
+            this.track_customer_order()
+        }
+
     },
     computed: {
         ...mapState(common_store, {
             all_cart_data: "all_cart_data",
             website_settings_data: "website_settings_data",
+            navbar_menu_data: "navbar_menu_data",
             get_setting_value: "get_setting_value",
         }),
     },
 };
 </script>
+
+<style>
+.order-track {
+    position: relative;
+}
+
+.order-track form input {
+    background-color: rgba(141, 139, 139, 0.267);
+}
+
+.order-track form {
+    position: absolute;
+    top: 28px;
+    left: 0;
+    z-index: 99;
+}
+</style>

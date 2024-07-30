@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Modules\BlogManagement\Blog\Actions;
+namespace App\Modules\WebsiteApi\NavbarMenu\Actions;
 
 class All
 {
-    static $model = \App\Modules\BlogManagement\Blog\Models\Model::class;
+    static $model = \App\Modules\WebsiteApi\NavbarMenu\Models\Model::class;
 
     public static function execute($request)
     {
@@ -14,7 +14,7 @@ class All
             $orderByType = request()->input('sort_type') ?? 'asc';
             $status = request()->input('status') ?? 'active';
             $fields = request()->input('fields') ?? "*";
-            $with = ['blog_categories'];
+            $with = [];
             $condition = [];
 
             $data = self::$model::query();

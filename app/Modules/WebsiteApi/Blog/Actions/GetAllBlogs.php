@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Modules\BlogManagement\Blog\Actions;
+namespace App\Modules\WebsiteApi\Blog\Actions;
 
-class All
+class GetAllBlogs
 {
     static $model = \App\Modules\BlogManagement\Blog\Models\Model::class;
 
-    public static function execute($request)
+
+    public static function execute()
     {
         try {
             $pageLimit = request()->input('limit') ?? 10;

@@ -37,10 +37,11 @@
                             </div>
                         </div>
                         <div class="subscribe-right">
-                            <form @click.prevent="submitHandler">
+                            <form @submit.prevent="submitHandler">
                                 <div class="input-group">
-                                    <input class="form-control" type="text" placeholder="Enter Your Email">
-                                    <div class="input-group-text">subscribe</div>
+                                    <input class="form-control" id="name" name="email" type="text"
+                                        placeholder="Enter Your Email" required>
+                                    <button type="submit" class="input-group-text">subscribe</button>
                                 </div>
                             </form>
 
@@ -53,11 +54,17 @@
 </template>
 
 <script>
+import { mapActions } from 'pinia'
+import { use_home_page_store } from "../Store/home_page_store"
 export default {
 
     methods: {
+        ...mapActions(use_home_page_store, {
+            store_news_letter_subscriber: 'store_news_letter_subscriber'
+        }),
         submitHandler() {
-           
+            let formData = event.target
+            this.store_news_letter_subscriber(formData)
         },
 
     }

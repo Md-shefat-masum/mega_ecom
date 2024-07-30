@@ -13,7 +13,7 @@
                                 <div class="footer-contant">
                                     <div class="footer-logo">
                                         <Link href="/">
-                                        <img :src="get_setting_value('footer_logo')" class="img-fluid" alt="logo">
+                                        <img :src="`/${get_setting_value('footer_logo')}`" class="img-fluid" alt="logo">
                                         </Link>
                                     </div>
                                     <div>
@@ -27,14 +27,17 @@
                                     <ul class="sosiyal">
                                         <li><a :href="get_setting_value('facebook')"><i class="fa fa-facebook"></i></a>
                                         </li>
-                                        <li><a :href="get_setting_value('google')"><i
-                                                    class="fa fa-google-plus"></i></a></li>
+                                        <li><a :href="get_setting_value('google')"><i class="fa fa-google-plus"></i></a>
+                                        </li>
                                         <li><a :href="get_setting_value('twitter')"><i class="fa fa-twitter"></i></a>
                                         </li>
-                                        <li><a :href="get_setting_value('instagram')"><i class="fa fa-instagram"></i></a>
+                                        <li><a :href="get_setting_value('instagram')"><i
+                                                    class="fa fa-instagram"></i></a>
                                         </li>
-                                        <li><a :href="get_setting_value('telegram')"><i class="fa fa-telegram"></i></a></li>
-                                        <li><a :href="get_setting_value('youtube')"><i class="fa fa-youtube"></i></a></li>
+                                        <li><a :href="get_setting_value('telegram')"><i class="fa fa-telegram"></i></a>
+                                        </li>
+                                        <li><a :href="get_setting_value('youtube')"><i class="fa fa-youtube"></i></a>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -51,13 +54,13 @@
                                             <Link href="/contact">contact us</Link>
                                         </li>
                                         <li>
-                                            <Link href="/terms_conditions">terms &amp; conditions</Link>
+                                            <Link href="/terms-conditions">terms &amp; conditions</Link>
                                         </li>
                                         <li>
-                                            <Link href="/returns_exchanges">returns &amp; exchanges</Link>
+                                            <Link href="/returns-exchanges">returns &amp; exchanges</Link>
                                         </li>
                                         <li>
-                                            <Link href="/shipping_delivery">shipping &amp; delivery</Link>
+                                            <Link href="/shipping-delivery">shipping &amp; delivery</Link>
                                         </li>
                                     </ul>
                                 </div>
@@ -84,24 +87,28 @@
                                     <h5>newsletter</h5>
                                 </div>
                                 <div class="footer-contant">
-                                    <div class="newsletter-second">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" placeholder="enter full name">
-                                                <span class="input-group-text"><i class="ti-user"></i></span>
+                                    <form action="" @submit.prevent="submitHandler">
+                                        <div class="newsletter-second">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i class="ti-user"></i></span>
+                                                    <input type="text" name="name" id="name" class="form-control"
+                                                        placeholder="enter full name" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i class="ti-email"></i>
+                                                    </span>
+                                                    <input type="email" name="email" id="email" class="form-control"
+                                                        placeholder="enter email address" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-solid btn-sm">submit now</button>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control"
-                                                    placeholder="enter email address">
-                                                <span class="input-group-text"><i class="ti-email"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group"> <a href="javascript:void(0)"
-                                                class="btn btn-solid btn-sm">submit now</a> </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -876,7 +883,7 @@
 <script>
 import { mapActions, mapState } from "pinia";
 import { common_store } from "../Store/common_store";
-
+import { use_home_page_store } from "../Pages/Home/Store/home_page_store"
 
 import AllCategories from '../Pages/Home/Components/Category/AllCategories.vue';
 import LoginModal from '../Pages/Auth/Components/LoginModal.vue';
@@ -896,6 +903,14 @@ export default {
             remove_cart_item: "remove_cart_item",
             cart_quantity_update: "cart_quantity_update",
         }),
+        ...mapActions(use_home_page_store, {
+            store_news_letter_subscriber: 'store_news_letter_subscriber'
+        }),
+        submitHandler() {
+            let formData = event.target
+            this.store_news_letter_subscriber(formData)
+            event.target.reset()
+        },
 
 
 

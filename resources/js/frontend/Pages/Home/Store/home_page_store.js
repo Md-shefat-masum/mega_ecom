@@ -1,3 +1,4 @@
+import axios from "axios";
 import { defineStore } from "pinia";
 
 
@@ -94,6 +95,16 @@ export const use_home_page_store = defineStore("use_home_page_store", {
                 this.all_brands = response.data?.data
             }
         },
+
+
+        store_news_letter_subscriber: async function (data) {
+            let formData = new FormData(data)
+            let response = await axios.post('website-subscribers/store', formData)
+            if (response.data.status == 'success') {
+                window.s_alert(response.data.message);
+            }
+
+        }
 
     },
 });

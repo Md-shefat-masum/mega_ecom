@@ -5,8 +5,11 @@ export const common_store = defineStore("common_store", {
         all_cart_data: [],
         all_wish_list_data: [],
         all_compare_list_data: [],
+        navbar_menu_data: [],
         website_settings_data: {},
         total_cart_price: 0,
+
+        fields: ['title', 'external_link']
     }),
 
     actions: {
@@ -175,7 +178,17 @@ export const common_store = defineStore("common_store", {
                     return [];
                 }
             } catch (error) {
-                console.error(error.message);
+                // console.error(error.message);
+            }
+        },
+
+        //navbar_menu
+        //navbar_menu
+        get_all_website_navbar_menu: async function () {
+            let fieldsQueryString = this.fields.map((field, index) => `fields[${index}]=${field}`).join('&');
+            let response = await axios.get(`/navbar-menus?get_all=1&${fieldsQueryString}`);
+            if (response.data.status == "success") {
+                this.navbar_menu_data = response.data.data;
             }
         },
 

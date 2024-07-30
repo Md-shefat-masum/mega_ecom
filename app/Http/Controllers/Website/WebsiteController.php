@@ -31,9 +31,10 @@ class WebsiteController extends Controller
             ]
         ]);
     }
-    public function blogDetails()
+    public function blogDetails($slug)
     {
         return Inertia::render('Blogs/Details', [
+            'slug' => $slug,
             'event' => [
                 'title' => 'ETEK Blog Details',
                 'image' => 'https://etek.com.bd/cache/frontend/images/etek_logo.png',

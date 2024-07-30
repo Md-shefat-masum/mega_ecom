@@ -26,7 +26,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('setting_title_id')->nullable();
             $table->string('title', 100)->nullable();
-            $table->json('value')->nullable();
+            $table->text('value')->nullable();
             // $table->json('values')->nullable();
             $table->bigInteger('creator')->unsigned()->nullable();
             $table->string('slug', 50)->nullable();
