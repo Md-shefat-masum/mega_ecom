@@ -79,6 +79,12 @@
                                     alt="camera collection" />
                             </div>
                         </div>
+                        <div class="bottom_banner_right">
+                            <div class="img">
+                                <img :src="`${check_image_url(home_hero_slider_side_banner.banner_four, true)}`"
+                                    alt="camera collection" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
