@@ -41,12 +41,17 @@ export const use_home_page_store = defineStore("use_home_page_store", {
             }
         },
         get_side_nav_categories: async function () {
-            if (this.side_nav_categories.length > 0) {
-                return
+            this.preloader = true;
+            try {
+                if (this.side_nav_categories.length > 0) {
+                    return
+                }
+                let res = await axios.get('/nav-categories');
+                let data = res.data;
+                this.side_nav_categories = data;
+            } finally {
+                this.preloader = false;
             }
-            let res = await axios.get('/nav-categories');
-            let data = res.data;
-            this.side_nav_categories = data;
         },
         get_parent_categories: async function () {
             if (this.parent_categories.length > 0) {

@@ -1,6 +1,6 @@
 <template>
-    <div :class="['cs-skeleton', isCircle ? 'circle' : ''] " :style="{ width: `${width}%`, height: `${height}px` }">
-        <div class="cover" :style="`height:${height-30}px`"></div>
+    <div :class="['cs-skeleton', isCircle ? 'circle' : ''] " :style="{ width: `${width}`, height: `${height}` }">
+        <div class="cover" :style="`height:${height}`"></div>
     </div>
 </template>
 
@@ -8,11 +8,11 @@
 export default {
     props: {
         width: {
-            type: Number,
+            type: String,
             required: true
         },
         height: {
-            type: Number,
+            type: String,
             required: true
         },
         isCircle: {
@@ -28,8 +28,8 @@ export default {
     background-color: #fafafa !important;
     overflow: hidden;
     box-shadow: 0 8px 60px -8px hsl(210, 14%, 80%);
-    border: 1px solid rgb(213, 218, 223);
-    padding: 14px;
+    /* border: 1px solid rgb(213, 218, 223); */
+    /* padding: 14px; */
     border-radius: 5px;
 }
 

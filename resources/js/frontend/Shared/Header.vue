@@ -8,8 +8,6 @@
                         <div class="top-header-left">
                             <div class="shpping-order">
                                 <h6> {{ get_setting_value('shiping_on_order') }} </h6>
-
-
                             </div>
                             <div class="app-link">
                                 <h6>
@@ -96,8 +94,13 @@
                 <div class="main-menu-block">
                     <div class="header-left">
                         <div class="brand-logo logo-sm-center">
-                            <Link href="/">
-                            <img :src="`/${get_setting_value('header_logo')}`" class="img-fluid" alt="ETEK Enterprise Logo">
+                            <div v-if="preloader" class="d-flex align-items-center gap-3">
+                                <skeleton :width="`100px`" :height="`100px`" :isCircle="true"></skeleton>
+                                <skeleton :width="`300px`" :height="`50px`"></skeleton>
+                            </div>
+                            <Link v-else href="/">
+                            <img :src="`/${get_setting_value('header_logo')}`" class="img-fluid"
+                                alt="ETEK Enterprise Logo">
                             </Link>
                         </div>
                     </div>
@@ -247,8 +250,9 @@ import { Link, usePage } from "@inertiajs/vue3";
 import SearchBar from "../Components/SearchBar.vue";
 import { common_store } from "../Store/common_store";
 import { mapActions, mapState } from "pinia";
+import Skeleton from '../Components/Skeleton.vue';
 export default {
-    components: { Link, SearchBar },
+    components: { Link, SearchBar, Skeleton },
     data: () => ({
         loaded: false,
         order_track_show: false
@@ -288,6 +292,7 @@ export default {
             website_settings_data: "website_settings_data",
             navbar_menu_data: "navbar_menu_data",
             get_setting_value: "get_setting_value",
+            preloader: "preloader",
         }),
     },
 };

@@ -3,26 +3,27 @@
         <div class="custom-container">
             <div class="website_banner">
                 <div class="left" id="banner_left">
+                    <skeleton v-if="preloader" :width="`100%`" :height="`640px`"></skeleton>
                     <left-category-list></left-category-list>
                 </div>
                 <div v-if="preloader" class="right">
                     <div class="d-flex gap-1">
                         <div class="w-80">
-                            <skeleton :width="100" :height="440"></skeleton>
+                            <skeleton :width="`100%`" :height="`440px`"></skeleton>
                         </div>
                         <div class="w-20">
-                            <skeleton :width="100" :height="440"></skeleton>
+                            <skeleton :width="`100%`" :height="`440px`"></skeleton>
                         </div>
                     </div>
-                    <div class="d-flex gap-1">
+                    <div class="d-flex gap-1 my-2">
                         <div class="w-40">
-                            <skeleton :width="100" :height="270"></skeleton>
+                            <skeleton :width="`100%`" :height="`270px`"></skeleton>
                         </div>
                         <div class="w-40">
-                            <skeleton :width="100" :height="270"></skeleton>
+                            <skeleton :width="`100%`" :height="`270px`"></skeleton>
                         </div>
                         <div class="w-20">
-                            <skeleton :width="100" :height="270"></skeleton>
+                            <skeleton :width="`100%`" :height="`270px`"></skeleton>
                         </div>
                     </div>
                 </div>
