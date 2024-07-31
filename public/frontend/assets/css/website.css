@@ -14801,6 +14801,17 @@ fieldset:disabled .btn {
     padding-left: 3rem !important;
 }
 
+.w-80 {
+    width: 80% !important;
+}
+
+.w-40 {
+    width: 40% !important;
+}
+.w-20 {
+    width: 20% !important;
+}
+
 .fs-1 {
     font-size: calc(1.375rem + 1.5vw) !important;
 }

@@ -40,7 +40,7 @@
                                 <div class="blog-right">
                                     <div>
                                         <Link :href="`/blog-details/${blog.slug}`">
-                                            <h4>{{ blog.title }}</h4>
+                                        <h4>{{ blog.title }}</h4>
                                         </Link>
                                         <ul class="post-social">
                                             <li>Posted By : Admin Admin</li>
@@ -48,6 +48,35 @@
                                             <li><i class="fa fa-comments"></i> 10 Comment</li> -->
                                         </ul>
                                         <p>{{ blog.description }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-pagination">
+                            <div class="theme-paggination-block">
+                                <div class="row">
+                                    <div class="col-xl-6 col-md-6 col-sm-12">
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination">
+                                                <li class="page-item" :class="{ active: link.active }"
+                                                    v-for="(link, index) in blog_data.links" :key="index">
+                                                    <a :href="link.url" @click.prevent="get_all_blogs(link.url)"
+                                                        class="page-link text_no_wrap">
+                                                        <span v-html="link.label"></span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                    <div class="col-xl-6 col-md-6 col-sm-12">
+                                        <div class="product-search-count-bottom">
+                                            <h5>
+                                                Showing Products {{ blog_data.from }} -
+                                                {{ blog_data.to }} of {{ blog_data.total }}
+                                                Result
+                                            </h5>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -75,18 +104,19 @@
                                 <h4>Popular Blog</h4>
                                 <ul class="popular-blog">
                                     <li v-for="blog in blog_data.data" :key="blog.id">
+                                        <Link :href="`/blog-details/${blog.slug}`">
                                         <div class="media">
-                                            <div class="blog-date"> <span>{{ new
-                            Date(blog.created_at).toDateString() }}</span>
+                                            <div class="blog-date"> <span>{{ new Date(blog.created_at).toDateString()
+                                                    }}</span>
                                             </div>
                                             <div class="media-body align-self-center">
                                                 <h6>{{ blog.title }}</h6>
-                                                <p>0 hits</p>
+                                                <!-- <p>0 hits</p> -->
                                             </div>
                                         </div>
+                                        </Link>
                                         <!-- <p>it look like readable English. Many desktop publishing text.</p> -->
                                     </li>
-
                                 </ul>
                             </div>
                         </div>
@@ -106,11 +136,11 @@ export default {
     components: { Layout },
     created: async function () {
         await this.get_all_blogs()
-        console.log(this.blog_data);
     },
     methods: {
         ...mapActions(blog_store, {
-            get_all_blogs: 'get_all_blogs'
+            get_all_blogs: 'get_all_blogs',
+            load_blogs: 'load_blogs'
         }),
 
     },

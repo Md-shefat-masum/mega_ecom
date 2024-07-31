@@ -1,0 +1,66 @@
+<template>
+    <div :class="['cs-skeleton', isCircle ? 'circle' : ''] " :style="{ width: `${width}%`, height: `${height}px` }">
+        <div class="cover" :style="`height:${height-30}px`"></div>
+    </div>
+</template>
+
+<script>
+export default {
+    props: {
+        width: {
+            type: Number,
+            required: true
+        },
+        height: {
+            type: Number,
+            required: true
+        },
+        isCircle: {
+            type: Boolean,
+            default: false
+        }
+    }
+}
+</script>
+
+<style>
+.cs-skeleton {
+    background-color: #fafafa !important;
+    overflow: hidden;
+    box-shadow: 0 8px 60px -8px hsl(210, 14%, 80%);
+    border: 1px solid rgb(213, 218, 223);
+    padding: 14px;
+    border-radius: 5px;
+}
+
+.cover {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.cs-skeleton.circle {
+    border-radius: 50%;
+}
+
+/* sleleton elements */
+.cover {
+    background: linear-gradient(90deg,
+            hsl(210, 15%, 88%),
+            hsl(210, 15%, 95%),
+            hsl(210, 15%, 88%));
+    background-size: 200%;
+    animation: loader 1s infinite reverse;
+}
+
+
+/* cs-skeleton animation */
+@keyframes loader {
+    from {
+        background-position: -100% 0;
+    }
+
+    to {
+        background-position: 100% 0;
+    }
+}
+</style>

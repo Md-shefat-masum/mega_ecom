@@ -62,7 +62,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('/null', function () {
     });
     Route::get('/f', function () {
-        // Storage::disk('etek')->putFile("", public_path("uploads/products/-CW-9060039-WW-Gallery-H100i-RGB-PLATINUM-01-228x228.png"));
+        Storage::disk('project_upload')->putFileAs("ehsan", public_path("uploads/products/-CW-9060039-WW-Gallery-H100i-RGB-PLATINUM-01-228x228.png"), "new.png");
     });
 });
 

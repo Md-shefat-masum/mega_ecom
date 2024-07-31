@@ -5,20 +5,46 @@
                 <div class="left" id="banner_left">
                     <left-category-list></left-category-list>
                 </div>
-                <div class="right">
+                <div v-if="preloader" class="right">
+                    <div class="d-flex gap-1">
+                        <div class="w-80">
+                            <skeleton :width="100" :height="440"></skeleton>
+                        </div>
+                        <div class="w-20">
+                            <skeleton :width="100" :height="440"></skeleton>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-1">
+                        <div class="w-40">
+                            <skeleton :width="100" :height="270"></skeleton>
+                        </div>
+                        <div class="w-40">
+                            <skeleton :width="100" :height="270"></skeleton>
+                        </div>
+                        <div class="w-20">
+                            <skeleton :width="100" :height="270"></skeleton>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="right" v-else>
                     <div class="top_banner">
                         <div class="top_banner_left">
-                            <Suspense>
+                            <slider></slider>
+                            <!-- <Suspense>
                                 <template #default>
                                     <LazyComponent />
                                 </template>
-                                <template #fallback>
-                                    <div>Loading...</div>
+<template #fallback>
+                                    <div>
+                                        <skeleton :width="100" :height="440"></skeleton>
+                                    </div>
                                 </template>
-                            </Suspense>
+</Suspense> -->
                         </div>
                         <div class="top_banner_right">
-                            <img :src="`${load_image(home_hero_slider_side_banner.banner_one, true)}`" alt="headphone collection" class="w-100" />
+                            <img :src="`${check_image_url(home_hero_slider_side_banner.banner_one, true)}`"
+                                alt="headphone collection" class="w-100" />
                             <!-- <div class="offer-banner-img">
                                 <img src="https://themes.pixelstrap.com/bigdeal/assets/images/layout-1/offer-banner.png" alt="offer-banner" class="img-fluid" />
                             </div>
@@ -35,18 +61,22 @@
                             </div> -->
                         </div>
                     </div>
+
                     <div class="bottom_banner">
                         <div class="bottom_banner_left">
                             <div class="img">
-                                <img :src="`${load_image(home_hero_slider_side_banner.banner_two, true)}`" alt="gadget collection" />
+                                <img :src="`${check_image_url(home_hero_slider_side_banner.banner_two, true)}`"
+                                    alt="gadget collection" />
                             </div>
                             <div class="img">
-                                <img :src="`${load_image(home_hero_slider_side_banner.banner_three, true)}`" alt="watch collection" />
+                                <img :src="`${check_image_url(home_hero_slider_side_banner.banner_three, true)}`"
+                                    alt="watch collection" />
                             </div>
                         </div>
                         <div class="bottom_banner_right">
                             <div class="img">
-                                <img :src="`${load_image(home_hero_slider_side_banner.banner_four, true)}`" alt="camera collection" />
+                                <img :src="`${check_image_url(home_hero_slider_side_banner.banner_four, true)}`"
+                                    alt="camera collection" />
                             </div>
                         </div>
                     </div>
@@ -59,30 +89,43 @@
 <script>
 import 'vue3-carousel/dist/carousel.css'
 import { defineAsyncComponent } from 'vue';
+import Slider from './Slider.vue';
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
 import LeftCategoryList from '../Category/LeftCategoryList.vue';
 import { mapState } from 'pinia';
 import { use_home_page_store } from '../../Store/home_page_store.js';
-
+import Skeleton from '../../../../Components/Skeleton.vue';
 export default {
     components: {
+        Skeleton,
         Carousel,
         Slide,
+        Slider,
         Pagination,
         Navigation,
         LeftCategoryList,
-        LazyComponent: defineAsyncComponent(() =>
-            import('./Slider.vue')
-        ),
-    },
+        // LazyComponent: defineAsyncComponent(() =>
+        //     import('./Slider.vue')
+        // ),
 
+    },
     methods: {
-        load_image: window.load_image,
+        check_image_url: function (url) {
+            try {
+                new URL(url);
+                return url;
+            } catch (e) {
+                url = "/cache/" + url;
+                url.replaceAll('//', '/');
+                return url;
+            }
+        },
     },
 
     computed: {
         ...mapState(use_home_page_store, {
             home_hero_slider_side_banner: 'home_hero_slider_side_banner',
+            preloader: 'preloader',
         }),
 
     },

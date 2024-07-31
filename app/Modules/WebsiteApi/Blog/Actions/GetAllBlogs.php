@@ -10,7 +10,7 @@ class GetAllBlogs
     public static function execute()
     {
         try {
-            $pageLimit = request()->input('limit') ?? 10;
+            $pageLimit = request()->input('limit') ?? 5;
             $orderByColumn = request()->input('sort_by_col') ?? 'id';
             $orderByType = request()->input('sort_type') ?? 'asc';
             $status = request()->input('status') ?? 'active';

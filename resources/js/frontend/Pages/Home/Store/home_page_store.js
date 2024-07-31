@@ -13,26 +13,31 @@ export const use_home_page_store = defineStore("use_home_page_store", {
         all_category_groups: [],
         feature_products: [],
         all_brands: [],
+        preloader: false,
     }),
 
     actions: {
         get_all_home_hero_sliders: async function () {
-            if (this.home_hero_sliders.length > 0) {
-                return
-            }
-            let response = await axios.get('/get-home-page-hero-sliders?get_all=1&is_show=1')
-            if (response.data.status === "success") {
-                this.home_hero_sliders = response.data.data
+            this.preloader = true
+            try {
+                let response = await axios.get('/get-home-page-hero-sliders?get_all=1&is_show=1');
+                if (response.data.status === "success") {
+                    this.home_hero_sliders = response.data.data;
+                }
+            } finally {
+                this.preloader = false;
             }
         },
 
         get_all_home_slider_side_banners: async function () {
-            if (this.home_hero_slider_side_banner.length > 0) {
-                return
-            }
-            let response = await axios.get('/get-home-page-hero-slider-side-banners')
-            if (response.data.status === "success") {
-                this.home_hero_slider_side_banner = response.data.data
+            this.preloader = true;
+            try {
+                let response = await axios.get('/get-home-page-hero-slider-side-banners');
+                if (response.data.status === "success") {
+                    this.home_hero_slider_side_banner = response.data.data;
+                }
+            } finally {
+                this.preloader = false;
             }
         },
         get_side_nav_categories: async function () {

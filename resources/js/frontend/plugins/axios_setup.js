@@ -121,11 +121,11 @@ window.axios.interceptors.response.use(
             );
         } else {
             console.log(error.response || error);
-            if (error.response.data.status == "server_error") {
-                window.s_warning(error.response.data.message);
+            if (error.response?.data?.status == "server_error") {
+                window.s_warning(error.response?.data?.message);
             }
-            if (error.response.data.status == "error") {
-                window.s_error(error.response.data.message);
+            if (error.response?.data?.status == "error") {
+                window.s_error(error.response?.data?.message);
             }
         }
         // console.log(error);

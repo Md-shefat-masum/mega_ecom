@@ -11,7 +11,7 @@
 
         <OurServiceType />
 
-        <FeaturedProducts />
+        <!-- <FeaturedProducts /> -->
 
         <Brands />
 
