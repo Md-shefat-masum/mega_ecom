@@ -69,22 +69,32 @@ export const use_home_page_store = defineStore("use_home_page_store", {
 
 
         get_all_top_products_offer: async function () {
-            if (this.all_top_products_offer.length > 0) {
-                return
-            }
-            let response = await axios.get('/get-all-top-product-offer?get_all=1')
-            if (response.data.status === "success") {
-                this.all_top_products_offer = response.data.data
+            this.preloader = true;
+            try {
+                if (this.all_top_products_offer.length > 0) {
+                    return
+                }
+                let response = await axios.get('/get-all-top-product-offer?get_all=1')
+                if (response.data.status === "success") {
+                    this.all_top_products_offer = response.data.data
+                }
+            } finally {
+                this.preloader = false;
             }
         },
 
         get_all_category_groups: async function () {
-            if (this.all_category_groups.length > 0) {
-                return
-            }
-            let response = await axios.get('/get-all-category-groups?get_all=1')
-            if (response.data.status === "success") {
-                this.all_category_groups = response.data.data
+            this.preloader = true;
+            try {
+                if (this.all_category_groups.length > 0) {
+                    return
+                }
+                let response = await axios.get('/get-all-category-groups?get_all=1')
+                if (response.data.status === "success") {
+                    this.all_category_groups = response.data.data
+                }
+            } finally {
+                this.preloader = false;
             }
         },
 

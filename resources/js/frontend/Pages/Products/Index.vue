@@ -1,5 +1,6 @@
 <template>
     <Layout>
+
         <Head>
             <title>{{ category.title }} Price in Bangladesh</title>
         </Head>
@@ -40,8 +41,10 @@
                                 </div>
 
                                 <PriceRange />
-
-                                <BrandVarients />
+                                <template v-if="preloader">
+                                    <skeleton :width="`300px`" :height="`100vh`"></skeleton>
+                                </template>
+                                <BrandVarients v-else />
 
                                 <AllVarients />
                             </div>
@@ -52,16 +55,12 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="top-banner-wrapper mb-2">
-                                            <img v-if="advertise" :src="load_image(advertise.image)" class="img-fluid"
-                                                :alt="advertise.title">
-                                            <img v-else
-                                                :src="load_image('uploads/categories/etek-category.png')"
-                                                class="img-fluid">
-                                            <!-- <div class="top-banner-content small-section">
-                                                <h1 class="category_page_heading">
-                                                    {{ category.title }}
-                                                </h1>
-                                            </div> -->
+                                            <skeleton v-if="preloader" :width="`100%`" :height="`300px`"></skeleton>
+                                            <img v-else-if="advertise" :src="load_image(advertise?.image)"
+                                                class="img-fluid" :alt="advertise?.title">
+                                            <img v-else src="/dummy.png" class="img-fluid border"
+                                                style="max-height: 200px; width: 100%;">
+
                                         </div>
                                         <div class="top-bar ws-box">
                                             <div class="row">
@@ -106,7 +105,11 @@
                                         <div class="collection-product-wrapper">
 
                                             <div class="py-5">
-                                                <div class="product_list"
+                                                <template v-if="preloader">
+                                                    <product-card-skeleton v-for="i in 30"
+                                                        :key="i"></product-card-skeleton>
+                                                </template>
+                                                <div v-else class="product_list"
                                                     :class="{ product_left: products.data?.length < 5 }">
                                                     <div v-for="i in products.data" :key="i.id">
                                                         <ProductItem :product="i" />
@@ -178,9 +181,17 @@ import ProductItem from "./Components/ProductItem.vue";
 import BreadCumb from '../../Components/BreadCumb.vue';
 import { product_store } from "./Store/product_store.js"
 import { mapActions, mapState } from 'pinia';
+
+import Skeleton from '../../Components/Skeleton.vue';
+import ProductCardSkeleton from '../../Components/Skeliton/ProductCardSkeleton.vue';
+
 export default {
-    components: { Layout, PriceRange, BrandVarients, AllVarients, ProductItem, BreadCumb },
+    components: { Layout, PriceRange, BrandVarients, AllVarients, ProductItem, BreadCumb, Skeleton, ProductCardSkeleton },
     props: ['slug', 'page'],
+
+    data: () => ({
+        preloader: true
+    }),
 
     setup(props) {
         let use_product_store = product_store();
@@ -194,6 +205,7 @@ export default {
         await this.set_bread_cumb();
     },
     methods: {
+
         load_image: window.load_image,
         ...mapActions(product_store, {
             get_products_by_category_id: "get_products_by_category_id",
@@ -218,24 +230,34 @@ export default {
             bread_cumb: 'bread_cumb',
             variant_values_id: 'variant_values_id',
             brand_id: 'brand_id',
+            preloader: true
         })
     },
 
     watch: {
         variant_values_id: {
-            handler: async function () {
-                await this.get_products_by_category_id();
+            handler: function () {
+
+                this.get_products_by_category_id();
+
             },
 
             deep: true
         },
         brand_id: {
-            handler: async function () {
-                await this.get_products_by_category_id();
+            handler: function () {
+
+                this.get_products_by_category_id();
+
             },
 
             deep: true
-        }
+        },
+        products(newVal) {
+            if (newVal) {
+                this.preloader = false;
+            }
+        },
     }
 
 };

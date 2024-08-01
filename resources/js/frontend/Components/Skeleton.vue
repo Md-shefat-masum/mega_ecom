@@ -1,5 +1,6 @@
 <template>
-    <div :class="['cs-skeleton', isCircle ? 'circle' : ''] " :style="{ width: `${width}`, height: `${height}` }">
+    <div :class="[cs_class, 'cs-skeleton', { 'circle': isCircle }]"
+        :style="{ width: `${width}`, height: `${height}` }">
         <div class="cover" :style="`height:${height}`"></div>
     </div>
 </template>
@@ -14,6 +15,9 @@ export default {
         height: {
             type: String,
             required: true
+        },
+        cs_class: {
+            type: String,
         },
         isCircle: {
             type: Boolean,
@@ -30,11 +34,11 @@ export default {
     box-shadow: 0 8px 60px -8px hsl(210, 14%, 80%);
     /* border: 1px solid rgb(213, 218, 223); */
     /* padding: 14px; */
-    border-radius: 5px;
+    border-radius: 0px;
 }
 
 .cover {
-    border-radius: 8px;
+    border-radius: 0px;
     overflow: hidden;
 }
 

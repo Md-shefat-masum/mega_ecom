@@ -13,7 +13,6 @@
             <div class="collection-collapse-block open">
                 <div class="collection-collapse-block-content">
                     <div class="collection-brand-filter">
-
                         <div v-for="brand in product_category_wise_brands" :key="brand.id"
                             class="custom-control custom-checkbox form-check collection-filter-checkbox d-flex">
                             <input type="checkbox" class="custom-control-input form-check-input mt-0"
@@ -24,10 +23,8 @@
                                     <span>{{ brand.title }}</span>
                                     <span>({{ brand.product_category_brands_sum_total_product }})</span>
                                 </span>
-
                             </label>
                         </div>
-
                     </div>
                 </div>
             </div>

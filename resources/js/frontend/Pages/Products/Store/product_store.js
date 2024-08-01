@@ -200,6 +200,7 @@ export const product_store = defineStore("product_store", {
         },
 
         set_brand_id: function (id) {
+
             this.min_price = 0
             this.max_price = 0
             if (this.brand_id.includes(id)) {
