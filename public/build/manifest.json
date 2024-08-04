@@ -11,12 +11,12 @@
     "src": "resources/js/backend/app.js"
   },
   "resources/js/frontend/app.css": {
-    "file": "assets/app-258affff.css",
+    "file": "assets/app-cd1e71ed.css",
     "src": "resources/js/frontend/app.css"
   },
   "resources/js/frontend/app.js": {
     "css": [
-      "assets/app-258affff.css"
+      "assets/app-cd1e71ed.css"
     ],
     "file": "assets/app-bc865af2.js",
     "imports": [

@@ -55,12 +55,13 @@
         window.load_image = function (url, cache = true) {
             try {
                 new URL(url);
+                url.replaceAll('//', '/');
                 return url;
             } catch (error) {
                 let full_url = `{{env('IMAGE_HOST')}}` + '/' + url;
-                if(cache){
-                    full_url = `{{env('IMAGE_HOST')}}` + '/cache/' + url;
-                }
+                // if(cache){
+                //     full_url = `{{env('IMAGE_HOST')}}` + '/cache/' + url;
+                // }
                 full_url.replaceAll('//', '/');
                 return full_url;
             }

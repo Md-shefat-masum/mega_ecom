@@ -29,11 +29,10 @@ class GetInitialProductDetails
                 ->where('slug', $slug)
                 ->first();
 
-            $data->product_images = $data->product_images()->select('id', 'product_id', 'url')->skip(1)->take(10)->get();
-
             if (!$data) {
                 return messageResponse('Data not found...', [], 404, 'error');
             }
+            $data->product_images = $data->product_images()->select('id', 'product_id', 'url')->skip(1)->take(10)->get();
 
             $response = entityResponse($data);
             $response->header('Cache-Control', 'public, max-age=300')

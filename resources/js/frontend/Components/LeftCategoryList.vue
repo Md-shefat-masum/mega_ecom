@@ -6,7 +6,7 @@
             </li>
             <li v-for="category in top_categories" :key="category.id">
                 <Link :href="`/category/${category.slug}`">
-                <img :src="`/${category.image}`" :alt="category.title">
+                <img :src="load_image(`${category.image}`)" :alt="category.title">
                 <span class="link_title">
                     {{ category.title }}
                 </span>
@@ -26,6 +26,7 @@ export default {
         }, 500);
     },
     methods: {
+        load_image: window.load_image,
         get_categories: async function () {
             let res = await axios.get('/nav-categories');
             let data = res.data;

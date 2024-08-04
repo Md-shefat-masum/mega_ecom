@@ -27,11 +27,11 @@ export default {
         imageUrl: '',
     }),
     created() {
-        this.imageUrl = this.check_image_url(this.product.product_images[0].url ?? '');
+        this.imageUrl = this.check_image_url(this.product.product_images[0]?.url ?? '');
     },
     watch: {
         product() {
-            this.imageUrl = this.check_image_url(this.product.product_images[0].url ?? '');
+            this.imageUrl = this.check_image_url(this.product.product_images[0]?.url ?? '');
         }
     },
     watch: {

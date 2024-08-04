@@ -6,7 +6,7 @@
         </title>
     </Head>
     <Layout>
-        <div class="breadcrumb-main py-3">
+        <div class="breadcrumb-main py-3" v-if="loaded">
             <div class="custom-container">
                 <BreadCumb :bread_cumb="bread_cumb" />
             </div>
@@ -59,7 +59,8 @@ export default {
         ],
     }),
     created: async function () {
-        // console.log(this.slug);
+        // await this.get_top_products();
+        console.log('slug',this.slug);
 
         await this.set_slug(this.slug);
 
@@ -97,17 +98,6 @@ export default {
             set_slug: "set_slug",
         }),
     },
-    data: () => ({
-        loaded: false,
-    }),
-    created: async function () {
-        await this.set_slug(this.slug);
-        await this.get_single_product_initial_data();
-        this.loaded = true;
-        await this.get_single_product_details();
-        // await this.get_top_products();
-    },
-
     computed: {
         ...mapState(useProductDetailsStore, {
             top_products: "top_products",
