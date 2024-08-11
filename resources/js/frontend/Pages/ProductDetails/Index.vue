@@ -6,20 +6,21 @@
                 {{ product_initial_data.title }}
             </title>
         </Head>
-        <section v-if="loaded">
-            <template v-if="product_details.type == 'medicine'">
-                <medicine-product></medicine-product>
-            </template>
-            <template v-else>
-                <general-product></general-product>
-            </template>
-            <TopProducts :products="top_products"></TopProducts>
-        </section>
-        <section v-else>
+        <section v-if="preloader">
             <div class="custom-container">
                 <img src="/frontend/images/product_skeleton.png" class="w-100" alt="product-loading">
             </div>
         </section>
+        <section v-else>
+            <template v-if="product_details.type == 'medicine'">
+                <medicine-product></medicine-product>
+            </template>
+            <template v-if="product_details.type == 'general'">
+                <general-product></general-product>
+            </template>
+            <TopProducts :products="top_products"></TopProducts>
+        </section>
+
     </layout>
 </template>
 
@@ -38,7 +39,7 @@ export default {
         slug: String,
     },
     data: () => ({
-        loaded: false,
+        preloader: true,
         bread_cumb: [
             {
                 title: 'product-details',
@@ -55,7 +56,7 @@ export default {
 
         await this.get_single_product_initial_data(this.slug);
 
-        this.loaded = true;
+        this.preloader = false;
 
         await this.get_single_product_details(this.slug);
 
@@ -80,6 +81,7 @@ export default {
         await this.get_all_question_and_answers(this.slug);
 
         await this.get_top_products();
+
 
     },
     methods: {

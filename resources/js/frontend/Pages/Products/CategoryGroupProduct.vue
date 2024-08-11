@@ -39,9 +39,13 @@
 
                                 <PriceRange />
 
-                                <BrandVarients />
-
-                                <AllVarients />
+                                <template v-if="preloader">
+                                    <skeleton :width="`300px`" :height="`100vh`"></skeleton>
+                                </template>
+                                <template v-else>
+                                    <BrandVarients />
+                                    <AllVarients />
+                                </template>
                             </div>
 
                         </div>
@@ -51,8 +55,11 @@
                                     <div class="col-sm-12">
                                         <div class="top-banner-wrapper mb-2">
                                             <skeleton v-if="preloader" :width="`100%`" :height="`300px`"></skeleton>
-                                            <img v-else :src="products?.productOfferDetails?.image" class="img-fluid"
+                                            <img v-else-if="products?.productOfferDetails?.image"
+                                                :src="products?.productOfferDetails?.image" class="img-fluid"
                                                 :alt="products?.productOfferDetails?.title">
+                                            <img v-else src="/dummy.png" style="max-height: 200px;width: 100%;"
+                                                class="img-fluid" alt="">
 
                                         </div>
                                         <div class="top-bar ws-box">
@@ -96,7 +103,6 @@
                                         </div>
 
                                         <div class="collection-product-wrapper">
-
                                             <div class=" py-5">
                                                 <template v-if="preloader">
                                                     <product-card-skeleton v-for="i in 30"
@@ -104,12 +110,20 @@
                                                 </template>
                                                 <div v-else class="product_list"
                                                     :class="{ product_left: products?.data?.data?.length < 5 }">
-                                                    <div v-for="i in products?.data?.data" :key="i.name">
-                                                        <ProductItem :product="i" />
-                                                    </div>
+                                                    <template v-if="products?.data?.data?.length">
+                                                        <div v-for="i in products?.data?.data" :key="i.name">
+                                                            <ProductItem :product="i" />
+                                                        </div>
+                                                    </template>
+                                                    <template v-else>
+
+                                                        <p class="p-3 alert-danger text-center text-danger">No Products
+                                                            Found</p>
+
+                                                    </template>
                                                 </div>
                                             </div>
-                                            <div class="product-pagination">
+                                            <div class="product-pagination" v-if="products?.data?.length">
                                                 <div class="theme-paggination-block">
                                                     <div class="row">
                                                         <div class="col-xl-6 col-md-6 col-sm-12">
@@ -181,7 +195,7 @@ import ProductCardSkeleton from '../../Components/Skeliton/ProductCardSkeleton.v
 
 export default {
 
-    components: { Layout, PriceRange, BrandVarients, AllVarients, ProductItem, BreadCumb,Skeleton,ProductCardSkeleton },
+    components: { Layout, PriceRange, BrandVarients, AllVarients, ProductItem, BreadCumb, Skeleton, ProductCardSkeleton },
 
     props: {
         slug: String,
@@ -194,6 +208,7 @@ export default {
                 active: false,
             },
         ],
+        preloader: true
     }),
     setup(props) {
         const use_product_store = product_store();
@@ -230,7 +245,14 @@ export default {
         ...mapState(product_store, {
             products: 'products',
         })
-    }
+    },
+    watch: {
+        products(newVal) {
+            if (newVal) {
+                this.preloader = false;
+            }
+        },
+    },
 
 
 };

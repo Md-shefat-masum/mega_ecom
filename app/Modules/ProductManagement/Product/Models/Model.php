@@ -18,6 +18,8 @@ class Model extends EloquentModel
     static $ProductReviewModel = \App\Modules\WebsiteApi\ProductReview\Models\Model::class;
     static $productCategoryBrandModel = \App\Modules\ProductManagement\Product\Models\ProductCategoryBrandModel::class;
     static $ProductReviewImageModel = \App\Modules\WebsiteApi\ProductReview\Models\ReviewImageModel::class;
+    static $MedicineProductModel = \App\Modules\ProductManagement\Product\Models\MedicineProductModel::class;
+    static $MedicineProductVerientModel = \App\Modules\ProductManagement\Product\Models\MedicineProductVerientModel::class;
 
 
     protected $table = "products";
@@ -86,7 +88,15 @@ class Model extends EloquentModel
     }
     public function product_reviews()
     {
-        return $this->hasMany(self::$ProductReviewModel, 'product_id','id');
+        return $this->hasMany(self::$ProductReviewModel, 'product_id', 'id');
+    }
+    public function medicine_product()
+    {
+        return $this->hasOne(self::$MedicineProductModel, 'product_id', 'id');
+    }
+    public function medicine_product_verient()
+    {
+        return $this->hasOne(self::$MedicineProductVerientModel, 'product_id', 'id');
     }
 
 

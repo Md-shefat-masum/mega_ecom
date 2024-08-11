@@ -13,7 +13,7 @@ class GetInitialProductDetails
             $with = [
                 'product_image:id,product_id,url',
                 'product_categories:id,title',
-                'product_brand:id,title',
+                'product_brand:id,title,image',
                 'product_region',
                 'product_region.country',
             ];
@@ -29,6 +29,15 @@ class GetInitialProductDetails
                 ->where('slug', $slug)
                 ->first();
 
+
+
+            if ($data->type == 'medicine') {
+                $data->medicine_product = $data->medicine_product()->first();
+                $data->medicine_product_verient = $data->medicine_product_verient()->first();
+            }
+
+
+
             $data->product_images = $data->product_images()->select('id', 'product_id', 'url')->skip(1)->take(10)->get();
 
             if (!$data) {
@@ -36,8 +45,6 @@ class GetInitialProductDetails
             }
 
             $response = entityResponse($data);
-            $response->header('Cache-Control', 'public, max-age=300')
-                ->header('Expires', now()->addMinutes(20)->toRfc7231String());
             return $response;
         } catch (\Exception $e) {
             return messageResponse($e->getMessage(), [], 500, 'server_error');
