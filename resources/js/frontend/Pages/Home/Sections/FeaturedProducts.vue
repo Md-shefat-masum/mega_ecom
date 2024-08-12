@@ -53,6 +53,11 @@ export default {
     data: () => ({
         preloader: true
     }),
+    created: async function () {
+        if (this.feature_products) {
+            this.preloader = false;
+        }
+    },
     computed: {
         ...mapState(use_home_page_store, {
             feature_products: "feature_products",

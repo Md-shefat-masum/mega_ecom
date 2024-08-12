@@ -38,4 +38,18 @@ class AuthController extends Controller
             ]
         ]);
     }
+    public function retailerRegister()
+    {
+
+        session()->put('prev_url', url()->previous());
+
+        return Inertia::render('Auth/RetailerRegister', [
+            'event' => [
+                'title' => 'ETEK Login',
+                'image' => 'https://etek.com.bd/frontend/images/etek_logo.png',
+                'description' => 'Best eCommerce in bangladesh'
+            ]
+        ]);
+
+    }
 }

@@ -45,6 +45,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
     Route::get('/login', 'Website\AuthController@login')->name('login');
     Route::get('/register', 'Website\AuthController@register')->name('register');
+    Route::get('/retailer-register', 'Website\AuthController@retailerRegister')->name('retailerRegister');
 
     Route::get('/uploads_variant', 'Website\TestController@uploads_variant');
     Route::get('/attach_category_into_products', 'Website\TestController@attach_category_into_products');

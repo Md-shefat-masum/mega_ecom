@@ -27,6 +27,7 @@ export const useProductDetailsStore = defineStore("useProductDetailsStore", {
             "product_brand_id",
             "sku",
             "type",
+            "slug",
 
         ]
 

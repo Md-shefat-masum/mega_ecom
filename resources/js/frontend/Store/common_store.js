@@ -21,8 +21,8 @@ export const common_store = defineStore("common_store", {
                 this.total_cart_price = 0;
                 let response = await window.privateAxios(`/get-cart-items?get_all=1`);
                 if (response.status == "success") {
-                    this.all_cart_data = response.data;
-                    if (this.all_cart_data) {
+                    this.all_cart_data = response?.data;
+                    if (this.all_cart_data.length) {
                         let itemTotal = this.all_cart_data.map(
                             (item) => item.quantity * item.product?.current_price
                         );

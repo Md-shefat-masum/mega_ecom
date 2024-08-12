@@ -24,9 +24,7 @@ window.privateAxios = async function (apiEndPoint = null, type = 'get', payload 
     window.axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem('token')}`;
 
     try {
-
         await axios.get("/check_user");
-
     } catch (error) {
         localStorage.removeItem("token");
         document.getElementById("myAccount").classList.add('open-side');

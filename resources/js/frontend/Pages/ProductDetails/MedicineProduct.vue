@@ -23,130 +23,10 @@
                             </svg>
                             <h2 class="ml-10">{{ product_initial_data.title }}</h2>
                         </div>
-                        <div class="d-flex justify-between items-center gap-10">
-                            <div class="text-grey700">বাংলা</div><label class="switch_switch__nE6i_"><input
-                                    type="checkbox" checked=""><span
-                                    class="switch_slider__RFe7M undefined"></span></label>
-                            <div class="text-primary">English</div>
-                        </div>
+
                     </div>
                     <div class="d-flex flex-column px-20">
-                        <div class="d-flex flex-column mb-10 focus_title-indication" id="indication">
-                            <div class="text-16 text-primary fw-500 mb-10">Indication</div>
-                            <div class="text-14 fw-400 text-grey700 " style="line-height: 24px;">
-                                <div>
-                                    <div class="text undefined">Treatment or prevention of, Vitamin C Deficiency,
-                                        Scurvy,
-                                        Infection, Trauma, Burns, Cold exposure, Following Surgery, common cold, Fever,
-                                        scurvy, Stress, Cancer, Methaemoglobinaemia and Children receiving unfortified
-                                        formulas. Also indicated in, Hema<b
-                                            style="align-items: center; font-weight: bold; font-size: 13px; color: black; margin-top: 20px; cursor: pointer;">
-                                            ... Show more</b></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-column mb-10 focus_title-administration" id="administration">
-                            <div class="text-16 text-primary fw-500 mb-10">Administration</div>
-                            <div class="text-14 fw-400 text-grey700 " style="line-height: 24px;">
-                                <div>
-                                    <div class="text undefined">May be taken with or without food.
-
-                                        IV Preparation
-                                        Dilute with large volume of compatible fluid to minimize adverse reactions
-                                        Compatible w/ most common diluents (dextrose solns, NS, LR, Ringer's, ½NS,
-                                        dextrose-saline, dextrose-LR etc)
-
-                                        IV Admin<b
-                                            style="align-items: center; font-weight: bold; font-size: 13px; color: black; margin-top: 20px; cursor: pointer;">
-                                            ... Show more</b></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-column mb-10 focus_title-adult-dose" id="adult-dose">
-                            <div class="text-16 text-primary fw-500 mb-10">Adult Dose</div>
-                            <div class="text-14 fw-400 text-grey700 " style="line-height: 24px;">
-                                <div>
-                                    <div class="text undefined">Oral
-                                        Scurvy
-                                        Adult: Prevention: 25-75 mg daily. 4 tablets 2 to 3 times daily. Treatment:
-                                        &gt;250
-                                        mg daily, given in divided doses.
-
-                                        May also be given via IM/IV/SC admin.
-                                        250-500mg IV qDay/BID for at least 2 weeks.
-
-                                        Thalassaemia
-                                        Adult: 100-200 <b
-                                            style="align-items: center; font-weight: bold; font-size: 13px; color: black; margin-top: 20px; cursor: pointer;">
-                                            ... Show more</b></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-column mb-10 focus_title-child-dose" id="child-dose">
-                            <div class="text-16 text-primary fw-500 mb-10">Child Dose</div>
-                            <div class="text-14 fw-400 text-grey700 " style="line-height: 24px;">
-                                <div>
-                                    <div class="text undefined">Children:
-                                        Child: 1 mth-4 yr: 125-250 mg daily;
-                                        4-12 yr: 250-500 mg daily;
-                                        12-18 yr: 500 mg-1 g daily.
-                                        Doses to be given in 1-2 divided doses.
-
-                                        Thalassaemia
-                                        Child: 100-200 mg daily, to be given with desferrioxamine.
-
-                                        Metabolic disorders
-                                        <b
-                                            style="align-items: center; font-weight: bold; font-size: 13px; color: black; margin-top: 20px; cursor: pointer;">
-                                            ... Show more</b>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-column mb-10 focus_title-mode-of-action" id="mode-of-action">
-                            <div class="text-16 text-primary fw-500 mb-10">Mode of Action</div>
-                            <div class="text-14 fw-400 text-grey700 " style="line-height: 24px;">
-                                <div>
-                                    <div class="text undefined">Vitamin C: Necessary for collagen formation and tissue
-                                        repair; plays a role in oxidation/reduction reactions as well as other metabolic
-                                        pathways including synthesis of catecholamines, carnitine, and steroids; also
-                                        plays
-                                        a role in conversion of folic <b
-                                            style="align-items: center; font-weight: bold; font-size: 13px; color: black; margin-top: 20px; cursor: pointer;">
-                                            ... Show more</b></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-column mb-10 focus_title-precaution" id="precaution">
-                            <div class="text-16 text-primary fw-500 mb-10">Precaution</div>
-                            <div class="text-14 fw-400 text-grey700 " style="line-height: 24px;">
-                                <div>
-                                    <div class="text undefined">Should be given with caution to patient with
-                                        hyperoxaluria.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-column mb-10 focus_title-side-effect" id="side-effect">
-                            <div class="text-16 text-primary fw-500 mb-10">Side Effect</div>
-                            <div class="text-14 fw-400 text-grey700 " style="line-height: 24px;">
-                                <div>
-                                    <div class="text undefined">Flushing, Flank pain, Faintness, headache, Diarrhea,
-                                        dyspepsia, nausea, vomiting, Hyperoxaluria (large doses)</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-column mb-10 focus_title-interaction" id="interaction">
-                            <div class="text-16 text-primary fw-500 mb-10">Interaction</div>
-                            <div class="text-14 fw-400 text-grey700 " style="line-height: 24px;">
-                                <div>
-                                    <div class="text undefined">Vit C: Deferroxamine, hormonal contraceptives,
-                                        flufenazine,
-                                        warfarin, elemental iron, salicylates, warfarin, fluphenazine, disulfiram,
-                                        mexiletine, vitamin B12.</div>
-                                </div>
-                            </div>
-                        </div>
+                        <div v-html="product_initial_data?.medicine_product.p_description"></div>
                     </div>
                 </div>
             </div>
@@ -160,7 +40,7 @@
                             ফার্মেসীর জন্য পাইকারি দামে ঔষধ কিনতে রেজিস্টেশন করুন
                         </h3>
                         <div>
-                            <Link href="/pharmacy-register" type="button" class="btn btn-solid ">Register</Link>
+                            <Link href="/retailer-register" type="button" class="btn btn-solid ">Register</Link>
                         </div>
                     </div>
                 </div>
@@ -366,7 +246,7 @@
                         <div class="d-flex align-items-center">
                             <!-- <img :src="load_image(`${product_initial_data.product_brand?.image}`)" height="60"
                                 width="80" alt=""> -->
-                            <Link class="p-core-info-list-sub-title brand-name text-info">{{
+                            <Link class="p-core-info-list-sub-title w-100 brand-name text-info">{{
                     product_initial_data.product_brand?.title }}</Link>
                         </div>
                     </div>
@@ -385,16 +265,18 @@
                             <div class="">
                                 <span class="d-flex text-16 text-grey900 fw-500">
                                     <div>
-                                         {{  product_initial_data.medicine_product_verient?.pu_b2c_base_unit_multiplier }}
-                                         <span v-if="product_initial_data.medicine_product_verient?.pu_base_unit_label==product_initial_data.medicine_product_verient?.pu_b2c_sales_unit_label">
+                                        {{ product_initial_data.medicine_product_verient?.pu_b2c_base_unit_multiplier }}
+                                        <span
+                                            v-if="product_initial_data.medicine_product_verient?.pu_base_unit_label == product_initial_data.medicine_product_verient?.pu_b2c_sales_unit_label">
                                             x
-                                         </span>
-                                         {{  product_initial_data.medicine_product_verient?.pu_base_unit_label }}
-                                         <span v-if="product_initial_data.medicine_product_verient?.pu_base_unit_label!=product_initial_data.medicine_product_verient?.pu_b2c_sales_unit_label">
-                                             -
-                                             {{ product_initial_data.medicine_product_verient?.pu_base_unit_multiplier }}
-                                             {{ product_initial_data.medicine_product_verient?.pu_b2c_sales_unit_label }}
-                                         </span>
+                                        </span>
+                                        {{ product_initial_data.medicine_product_verient?.pu_base_unit_label }}
+                                        <span
+                                            v-if="product_initial_data.medicine_product_verient?.pu_base_unit_label != product_initial_data.medicine_product_verient?.pu_b2c_sales_unit_label">
+                                            -
+                                            {{ product_initial_data.medicine_product_verient?.pu_base_unit_multiplier }}
+                                            {{ product_initial_data.medicine_product_verient?.pu_b2c_sales_unit_label }}
+                                        </span>
 
                                     </div>
                                 </span>
@@ -403,20 +285,21 @@
 
                     </div>
                     <div class="single-product-price display-flex-center mb-24">
-                        <div class="product-price-widget regular-price p-0">
-                            <span class="regular-price-title m-0">Regular price:</span>
-                            <span class="regular-main-price">
-                                {{ product_initial_data.medicine_product_verient?.pv_b2c_mrp }}  BDT
-                            </span>
-                        </div>
-                        <div class="product-price-widget offer-price">
+
+                        <div class="product-price-widget offer-price p-0">
                             <span class="offer-price-title">Offer price: </span>
                             <span class="offer-main-price">
                                 {{ product_initial_data.medicine_product_verient?.pv_b2c_price }} BDT
                             </span>
                         </div>
+                        <div class="product-price-widget regular-price p-0">
+                            <span class="regular-price-title m-0">Regular price:</span>
+                            <span class="regular-main-price">
+                                {{ product_initial_data.medicine_product_verient?.pv_b2c_mrp }} BDT
+                            </span>
+                        </div>
                         <span class="product-price-save">
-                            12 SAVE
+                            {{ product_initial_data.medicine_product_verient?.pv_b2b_discount_percent }} % SAVE
                         </span>
                     </div>
 
@@ -426,8 +309,11 @@
                     <h6 class="product-title d-block mt-3">quantity</h6>
                     <div>
                         <select name="quantity" class="form-select w-50" id="">
-                            <option value="1">1</option>
-                            <option value="1">1</option>
+                            <option value="" selected disabled>Select quantity</option>
+                            <option v-for="data in product_initial_data.medicine_product_verient?.pv_b2c_max_qty"
+                                :key="data" :value="data">{{ data }} x {{
+                    product_initial_data.medicine_product_verient?.pu_b2c_sales_unit_label }}</option>
+
                         </select>
                     </div>
                 </div>
@@ -446,73 +332,46 @@
                 <hr>
                 <div class="d-flex justify-content-between px-3 border-b1-grey300 align-items-center">
                     <div class="text-18 text-grey900 fw-500 d-flex items-center" style="width: 55%;">
-                        <h4 class="ml-5 mb-0">Alternative Brands For Ceevit</h4>
+                        <h4 class="ml-5 mb-0">Alternative Brands For {{ product_initial_data.title }}</h4>
                     </div>
-                    <div class="d-flex  gap-20 align-items-center">
+                    <!-- <div class="d-flex  gap-20 align-items-center">
                         <span class="text-16 text-grey500 w-50">Sort by: </span>
                         <select class="form-select " style="width: 300px;" aria-label="Default select example">
                             <option selected>Choose</option>
                             <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
                         </select>
-                    </div>
+                    </div> -->
                 </div>
-                <div class="media-banner plrb-0 b-g-white1 border-0 p-3">
-                    <div class="media-banner-box">
-                        <div class="media"><a tabindex="0" href="/uploads/products/ua18-01-228x228.jpg"><img
-                                    src="https://files.etek.com.bd/cache//uploads/products/ua18-01-500x500.jpg"
-                                    height="100" width="100" class="img-fluid" alt="banner"></a>
+                <div class="media-banner brand-related-product plrb-0 b-g-white1 border-0 p-3">
+
+                    <div class="media-banner-box "
+                        v-for="item in product_initial_data.related_brand_product" :key="item.id">
+                        <div class="media">
+                            <a tabindex="0" :href="item.product_image?.url">
+                                <img :src="item.product_image?.url ?? '/dummy.png'" height="100" width="100"
+                                    class="img-fluid" alt="banner">
+                            </a>
                             <div class="media-body">
                                 <div class="media-contant">
                                     <div>
                                         <div class="product-detail">
-                                            <ul class="rating">
-                                                <li><i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                        class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                        class="fa fa-star"></i></li>
-                                            </ul><a tabindex="0"
-                                                href="product-details/orico-bta-508-usb-bluetooth-50-adapter">
-                                                <p>Orico BTA-508 USB Bluetooth 5.0 Adapter</p>
+                                            <a tabindex="0" :href="`/product-details/${item.slug}`">
+                                                <p>{{ item.title }}</p>
                                             </a>
-                                            <h6>$ 500 <span>$ 500</span></h6>
+                                            <h6> {{ item.medicine_product_verient?.pv_b2c_price }} ৳
+                                                <span>{{ item.medicine_product_verient?.pv_b2c_mrp }} ৳</span>
+                                            </h6>
                                         </div>
                                         <div class="cart-info"><button class="tooltip-top add-cartnoty"><i
                                                     class="fa fa-shopping-cart"></i></button><a tabindex="0"
-                                                href="/product-details/orico-bta-508-usb-bluetooth-50-adapter"><i
-                                                    class="fa fa-eye"></i></a></div>
+                                                :href="`/product-details/${item.slug}`"><i class="fa fa-eye"></i></a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="media-banner-box">
-                        <div class="media"><a tabindex="0"
-                                href="/product-details/vention-nafb0-usb-apt-x-bluetooth-51-adapter"><img
-                                    src="https://files.etek.com.bd/cache//uploads/products/ua18-01-500x500.jpg"
-                                    height="100" width="100" class="img-fluid" alt="banner"></a>
-                            <div class="media-body">
-                                <div class="media-contant">
-                                    <div>
-                                        <div class="product-detail">
-                                            <ul class="rating">
-                                                <li><i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                        class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                        class="fa fa-star"></i></li>
-                                            </ul><a tabindex="0"
-                                                href="product-details/vention-nafb0-usb-apt-x-bluetooth-51-adapter">
-                                                <p>Vention NAFB0 USB Apt-X Bluetooth 5.1 Adapter</p>
-                                            </a><!---->
-                                        </div>
-                                        <div class="cart-info"><button class="tooltip-top add-cartnoty"><i
-                                                    class="fa fa-shopping-cart"></i></button><a tabindex="0"
-                                                href="/product-details/vention-nafb0-usb-apt-x-bluetooth-51-adapter"><i
-                                                    class="fa fa-eye"></i></a></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
 
                 </div>
             </div>
@@ -590,5 +449,10 @@ export default {
     margin-top: 15px;
     z-index: 90;
     box-shadow: 0px 0px 5px #717171;
+}
+
+.brand-related-product {
+    max-height: 800px;
+    overflow-y: auto;
 }
 </style>

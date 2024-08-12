@@ -11,11 +11,11 @@
                 <div class="row" v-if="is_register">
                     <div class="col-xl-4 col-lg-6 col-md-8 offset-xl-4 offset-lg-3 offset-md-2">
                         <div class="theme-card">
-                            <h3 class="text-center">Register</h3>
+                            <h3 class="text-center">Retailer Register</h3>
                             <form class="theme-form" @submit.prevent="registerFormHandler($event)" method="post">
                                 <div class="form-group">
                                     <label>Enter your Full name</label>
-                                    <input type="text" v-model="name" name="name" id="name" class="form-control"
+                                    <input type="text" name="name" v-model="name" id="name" class="form-control"
                                         placeholder="Enter your full name" />
                                 </div>
                                 <div class="form-group">
@@ -23,25 +23,25 @@
                                     <input type="number" name="phone_number" id="phone_number" class="form-control"
                                         placeholder="Enter your phone number" />
                                 </div>
-                                <!-- <div class="form-group">
-                                    <label>Password</label>
-                                    <div class="password-icon">
-                                        <input :type="type" name="password" id="password"
-                                            class="form-control position-relative" placeholder="Enter your password" />
-                                        <i class="fa fa-eye" :class="{ 'fa-eye-slash': type === 'password' }"
-                                            @click="showPassword"></i>
-                                    </div>
-                                </div> -->
+                                <div class="form-group">
+                                    <label>Enter your Shop name</label>
+                                    <input type="text" v-model="shop_name" name="shop_name" id="shop_name"
+                                        class="form-control" placeholder="Enter your shop name" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Enter license Numaber</label>
+                                    <input type="number" v-model="license_number" name="license_number"
+                                        id="license_number" class="form-control"
+                                        placeholder="Enter your license number" />
+                                </div>
+
                                 <button class="btn btn-normal">Register</button>
                                 <!-- <a class="float-end txt-default mt-2" href="#">
                                     Forgot your password?
                                 </a> -->
                             </form>
 
-                            <p class="mt-3 d-flex align-items-center gap-2">
-                                <span> Already have an account?</span>
-                                <Link href="login" class="txt-default  d-block">Login</Link>
-                            </p>
+
 
                         </div>
                     </div>
@@ -87,6 +87,8 @@ export default {
         is_otp_verify: false,
         phone_number: "",
         name: "",
+        shop_name: "",
+        license_number: "",
 
     }),
     created: async function () {
@@ -102,7 +104,7 @@ export default {
         }),
         registerFormHandler: async function (event) {
             let formData = new FormData(event.target);
-            let response = await axios.post('/register', formData)
+            let response = await axios.post('/retailer-register', formData)
             if (response.data?.status === "success") {
                 window.s_alert(response.data?.message);
                 this.is_register = false;
@@ -116,12 +118,12 @@ export default {
             let formData = new FormData(event.target);
             formData.append("phone_number", this.phone_number);
             formData.append("name", this.name);
-            let response = await axios.post('/verify-user-otp?type=customer', formData)
+            let response = await axios.post('/verify-user-otp?type=retailer', formData)
             if (response.data?.status === "success") {
                 localStorage.setItem("token", response.data?.data?.access_token);
                 window.s_alert(response.data?.message);
                 setTimeout(() => {
-                    window.s_alert("You are login successfully");
+                    window.s_alert("You are successfully login ");
                     window.location.href = "/profile";
                 }, 1000)
 

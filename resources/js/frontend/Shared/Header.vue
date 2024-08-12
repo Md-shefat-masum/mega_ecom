@@ -1,7 +1,7 @@
 <template>
     <header>
         <!-- top header part -->
-        <div class="top-header" v-if="loaded">
+        <div class="top-header" >
             <div class="custom-container">
                 <div class="row">
                     <div class="col-xl-5 col-md-7 col-sm-6">
@@ -254,15 +254,16 @@ import Skeleton from '../Components/Skeleton.vue';
 export default {
     components: { Link, SearchBar, Skeleton },
     data: () => ({
-        loaded: false,
         order_track_show: false
     }),
     created: async function () {
-        await this.get_all_cart_data();
+        let token = localStorage.getItem('token');
+        if (token) {
+            this.get_all_cart_data();
+        }
         await this.get_all_website_settings();
         await this.get_all_website_navbar_menu();
 
-        this.loaded = true;
     },
     methods: {
         toggle_nav: function () {

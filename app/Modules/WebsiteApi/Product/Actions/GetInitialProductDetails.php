@@ -29,11 +29,19 @@ class GetInitialProductDetails
                 ->where('slug', $slug)
                 ->first();
 
-
-
             if ($data->type == 'medicine') {
-                $data->medicine_product = $data->medicine_product()->first();
-                $data->medicine_product_verient = $data->medicine_product_verient()->first();
+                $data->load(['medicine_product', 'medicine_product_verient']);
+                $related_brand_product = [];
+                if ($data->medicine_product && $data->medicine_product->p_generic_name) {
+
+                    $related_brand_product = self::$ProductModel::with(['medicine_product', 'medicine_product_verient','product_image:id,product_id,url'])
+                        ->select($fields)
+                        ->whereHas('medicine_product', function ($query) use ($data) {
+                            $query->where('p_generic_name', $data->medicine_product->p_generic_name);
+                        })->get();
+                    $data->related_brand_product = $related_brand_product;
+
+                }
             }
 
 
