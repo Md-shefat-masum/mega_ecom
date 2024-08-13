@@ -15,7 +15,7 @@ class All
             $orderByType = request()->input('sort_type')    ?? 'asc';
             $status = request()->input('status') ?? 'active';
             $fields = request()->input('fields') ?? '*';
-            $with = ['product:id,slug,title,purchase_price,customer_sales_price','product.product_image:id,product_id,url'];
+            $with = ['product:id,slug,title,purchase_price,customer_sales_price,type', 'product.product_image:id,product_id,url'];
             $condition = [];
 
             $data = self::$model::query()->where('user_id', auth()->user()->id);
@@ -31,16 +31,21 @@ class All
             if (request()->has('get_all') && (int)request()->input('get_all') === 1) {
                 $data = $data
                     ->with($with)
-                    ->select($fields)
                     ->where($condition)
                     ->where('status', $status)
                     ->limit($pageLimit)
                     ->orderBy($orderByColumn, $orderByType)
-                    ->get();
+                    ->get()
+                    ->map(function ($item) {
+                        if ($item->product->type == 'medicine') {
+
+                            $item->product->load(['medicine_product', 'medicine_product_verient']);
+                        }
+                        return $item;
+                    });
             } else {
                 $data = $data
                     ->with($with)
-                    ->select($fields)
                     ->where($condition)
                     ->where('status', $status)
                     ->orderBy($orderByColumn, $orderByType)

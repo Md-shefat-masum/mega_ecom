@@ -14,6 +14,19 @@ export const use_home_page_store = defineStore("use_home_page_store", {
         feature_products: [],
         all_brands: [],
         preloader: false,
+        fields: [
+            "id",
+            "title",
+            "customer_sales_price",
+            "discount_type",
+            "discount_amount",
+            "product_brand_id",
+            "sku",
+            "type",
+            "slug",
+            "is_available",
+
+        ]
     }),
 
     actions: {
@@ -102,8 +115,11 @@ export const use_home_page_store = defineStore("use_home_page_store", {
             if (this.feature_products.length > 0) {
                 return
             }
-            let res = await window.publicAxios("/featured-products");
-            this.feature_products = res;
+            const fieldsQuery = this.fields.map((field, index) => `fields[${index}]=${field}`).join('&');
+            let res = await axios.get("/get-all-featured-products?get_all=1&limit=24&" + fieldsQuery);
+            if (res.data?.status === "success") {
+                this.feature_products = res.data?.data;
+            }
         },
 
         get_all_brands: async function () {

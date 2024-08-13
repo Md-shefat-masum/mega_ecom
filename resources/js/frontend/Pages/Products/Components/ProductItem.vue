@@ -63,27 +63,50 @@
                         </Link>
                     </div>
 
-                    <div class="detail-right" v-if="product.is_available">
-                        <template v-if="product.is_discount">
-                            <div class="price">
-                               {{ Math.round(product.current_price) }} ৳
-                            </div>
-                            <div class="check-price">
-                                {{ Math.round(product.customer_sales_price) }} ৳
-                            </div>
-                        </template>
-                        <template v-else>
-                            <div class="price">
-                                {{ Math.round(product.current_price) }} ৳
-                            </div>
-                        </template>
+                    <template v-if="product.type == 'medicine'">
+                        <div class="detail-right" v-if="product.is_available">
+                            <template v-if="product.is_discount">
+                                <div class="price">
+                                    {{ Math.round(product.current_price) }} ৳
+                                </div>
+                                <div class="check-price">
+                                    {{ Math.round(product.customer_sales_price) }} ৳
+                                </div>
+                            </template>
+                            <template v-else>
+                                <div class="price">
+                                    {{ Math.round(product.current_price) }} ৳
+                                </div>
+                            </template>
+                        </div>
+
+                        <div v-else class="out-of-stock text-center text-black fw-bold border py-2">
+                            Unavailable
+                        </div>
+                    </template>
+                    <template v-if="product.type == 'product'">
+                        <div class="detail-right" v-if="product.is_available">
+                            <template v-if="product.is_discount">
+                                <div class="price">
+                                    {{ Math.round(product.current_price) }} ৳
+                                </div>
+                                <div class="check-price">
+                                    {{ Math.round(product.customer_sales_price) }} ৳
+                                </div>
+                            </template>
+                            <template v-else>
+                                <div class="price">
+                                    {{ Math.round(product.current_price) }} ৳
+                                </div>
+                            </template>
+                        </div>
+
+                        <div v-else class="out-of-stock text-center text-black fw-bold border py-2">
+                            Unavailable
+                        </div>
+                    </template>
 
 
-                    </div>
-
-                    <div v-else class="out-of-stock text-center text-black fw-bold border py-2">
-                        Unavailable
-                    </div>
                 </div>
             </div>
         </div>
@@ -99,6 +122,7 @@ export default {
 
     data: () => ({
         is_auth: false,
+        user_type: 'customer',
     }),
 
     created() {
@@ -136,6 +160,8 @@ export default {
         }
 
     },
+
+    
 
 
 };

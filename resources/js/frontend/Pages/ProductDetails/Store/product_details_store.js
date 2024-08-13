@@ -28,7 +28,6 @@ export const useProductDetailsStore = defineStore("useProductDetailsStore", {
             "sku",
             "type",
             "slug",
-
         ]
 
     }),

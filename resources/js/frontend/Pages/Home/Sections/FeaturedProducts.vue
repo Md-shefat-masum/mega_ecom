@@ -54,7 +54,7 @@ export default {
         preloader: true
     }),
     created: async function () {
-        if (this.feature_products) {
+        if (this.feature_products.length) {
             this.preloader = false;
         }
     },

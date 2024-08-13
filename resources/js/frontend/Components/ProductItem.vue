@@ -5,7 +5,7 @@
                 <div class="product-front">
                     <Link :href="`/product-details/${product.slug}`">
                     <img :src="load_image(`${product.product_image?.url}`)
-                        " class="img-fluid" alt="product" />
+                        " class="img-fluid" />
                     </Link>
                     <a v-if="product.is_available" @click="is_auth ? buyNow(product.id) : openAccount()"
                         class="buy_now_btn c-pointer">
@@ -58,7 +58,8 @@
                     <div class="detail-left">
                         <Link :href="`/product-details/${product.slug}`">
                         <h6 class="price-title">
-                            {{ product.title }}
+
+                            {{ product.title.substring(0, 50) }}
                         </h6>
                         </Link>
                     </div>
@@ -66,22 +67,23 @@
                     <div class="detail-right" v-if="product.is_available">
                         <template v-if="product.is_discount">
                             <div class="price">
-                               {{ Math.round(product.current_price) }} ৳
+                                {{ get_price(product).new_price }} ৳
                             </div>
                             <div class="check-price">
-                                {{ Math.round(product.customer_sales_price) }} ৳
+                                {{ get_price(product).old_price }} ৳
                             </div>
                         </template>
                         <template v-else>
                             <div class="price">
-                                {{ Math.round(product.current_price) }} ৳
+                                {{ get_price(product).new_price }} ৳
                             </div>
                         </template>
                     </div>
 
                     <div v-else class="out-of-stock text-center text-black fw-bold border py-2">
-                        stock out
+                        Unavailable
                     </div>
+
                 </div>
             </div>
         </div>
@@ -92,15 +94,17 @@
 
 import { mapActions, mapState } from "pinia";
 import { common_store } from '../Store/common_store';
+import { auth_store } from '../Store/auth_store';
 export default {
     props: ["product"],
 
     data: () => ({
-        is_auth: false,
+        user_type: 'customer'
     }),
 
-    created() {
-        this.is_auth = localStorage.getItem("token") ? true : false;
+    created: async function () {
+
+
     },
 
     methods: {
@@ -118,6 +122,7 @@ export default {
             add_to_cart: "add_to_cart",
             add_to_wish_list: "add_to_wish_list",
             add_to_compare_list: "add_to_compare_list",
+            get_price: "get_price",
         }),
 
         openAccount() {
@@ -134,7 +139,33 @@ export default {
         }
 
     },
+    computed: {
+        ...mapState(auth_store, {
+            "is_auth": "is_auth",
+            "auth_info": "auth_info",
+        }),
+    },
+    watch: {
+        is_auth: {
+            handler: function () {
+                if (this.is_auth) {
+                    this.user_type = this.auth_info?.role?.name ?? 'customer';
+                }
+            },
+            immediate: true,
+        },
+    },
 
 
 };
 </script>
+
+<style>
+.product-front {
+    background-image: url('/dummy.png');
+    height: 140px;
+    width: 100%;
+    background-size: contain;
+
+}
+</style>

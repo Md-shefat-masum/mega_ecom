@@ -163,7 +163,6 @@ export default {
         }),
         ...mapState(auth_store, {
             "is_auth": "is_auth",
-
         }),
     },
 };

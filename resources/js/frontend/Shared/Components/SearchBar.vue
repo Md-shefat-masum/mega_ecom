@@ -39,7 +39,8 @@
                 <div class="products" v-if="search_type == 'products'">
                     <template v-if="search_data.product?.data?.length">
                         <div class="search_item" v-for="product in search_data.product.data" :key="product.id">
-                            <a @click.prevent="visit_product(`/product-details/${product.slug}`)" :href="`/product-details/${product.slug}`">
+                            <a @click.prevent="visit_product(`/product-details/${product.slug}`)"
+                                :href="`/product-details/${product.slug}`">
                                 <div class="left">
                                     <img :src="load_image(`${product.product_image?.url}`)" :alt="product.title">
                                 </div>
@@ -47,12 +48,12 @@
                                     <h3 class="product_title">
                                         {{ product.title }}
                                     </h3>
-                                    <div v-if="product.customer_sales_price" class="price">
+                                    <div v-if="product.is_available" class="price">
                                         <div class="old">
-                                            {{ product.customer_sales_price }}৳
+                                            {{ get_price(product).old_price }}৳
                                         </div>
                                         <div class="new">
-                                            {{ product.current_price }}৳
+                                            {{ get_price(product).new_price }}৳
                                         </div>
                                     </div>
                                     <div v-else>
@@ -71,14 +72,14 @@
                     <template v-if="search_data.category?.data?.length">
                         <div class="search_item" v-for="category in search_data.category.data" :key="category.id">
                             <Link :href="`/category/${category.slug}`">
-                                <div class="left">
-                                    <img :src="`/${category.image}`" alt="">
-                                </div>
-                                <div class="right">
-                                    <h3 class="product_title">
-                                        {{ category.title }}
-                                    </h3>
-                                </div>
+                            <div class="left">
+                                <img :src="`/${category.image}`" alt="">
+                            </div>
+                            <div class="right">
+                                <h3 class="product_title">
+                                    {{ category.title }}
+                                </h3>
+                            </div>
                             </Link>
                         </div>
                     </template>
@@ -147,7 +148,8 @@
 <script>
 import { ref, watch, computed } from 'vue';
 
-import { use_global_search_store } from "../Pages/GlobalSearchResult/Store/global_search_store.js"
+import { use_global_search_store } from "../../Pages/GlobalSearchResult/Store/global_search_store.js"
+import { common_store } from "../../Store/common_store";
 import { router } from '@inertiajs/vue3';
 import { mapActions } from 'pinia';
 
@@ -178,9 +180,12 @@ export default {
 
     }),
     methods: {
+
         ...mapActions(use_global_search_store, ['reset_search']),
+        ...mapActions(common_store, { get_price: "get_price" }),
+
         load_image: window.load_image,
-        visit_product: function(url){
+        visit_product: function (url) {
             router.get(url);
             this.reset_search();
         }

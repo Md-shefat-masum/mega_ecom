@@ -247,12 +247,15 @@
         position: relative;
 
         .product-imgbox {
-            padding: 35px 20px;
+            padding: 12px 10px;
             border-bottom: 1px solid #e9e9e9;
+            min-height: 250px;
 
             img {
                 transition-duration: .3s;
-                min-height: 169px;
+                max-height: 160px;
+                object-fit: contain;
+                background-color: white;
             }
 
             .product-front {

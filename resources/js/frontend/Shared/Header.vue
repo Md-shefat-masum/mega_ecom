@@ -1,7 +1,7 @@
 <template>
     <header>
         <!-- top header part -->
-        <div class="top-header" >
+        <div class="top-header">
             <div class="custom-container">
                 <div class="row">
                     <div class="col-xl-5 col-md-7 col-sm-6">
@@ -247,8 +247,9 @@
 
 <script>
 import { Link, usePage } from "@inertiajs/vue3";
-import SearchBar from "../Components/SearchBar.vue";
+import SearchBar from "./Components/SearchBar.vue";
 import { common_store } from "../Store/common_store";
+import { auth_store } from "../Store/auth_store";
 import { mapActions, mapState } from "pinia";
 import Skeleton from '../Components/Skeleton.vue';
 export default {
@@ -257,12 +258,13 @@ export default {
         order_track_show: false
     }),
     created: async function () {
-        let token = localStorage.getItem('token');
-        if (token) {
-            this.get_all_cart_data();
-        }
+        await this.check_is_auth();
         await this.get_all_website_settings();
         await this.get_all_website_navbar_menu();
+
+        if (this.is_auth) {
+            this.get_all_cart_data();
+        }
 
     },
     methods: {
@@ -277,12 +279,15 @@ export default {
             track_customer_order: "track_customer_order",
         }),
 
+        ...mapActions(auth_store, {
+            "check_is_auth": "check_is_auth",
+        }),
+
         toggle_category: function () {
             document.querySelector('.modal_category_all_page').classList.toggle('active');
         },
 
         TrackOrderForm: function () {
-
             this.track_customer_order()
         }
 
@@ -294,6 +299,9 @@ export default {
             navbar_menu_data: "navbar_menu_data",
             get_setting_value: "get_setting_value",
             preloader: "preloader",
+        }),
+        ...mapState(auth_store, {
+            "is_auth": "is_auth",
         }),
     },
 };
