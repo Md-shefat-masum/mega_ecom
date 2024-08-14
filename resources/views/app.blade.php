@@ -53,6 +53,7 @@
             location.href = "https://m.etek.com.bd";
         }
         window.load_image = function (url, cache = true) {
+
             try {
                 new URL(url);
                 return url;
@@ -64,6 +65,7 @@
                 full_url.replaceAll('//', '/');
                 return full_url;
             }
+            
         }
     </script>
 

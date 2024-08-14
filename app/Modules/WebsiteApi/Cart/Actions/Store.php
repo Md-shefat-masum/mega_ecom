@@ -24,6 +24,7 @@ class Store
                 'product_id' => request()->product_id,
                 'quantity' => request()->quantity ?? 1,
                 'user_id' =>  auth()->id() ?? 3,
+                'product_type' => request()->product_type ?? 'product',
             ];
 
             $data = self::$model::query()->create($requestData);

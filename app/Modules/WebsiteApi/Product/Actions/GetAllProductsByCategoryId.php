@@ -49,6 +49,11 @@ class GetAllProductsByCategoryId
                     ->paginate($pageLimit);
             }
 
+            $data  = [
+                'data' => $data,
+                "category" =>  $category
+            ];
+
             return entityResponse($data);
         } catch (\Exception $e) {
             return messageResponse($e->getMessage(), [], 500, 'server_error');

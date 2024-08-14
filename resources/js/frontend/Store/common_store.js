@@ -219,7 +219,7 @@ export const common_store = defineStore("common_store", {
 
         get_price(product) {
 
-            console.log("search",product);
+            // console.log("search",product);
 
 
             let old_price = 0;
@@ -274,11 +274,29 @@ export const common_store = defineStore("common_store", {
                     }
 
                 }
+            } else {
+                if (product.type == "medicine") {
 
-                return {
-                    old_price: old_price,
-                    new_price: new_price
+                    if (product.medicine_product_verient?.pv_b2c_discount_percent) {
+                        new_price = Math.round(product.medicine_product_verient?.pv_b2c_price)
+                        old_price = Math.round(product.medicine_product_verient?.pv_b2c_mrp)
+                    } else {
+                        old_price = Math.round(product.medicine_product_verient?.pv_b2c_mrp)
+                    }
+
+                } else if (product.type == "product") {
+                    if (product.is_discount) {
+                        new_price = Math.round(product.current_price)
+                        old_price = Math.round(product.customer_sales_price)
+                    } else {
+                        old_price = Math.round(product.customer_sales_price)
+                    }
                 }
+            }
+
+            return {
+                old_price: old_price,
+                new_price: new_price
             }
         }
 

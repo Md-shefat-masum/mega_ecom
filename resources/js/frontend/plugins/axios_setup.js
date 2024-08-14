@@ -24,7 +24,9 @@ window.privateAxios = async function (apiEndPoint = null, type = 'get', payload 
     window.axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem('token')}`;
 
     try {
+
         await axios.get("/check_user");
+
     } catch (error) {
         localStorage.removeItem("token");
         document.getElementById("myAccount").classList.add('open-side');
@@ -118,7 +120,7 @@ window.axios.interceptors.response.use(
                 error?.response?.data ? error?.response?.data : error.response
             );
         } else {
-            console.log(error.response || error);
+            // console.log(error.response || error);
             if (error.response?.data?.status == "server_error") {
                 window.s_warning(error.response?.data?.message);
             }

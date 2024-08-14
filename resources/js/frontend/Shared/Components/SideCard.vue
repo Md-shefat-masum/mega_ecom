@@ -90,11 +90,7 @@
                     </li>
                 </ul>
                 <ul class="cart_total">
-                    <li>
-                        subtotal : <span>${{ total_cart_price }}</span>
-                    </li>
-                    <li>shpping <span>free</span></li>
-                    <li>taxes <span>$0.00</span></li>
+
                     <li>
                         <div class="total">
                             total<span>$ {{ total_cart_price }}</span>
@@ -169,6 +165,5 @@ export default {
     width: 80px;
     background-repeat: no-repeat;
     background-size: contain;
-
 }
 </style>

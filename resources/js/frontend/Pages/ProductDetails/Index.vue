@@ -15,7 +15,7 @@
             <template v-if="product_details.type == 'medicine'">
                 <medicine-product></medicine-product>
             </template>
-            <template v-if="product_details.type == 'general'">
+            <template v-if="product_details.type == 'product'">
                 <general-product></general-product>
             </template>
             <TopProducts :products="top_products"></TopProducts>

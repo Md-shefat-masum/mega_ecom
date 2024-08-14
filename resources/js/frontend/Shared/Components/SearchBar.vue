@@ -28,112 +28,111 @@
                             Brand
                         </a>
                     </li>
-                    <li>
+                    <!-- <li>
                         <a href="#" @click.prevent="search_type = 'tag'" :class="{ active: search_type == 'tag', }">
                             Tag
                         </a>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
+
             <div class="search_items">
-                <div class="products" v-if="search_type == 'products'">
-                    <template v-if="search_data.product?.data?.length">
-                        <div class="search_item" v-for="product in search_data.product.data" :key="product.id">
-                            <a @click.prevent="visit_product(`/product-details/${product.slug}`)"
-                                :href="`/product-details/${product.slug}`">
+                <div v-if="preloader">
+                    <search-result-skeleton></search-result-skeleton>
+                </div>
+                <template v-else>
+                    <div class="products" v-if="search_type == 'products'">
+                        <template v-if="search_data.product?.data?.length">
+                            <div class="search_item" v-for="product in search_data.product.data" :key="product.id">
+                                <a @click.prevent="visit_product(`/product-details/${product.slug}`)"
+                                    :href="`/product-details/${product.slug}`">
+                                    <div class="left dummy-image-render">
+                                        <img :src="load_image(`${product.product_image?.url}`)" alt="img">
+                                    </div>
+                                    <div class="right">
+                                        <h3 class="product_title">
+                                            {{ product.title }}
+                                        </h3>
+                                        <div v-if="product.is_available" class="price">
+                                            <div class="old">
+                                                {{ get_price(product)?.old_price }}৳
+                                            </div>
+                                            <div class="new">
+                                                {{ get_price(product)?.new_price }}৳
+                                            </div>
+                                        </div>
+                                        <div v-else>
+                                            stock out
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <p class="alert alert-info">No item found in search</p>
+                        </template>
+
+                    </div>
+                    <div class="categories" v-if="search_type == 'categories'">
+                        <template v-if="search_data.category?.data?.length">
+                            <div class="search_item" v-for="category in search_data.category.data" :key="category.id">
+                                <Link :href="`/category/${category.slug}`">
                                 <div class="left">
-                                    <img :src="load_image(`${product.product_image?.url}`)" :alt="product.title">
+                                    <img :src="`/${category.image}`" alt="img">
                                 </div>
                                 <div class="right">
                                     <h3 class="product_title">
-                                        {{ product.title }}
+                                        {{ category.title }}
                                     </h3>
-                                    <div v-if="product.is_available" class="price">
-                                        <div class="old">
-                                            {{ get_price(product).old_price }}৳
-                                        </div>
-                                        <div class="new">
-                                            {{ get_price(product).new_price }}৳
-                                        </div>
-                                    </div>
-                                    <div v-else>
-                                        stock out
-                                    </div>
                                 </div>
-                            </a>
-                        </div>
-                    </template>
-                    <template v-else>
-                        <p class="alert alert-info">No item found in search</p>
-                    </template>
-
-                </div>
-                <div class="categories" v-if="search_type == 'categories'">
-                    <template v-if="search_data.category?.data?.length">
-                        <div class="search_item" v-for="category in search_data.category.data" :key="category.id">
-                            <Link :href="`/category/${category.slug}`">
-                            <div class="left">
-                                <img :src="`/${category.image}`" alt="">
+                                </Link>
                             </div>
-                            <div class="right">
-                                <h3 class="product_title">
-                                    {{ category.title }}
-                                </h3>
-                            </div>
-                            </Link>
-                        </div>
-                    </template>
-                    <template v-else>
-                        <p class="alert alert-info">No item found in search</p>
-                    </template>
-                </div>
-                <div class="categories" v-if="search_type == 'brand'">
-                    <template v-if="search_data.brand?.data?.length">
-                        <div class="search_item" v-for="brand in search_data.brand?.data" :key="brand.id">
-                            <Link :href="`/brand/${brand.slug}`">
-                            <div class="left">
-                                <template v-if="brand.image">
-                                    <img :src="`${brand.image}`" :alt="brand.title">
-                                </template>
-
-                                <template v-else>
-                                    <div class="no-image d-flex align-items-center justify-content-center">
+                        </template>
+                        <template v-else>
+                            <p class="alert alert-info">No item found in search</p>
+                        </template>
+                    </div>
+                    <div class="categories" v-if="search_type == 'brand'">
+                        <template v-if="search_data.brand?.data?.length">
+                            <div class="search_item" v-for="brand in search_data.brand?.data" :key="brand.id">
+                                <Link :href="`/brand/${brand.slug}`">
+                                <div class="left">
+                                    <img :src="`/${brand.image}`" alt="img">
+                                </div>
+                                <div class="right">
+                                    <h3 class="product_title">
                                         {{ brand.title }}
-                                    </div>
-                                </template>
-
-                            </div>
-                            <div class="right">
-                                <h3 class="product_title">
-                                    {{ brand.title }}
-                                </h3>
-                            </div>
-                            </Link>
-                        </div>
-                    </template>
-                    <template v-else>
-                        <p class="alert alert-info">No item found in search</p>
-                    </template>
-                </div>
-                <div class="categories" v-if="search_type == 'tag'">
-                    <template v-if="search_data.tag?.length">
-                        <div class="search_item" v-for="tag in search_data.tag" :key="tag.id">
-                            <a href="#">
-                                <div class="left">
-                                    <img :src="`/${tag.image}`" alt="">
-                                </div>
-                                <div class="right">
-                                    <h3 class="product_title">
-                                        {{ tag.title }}
                                     </h3>
                                 </div>
-                            </a>
-                        </div>
-                    </template>
-                    <template v-else>
-                        <p class="alert alert-info">No item found in search</p>
-                    </template>
-                </div>
+                                </Link>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <p class="alert alert-info">No item found in search</p>
+                        </template>
+                    </div>
+                    <div class="categories" v-if="search_type == 'tag'">
+                        <template v-if="search_data.tag?.length">
+                            <div class="search_item" v-for="tag in search_data.tag" :key="tag.id">
+                                <a href="#">
+                                    <div class="left">
+                                        <img :src="`/${tag.image}`" alt="">
+                                    </div>
+                                    <div class="right">
+                                        <h3 class="product_title">
+                                            {{ tag.title }}
+                                        </h3>
+                                    </div>
+                                </a>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <p class="alert alert-info">No item found in search</p>
+                        </template>
+                    </div>
+                </template>
+
+
             </div>
             <div class="search_action">
                 <Link :href="`/search-results?search_key=${search_key}`" :preserve-state="true" :preserve-scroll="true">
@@ -152,23 +151,29 @@ import { use_global_search_store } from "../../Pages/GlobalSearchResult/Store/gl
 import { common_store } from "../../Store/common_store";
 import { router } from '@inertiajs/vue3';
 import { mapActions } from 'pinia';
+import SearchResultSkeleton from '../../Components/Skeliton/SearchResultSkeleton.vue';
 
 export default {
+    components: { SearchResultSkeleton },
 
     setup() {
+        const preloader = ref(true);
         const global_search_store = use_global_search_store();
         const search_data = computed(() => global_search_store.search_result_data);
         const search_key = ref(global_search_store.search_key);
         const searchTimer = ref(null);
         watch(search_key, (newVal) => {
             clearTimeout(searchTimer.value);
+            preloader.value = true; // Set preloader to true before starting the search
             searchTimer.value = setTimeout(async () => {
                 global_search_store.search_key = newVal;
                 await global_search_store.global_search();
+                preloader.value = false; // Set preloader to false after the search is done
             }, 1000);
         });
 
         return {
+            preloader,
             search_data,
             search_key
         };
@@ -213,4 +218,14 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.left {
+    background-image: url('/dummy.png');
+    height: 40px;
+    width: 80px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-color: white;
+
+}
+</style>

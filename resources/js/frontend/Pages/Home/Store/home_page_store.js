@@ -26,6 +26,12 @@ export const use_home_page_store = defineStore("use_home_page_store", {
             "slug",
             "is_available",
 
+        ],
+        BrandFields: [
+            "id",
+            "title",
+            "image",
+            "slug",
         ]
     }),
 
@@ -126,7 +132,8 @@ export const use_home_page_store = defineStore("use_home_page_store", {
             if (this.all_brands.length > 0) {
                 return
             }
-            let response = await axios.get('/brands')
+            const fieldsQuery = this.BrandFields.map((field, index) => `fields[${index}]=${field}`).join('&');
+            let response = await axios.get('/get-all-brands?get_all=1' + fieldsQuery);
             if (response.data.status === "success") {
                 this.all_brands = response.data?.data
             }

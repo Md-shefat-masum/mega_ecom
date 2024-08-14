@@ -121,8 +121,8 @@ import ColorVarient from '../Components/ColorVarient.vue'
 import CommonVarient from '../Components/CommonVarient.vue'
 import ProductImage from '../Components/ProductImage.vue'
 
-// import { mapActions } from "pinia";
-// import { common_store } from "../../../Store/common_store";
+import { mapActions } from "pinia";
+import { common_store } from "../../../Store/common_store";
 
 export default {
     components: { ProductImage, ColorVarient, CommonVarient },
@@ -136,13 +136,17 @@ export default {
         this.is_auth = localStorage.getItem("token") ? true : false;
     },
     methods: {
-        // ...mapActions(common_store, {
-        //     add_to_wish_list: "add_to_wish_list",
-        //     get_all_cart_data: "get_all_cart_data",
-        // }),
+
+        ...mapActions(common_store, {
+            add_to_wish_list: "add_to_wish_list",
+            get_all_cart_data: "get_all_cart_data",
+            add_to_cart: "add_to_cart",
+        }),
+
         openAccount() {
             document.getElementById("myAccount").classList.add('open-side');
         },
+
         AdujustQuantity: function (type) {
             if (type == "plus") {
                 this.quantity++;
@@ -152,18 +156,7 @@ export default {
                 }
             }
         },
-        add_to_cart: async function (productId) {
-            const response = await window.privateAxios(`/add-to-cart?quantity=${this.quantity}`, 'post',
-                {
-                    product_id: productId,
-                }
-            );
 
-            if (response.status === "success") {
-                window.s_alert(response.message);
-                this.get_all_cart_data();
-            }
-        },
     },
 }
 </script>

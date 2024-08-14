@@ -51,7 +51,32 @@ class WebsiteController extends Controller
             'slug' => $slug,
             'page' => $page,
             'event' => [
-                'title' => $category->title .' price in bangladesh',
+                'title' => $category->title??'ETEK Products' .' price in bangladesh',
+                'image' => 'https://etek.com.bd/cache/frontend/images/etek_logo.png',
+                'description' => 'Best eCommerce in bangladesh'
+            ]
+        ]);
+    }
+    public function categoryProducts($slug)
+    {
+        $category = DB::table('product_categories')->select('title','slug')->where('slug',$slug)->first();
+        $page = request()->page ? request()->page : 1;
+        return Inertia::render('Category/ProductByCategory', [
+            'slug' => $slug,
+            'page' => $page,
+            'event' => [
+                'title' => $category->title??'ETEK Products' .' price in bangladesh',
+                'image' => 'https://etek.com.bd/cache/frontend/images/etek_logo.png',
+                'description' => 'Best eCommerce in bangladesh'
+            ]
+        ]);
+    }
+    public function brandProducts($slug)
+    {
+        return Inertia::render('Brand/ProductsByBrand', [
+            'slug' => $slug,
+            'event' => [
+                'title' => $slug .' price in bangladesh',
                 'image' => 'https://etek.com.bd/cache/frontend/images/etek_logo.png',
                 'description' => 'Best eCommerce in bangladesh'
             ]

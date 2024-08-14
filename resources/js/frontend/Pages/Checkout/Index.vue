@@ -131,7 +131,7 @@
                                                             </Link>
                                                         </td>
                                                         <td>
-                                                            <p>{{ cart.product.current_price }}</p>
+                                                            <p>{{ get_price(cart?.product).new_price }}</p>
                                                         </td>
                                                         <td>
                                                             <p>{{ cart.quantity }}</p>
@@ -139,7 +139,7 @@
 
                                                         <td>
                                                             <p class="td-color">{{ cart.quantity *
-                            cart.product.current_price }}</p>
+                            get_price(cart?.product).new_price }}</p>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -366,6 +366,7 @@ export default {
         ...mapState(common_store, {
             all_cart_data: "all_cart_data",
             total_cart_price: "total_cart_price",
+            get_price: "get_price",
         }),
     },
 };

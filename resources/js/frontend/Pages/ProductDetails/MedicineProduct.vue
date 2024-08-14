@@ -308,7 +308,7 @@
                 <div class="ps-3">
                     <h6 class="product-title d-block mt-3">quantity</h6>
                     <div>
-                        <select name="quantity" class="form-select w-50" id="">
+                        <select name="quantity" class="form-select w-50" id="" v-model="quantity">
                             <option value="" selected disabled>Select quantity</option>
                             <option v-for="data in product_initial_data.medicine_product_verient?.pv_b2c_max_qty"
                                 :key="data" :value="data">{{ data }} x {{
@@ -319,11 +319,12 @@
                 </div>
 
                 <div class="product-buttons ps-3 d-flex flex-wrap gap-2 mt-4">
-                    <button @click="is_auth ? add_to_cart(12) : openAccount()" class="btn btn-normal">
+                    <button @click="is_auth ? add_to_cart(product_initial_data.id) : openAccount()"
+                        class="btn btn-normal">
                         <i class="icon icon-shopping-cart"></i>
                         Add to Cart
                     </button>
-                    <a @click="is_auth ? add_to_wish_list(123) : openAccount()"
+                    <a @click="is_auth ? add_to_wish_list(product_initial_data.id) : openAccount()"
                         class="btn px-4 btn-normal btn-outline add-to-wish tooltip-top"
                         data-tippy-content="Add to wishlist">
                         <i class="fa fa-heart" aria-hidden="true"></i>
@@ -344,8 +345,8 @@
                 </div>
                 <div class="media-banner brand-related-product plrb-0 b-g-white1 border-0 p-3">
 
-                    <div class="media-banner-box "
-                        v-for="item in product_initial_data.related_brand_product" :key="item.id">
+                    <div class="media-banner-box " v-for="item in product_initial_data.related_brand_product"
+                        :key="item.id">
                         <div class="media">
                             <a tabindex="0" :href="item.product_image?.url">
                                 <img :src="item.product_image?.url ?? '/dummy.png'" height="100" width="100"
@@ -393,7 +394,7 @@ import TopProducts from './Components/TopProducts.vue';
 import { mapActions, mapState, mapWritableState } from 'pinia';
 import ProductImage from './Components/ProductImage.vue';
 import BreadCumb from '../../Components/BreadCumb.vue';
-
+import { common_store } from "../../Store/common_store";
 export default {
     components: { BreadCumb, Layout, ProductBasicInfo, ProductBottomDetails, TopProducts, ProductImage },
     props: {
@@ -412,14 +413,41 @@ export default {
         is_availablity_show: false,
         is_share_show: false,
         is_originality_show: false,
-        genericModal: false
+        genericModal: false,
+
+        is_auth: false,
+        quantity: 1,
+
     }),
 
+    created: async function () {
+        this.is_auth = localStorage.getItem("token") ? true : false;
+    },
+
     methods: {
+        ...mapActions(common_store, {
+            add_to_wish_list: "add_to_wish_list",
+            get_all_cart_data: "get_all_cart_data",
+        }),
         load_image: window.load_image,
         genericProducts: function () {
             this.genericModal = true
-        }
+        },
+        add_to_cart: async function (productId) {
+            console.log(productId);
+            const response = await window.privateAxios(`/add-to-cart`, 'post',
+                {
+                    product_id: productId,
+                    quantity: this.quantity,
+                }
+            );
+
+            if (response?.status === "success") {
+                window.s_alert(response.message);
+                this.get_all_cart_data();
+            }
+
+        },
     },
 
 

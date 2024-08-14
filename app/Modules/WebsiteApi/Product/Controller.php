@@ -8,7 +8,7 @@ use App\Modules\WebsiteApi\Product\Actions\GetAllProduct;
 use App\Modules\WebsiteApi\Product\Actions\GetAllBestSellingProduct;
 use App\Modules\WebsiteApi\Product\Actions\GetAllFeaturedProduct;
 use App\Modules\WebsiteApi\Product\Actions\GetAllFeaturedProductsByCategoryId;
-use App\Modules\WebsiteApi\Product\Actions\GetAllFeaturedProductsByBrandId;
+use App\Modules\WebsiteApi\Product\Actions\GetAllProductsByBrandId;
 use App\Modules\WebsiteApi\Product\Actions\GetAllProductsByCategoryId;
 use App\Modules\WebsiteApi\Product\Actions\GetProductDetails;
 use App\Modules\WebsiteApi\Product\Actions\GetAllProductOffers;
@@ -41,9 +41,9 @@ class Controller extends ControllersController
         $data = GetAllFeaturedProductsByCategoryId::execute($slug);
         return $data;
     }
-    public function GetAllFeaturedProductsByBrandId($slug)
+    public function GetAllProductsByBrandId($slug)
     {
-        $data = GetAllFeaturedProductsByBrandId::execute($slug);
+        $data = GetAllProductsByBrandId::execute($slug);
         return $data;
     }
     public function GetAllProductsByCategoryId($slug)

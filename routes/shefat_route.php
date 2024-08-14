@@ -15,7 +15,8 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('/blog-details/{slug}', 'Website\WebsiteController@blogDetails')->name('website_blog_details');
 
     Route::get('/products/{slug}', 'Website\WebsiteController@products')->name('website_products');
-    Route::get('/category/{slug}', 'Website\WebsiteController@products')->name('website_products');
+    Route::get('/category/{slug}', 'Website\WebsiteController@categoryProducts')->name('category_products');
+    Route::get('/brand/{slug}', 'Website\WebsiteController@brandProducts')->name('brand_products');
     Route::get('/category-group/{slug}', 'Website\WebsiteController@category_group_products')->name('category_group_products');
 
     Route::get('/product-details/{slug}', 'Website\WebsiteController@products_details')->name('website_products_details');
@@ -58,10 +59,10 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('/upload_product_list', 'Website\TestController@upload_product_list');
     Route::get('/upload_product', 'Website\TestController@upload_product');
 
-    Route::get('/undefined', function () {
-    });
-    Route::get('/null', function () {
-    });
+    // Route::get('/undefined', function () {
+    // });
+    // Route::get('/null', function () {
+    // });
     Route::get('/f', function () {
         Storage::disk('project_upload')->putFileAs("ehsan", public_path("uploads/products/-CW-9060039-WW-Gallery-H100i-RGB-PLATINUM-01-228x228.png"), "new.png");
     });

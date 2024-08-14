@@ -2,7 +2,7 @@
 
 namespace App\Modules\WebsiteApi\Product\Actions;
 
-class GetAllFeaturedProductsByBrandId
+class GetAllProductsByBrandId
 {
     static $ProductModel = \App\Modules\ProductManagement\Product\Models\Model::class;
     static $BrandModel = \App\Modules\ProductManagement\ProductBrand\Models\Model::class;
@@ -25,7 +25,11 @@ class GetAllFeaturedProductsByBrandId
             }
 
 
-            $data = self::$ProductModel::query() ->where('is_featured', 1)->where('product_brand_id', $brand->id);
+            $data = self::$ProductModel::query()->where('product_brand_id', $brand->id);
+
+            if (request()->has('is_featured') && (int)request()->input('is_featured') === 1) {
+                $condition['is_featured'] = 1;
+            }
 
             if (request()->has('get_all') && (int)request()->input('get_all') === 1) {
                 $data = $data
@@ -35,8 +39,14 @@ class GetAllFeaturedProductsByBrandId
                     ->where('status', $status)
                     ->limit($pageLimit)
                     ->orderBy($orderByColumn, $orderByType)
-                    ->get();
+                    ->get()
+                    ->map(function ($item) {
+                        if ($item->type == "medicine") {
+                            $item->load(['medicine_product', 'medicine_product_verient']);
+                        }
+                    });
             } else {
+
                 $data = $data
                     ->with($with)
                     ->select($fields)
@@ -44,7 +54,20 @@ class GetAllFeaturedProductsByBrandId
                     ->where('status', $status)
                     ->orderBy($orderByColumn, $orderByType)
                     ->paginate($pageLimit);
+
+                $data->getCollection()->map(function ($item) {
+                    if ($item->type == "medicine") {
+                        $item->load(['medicine_product', 'medicine_product_verient']);
+                    }
+                });
             }
+
+            $data  = [
+                'data' => $data,
+                "brand" =>  $brand
+            ];
+
+         
 
             return entityResponse($data);
         } catch (\Exception $e) {

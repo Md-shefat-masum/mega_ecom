@@ -15,8 +15,14 @@ class CategoryController extends Controller
     {
         $data = Category::where('parent_id', 0)
             ->select([
-                'id', 'is_nav', 'is_featured', 'parent_id', 'title',
-                'serial', 'image', 'slug'
+                'id',
+                'is_nav',
+                'is_featured',
+                'parent_id',
+                'title',
+                'serial',
+                'image',
+                'slug'
             ])
             ->where('status', 'active')
             ->orderBy('serial', 'ASC')
@@ -45,8 +51,13 @@ class CategoryController extends Controller
     {
         $data = Category::where('is_nav', 1)
             ->select([
-                'id', 'is_nav', 'is_featured', 'title',
-                'serial', 'image', 'slug',
+                'id',
+                'is_nav',
+                'is_featured',
+                'title',
+                'serial',
+                'image',
+                'slug',
             ])
             ->where('status', 'active')
             ->orderBy('serial', 'ASC')
@@ -58,7 +69,9 @@ class CategoryController extends Controller
     public function brands()
     {
         $data = Brand::select([
-            'id', 'title', 'image'
+            'id',
+            'title',
+            'image'
         ])
             ->where('status', 'active')
             ->orderBy('serial', 'ASC')
@@ -73,7 +86,8 @@ class CategoryController extends Controller
     public function varients()
     {
         $data = ProductVarient::select([
-            'id', 'title',
+            'id',
+            'title',
         ])->take(10)->get()->map(function ($i) {
             $i->values = ProductVarientValue::where('product_varient_id', $i->id)
                 ->select('id', 'product_varient_id', 'title')->take(10)->get();
@@ -85,6 +99,7 @@ class CategoryController extends Controller
 
     public function category($slug)
     {
+
         $varient_value_id = null;
         $brand_id = null;
         if (request()->variant_values_id) {
@@ -97,6 +112,9 @@ class CategoryController extends Controller
         $category = Category::where('slug', $slug)
             ->with('parents:id,title,parent_id,slug,image,status')
             ->first();
+         if (!$category) {
+            return messageResponse('Data not found...', $slug, 404, 'error');
+        }
 
         $products = $category->products()
             ->with('product_image');

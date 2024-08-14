@@ -5,7 +5,7 @@
                 <div class="product-front">
                     <Link :href="`/product-details/${product.slug}`">
                     <img :src="load_image(`${product.product_image?.url}`)
-                        " class="img-fluid" />
+                        " class="img-fluid" alt="product" />
                     </Link>
                     <a v-if="product.is_available" @click="is_auth ? buyNow(product.id) : openAccount()"
                         class="buy_now_btn c-pointer">
@@ -58,31 +58,54 @@
                     <div class="detail-left">
                         <Link :href="`/product-details/${product.slug}`">
                         <h6 class="price-title">
-
-                            {{ product.title.substring(0, 50) }}
+                            {{ product.title }}
                         </h6>
                         </Link>
                     </div>
 
-                    <div class="detail-right" v-if="product.is_available">
-                        <template v-if="product.is_discount">
-                            <div class="price">
-                                {{ get_price(product)?.new_price }} ৳
-                            </div>
-                            <div class="check-price">
-                                {{ get_price(product)?.old_price }} ৳
-                            </div>
-                        </template>
-                        <template v-else>
-                            <div class="price">
-                                {{ get_price(product)?.new_price }} ৳
-                            </div>
-                        </template>
-                    </div>
+                    <template v-if="product.type == 'medicine'">
+                        <div class="detail-right" v-if="product.is_available">
+                            <template v-if="product.is_discount">
+                                <div class="price">
+                                    {{ Math.round(product.current_price) }} ৳
+                                </div>
+                                <div class="check-price">
+                                    {{ Math.round(product.customer_sales_price) }} ৳
+                                </div>
+                            </template>
+                            <template v-else>
+                                <div class="price">
+                                    {{ Math.round(product.current_price) }} ৳
+                                </div>
+                            </template>
+                        </div>
 
-                    <div v-else class="out-of-stock text-center text-black fw-bold border py-2">
-                        Unavailable
-                    </div>
+                        <div v-else class="out-of-stock text-center text-black fw-bold border py-2">
+                            Unavailable
+                        </div>
+                    </template>
+                    <template v-if="product.type == 'product'">
+                        <div class="detail-right" v-if="product.is_available">
+                            <template v-if="product.is_discount">
+                                <div class="price">
+                                    {{ Math.round(product.current_price) }} ৳
+                                </div>
+                                <div class="check-price">
+                                    {{ Math.round(product.customer_sales_price) }} ৳
+                                </div>
+                            </template>
+                            <template v-else>
+                                <div class="price">
+                                    {{ Math.round(product.current_price) }} ৳
+                                </div>
+                            </template>
+                        </div>
+
+                        <div v-else class="out-of-stock text-center text-black fw-bold border py-2">
+                            Unavailable
+                        </div>
+                    </template>
+
 
                 </div>
             </div>
@@ -93,18 +116,17 @@
 <script>
 
 import { mapActions, mapState } from "pinia";
-import { common_store } from '../Store/common_store';
-import { auth_store } from '../Store/auth_store';
+import { common_store } from "../../../Store/common_store";
 export default {
     props: ["product"],
 
     data: () => ({
-        user_type: 'customer'
+        is_auth: false,
+        user_type: 'customer',
     }),
 
-    created: async function () {
-
-
+    created() {
+        this.is_auth = localStorage.getItem("token") ? true : false;
     },
 
     methods: {
@@ -122,7 +144,6 @@ export default {
             add_to_cart: "add_to_cart",
             add_to_wish_list: "add_to_wish_list",
             add_to_compare_list: "add_to_compare_list",
-            get_price: "get_price",
         }),
 
         openAccount() {
@@ -139,33 +160,9 @@ export default {
         }
 
     },
-    computed: {
-        ...mapState(auth_store, {
-            "is_auth": "is_auth",
-            "auth_info": "auth_info",
-        }),
-    },
-    watch: {
-        is_auth: {
-            handler: function () {
-                if (this.is_auth) {
-                    this.user_type = this.auth_info?.role?.name ?? 'customer';
-                }
-            },
-            immediate: true,
-        },
-    },
+
+    
 
 
 };
 </script>
-
-<style>
-.product-front {
-    background-image: url('/dummy.png');
-    height: 140px;
-    width: 100%;
-    background-size: contain;
-
-}
-</style>

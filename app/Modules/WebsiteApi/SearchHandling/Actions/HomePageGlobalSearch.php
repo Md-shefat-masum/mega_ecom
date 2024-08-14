@@ -30,9 +30,16 @@ class HomePageGlobalSearch
                     'discount_amount',
                     'slug',
                     'is_new',
+                    "type"
                 ])
                 ->where("status", "active")
                 ->paginate(24);
+
+            $product->getCollection()->map(function ($item) {
+                if ($item->type == "medicine") {
+                    $item->load(['medicine_product', 'medicine_product_verient']);
+                }
+            });
 
             $product->appends('search_key', $searchKey);
 

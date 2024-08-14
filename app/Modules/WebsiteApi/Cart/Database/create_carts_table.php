@@ -18,7 +18,8 @@ return new class extends Migration
             $table->bigInteger('product_id')->nullable();
             $table->string('product_name')->nullable();
             $table->integer('quantity')->nullable();
-            $table->float('current_ price')->nullable();
+            $table->float('current_price')->nullable();
+            $table->string('product_type')->nullable();
 
             $table->bigInteger('creator')->unsigned()->nullable();
             $table->string('slug', 50)->nullable();

@@ -12,11 +12,11 @@ export const product_store = defineStore("product_store", {
         childrens: [],
         advertise: null,
         bread_cumb: [
-            // {
-            //     title: 'category',
-            //     url: '#',
-            //     active: false,
-            // },
+            {
+                title: 'category',
+                url: '#',
+                active: false,
+            },
         ],
 
         variant_values_id: [],

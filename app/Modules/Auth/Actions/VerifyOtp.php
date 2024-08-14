@@ -17,6 +17,9 @@ class VerifyOtp
 
             $requestData = $request->validated();
 
+
+
+
             $otpRecord = DB::table('otp_codes')
                 ->where('phone_number', $requestData['phone_number'])
                 ->where('otp', $requestData['otp'])
@@ -36,6 +39,7 @@ class VerifyOtp
             // Proceed with user registration
             unset($requestData['otp']);
             $user = self::$model::where('phone_number', $requestData['phone_number'])->first();
+            $data = [];
             if ($user) {
                 $data['access_token'] = $user->createToken('accessToken')->accessToken;
                 $data['user'] = $user;
@@ -64,6 +68,7 @@ class VerifyOtp
                     $data['user'] = $user;
                 }
             }
+ 
 
             return messageResponse('Your OTP successfully Matched', $data, 200, 'success');
         } catch (\Exception $e) {

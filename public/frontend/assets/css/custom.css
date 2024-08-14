@@ -229,7 +229,7 @@
 
                 .product-front {
                     .buy_now_btn {
-                        bottom: -30px;
+                        bottom: -80px;
                     }
                 }
             }
@@ -276,7 +276,7 @@
                     min-width: 118px;
                     text-align: center;
                     transition-duration: .3s;
-                    bottom: -70px;
+                    bottom: -125px;
 
                     &:hover {
                         background-color: #f15838;
@@ -1019,7 +1019,7 @@
                         .left {
                             img {
                                 height: 43px;
-                                width: 43px;
+                                width: 100%;
                                 object-fit: cover;
                             }
                         }

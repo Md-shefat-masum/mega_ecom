@@ -70,6 +70,8 @@ export default {
             formData.append("phone_number", this.phone_number);
             let response = await axios.post('/verify-user-otp', formData)
             if (response.data?.status === "success") {
+                console.log(response.data);
+
                 localStorage.setItem("token", response.data?.data?.access_token);
                 window.s_alert(response.data?.message);
                 setTimeout(() => {
