@@ -11,6 +11,7 @@ use App\Modules\ProductManagement\ProductVarientValue\Models\Model as ProductVar
 
 class CategoryController extends Controller
 {
+
     public function all_categories()
     {
         $data = Category::where('parent_id', 0)
@@ -47,41 +48,8 @@ class CategoryController extends Controller
         }
     }
 
-    public function featured()
-    {
-        $data = Category::where('is_nav', 1)
-            ->select([
-                'id',
-                'is_nav',
-                'is_featured',
-                'title',
-                'serial',
-                'image',
-                'slug',
-            ])
-            ->where('status', 'active')
-            ->orderBy('serial', 'ASC')
-            ->get();
-        return response()->json($data)->header('Cache-Control', 'public, max-age=300')
-            ->header('Expires', now()->addMinutes(120)->toRfc7231String());
-    }
 
-    public function brands()
-    {
-        $data = Brand::select([
-            'id',
-            'title',
-            'image'
-        ])
-            ->where('status', 'active')
-            ->orderBy('serial', 'ASC')
-            ->take(10)
-            ->get();
-        $response = entityResponse($data);
-        $response->header('Cache-Control', 'public, max-age=300')
-            ->header('Expires', now()->addMinutes(120)->toRfc7231String());
-        return $response;
-    }
+
 
     public function varients()
     {
@@ -154,5 +122,6 @@ class CategoryController extends Controller
             "max_price" => $max_price,
         ])->header('Cache-Control', 'public, max-age=300')
             ->header('Expires', now()->addMinutes(60)->toRfc7231String());
+
     }
 }
