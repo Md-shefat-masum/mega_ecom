@@ -69,10 +69,11 @@
                                                     </div>
                                                 </div>
                                             </template>
-                                            <template>
+                                            <template v-else>
                                                 <div class="qty-box">
                                                     <div class="input-group">
                                                         <input type="number" name="quantity"
+                                                        min="1"
                                                             class="form-control input-number" v-model="cart.quantity"
                                                             @keyup="
                                     cart_quantity_update(

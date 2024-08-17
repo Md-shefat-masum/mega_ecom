@@ -6,8 +6,5 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function test()
-    {
-        dd(request()->all());
-    }
+   
 }

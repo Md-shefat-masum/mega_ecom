@@ -6,7 +6,7 @@
                 <div class="media-banner-box" v-for="item in product.related_products" :key="item.id">
                     <div class="media">
                         <Link :href="`/product-details/${item.slug}`" tabindex="0">
-                        <img :src="`/${item.product_image?.url}`" height="100" width="100" class="img-fluid"
+                        <img :src="load_image(`${item.product_image?.url}`)" height="100" width="100" class="img-fluid"
                             alt="banner">
                         </Link>
                         <div class="media-body">
@@ -64,7 +64,9 @@ export default {
     methods: {
         ...mapActions(common_store, {
             add_to_cart: "add_to_cart",
-        })
+        }),
+
+        load_image: window.load_image,
     }
 }
 </script>

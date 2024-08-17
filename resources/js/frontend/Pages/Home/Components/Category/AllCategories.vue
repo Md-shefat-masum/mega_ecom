@@ -80,9 +80,10 @@ export default {
             router.visit(`/category/${slug}`);
         },
         get_sub_categories: function(){
-            axios.get(`/category/${this.selected.slug}/subcategories`)
+
+            axios.get(`get-all-sub-category-by-category-id/${this.selected.slug}?get_all=1`)
                 .then(res=>{
-                    this.sub_categories = res.data;
+                    this.sub_categories = res.data?.data;
                 });
         }
 

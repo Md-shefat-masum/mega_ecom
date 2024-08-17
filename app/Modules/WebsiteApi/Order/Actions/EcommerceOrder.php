@@ -17,6 +17,8 @@ class EcommerceOrder
 
             $orderDetails = $request->all();
 
+            // dd($orderDetails);
+
             $cartItems  = self::$cartModel::where('user_id', auth()->id())->get();
             $cartSubtotal = $cartItems->sum(function ($cartItem) {
                 return $cartItem->product->current_price * $cartItem->quantity;
@@ -35,9 +37,9 @@ class EcommerceOrder
                 "user_id" => auth()->user()->id,
                 "is_delivered" => 0,
                 "order_status" => 'pending',
-                "user_address_id" => $orderDetails["address_id"] ?? auth()->user()->user_address->id,
+                // "user_address_id" => ($orderDetails["address_id"] ?? auth()->user()?->user_address->id) ?? null,
                 "delivery_method" => "home_delivery",
-                "delivery_address_id" => $orderDetails["address_id"] ?? auth()->user()->user_address->id,
+                // "delivery_address_id" =>  ($orderDetails["address_id"] ?? auth()->user()?->user_address->id) ?? null,
 
                 "delivery_charge" => $orderDetails["delivery_charge"] ?? 0,
                 "additional_charge" => 0,
@@ -113,6 +115,8 @@ $messag_items
 
             return messageResponse('Order Successfully completed', [$orderInfo], 200, 'success');
         } catch (\Exception $e) {
+
+            dd($e);
 
             return messageResponse($e->getMessage(), [], 500, 'server_error');
         }

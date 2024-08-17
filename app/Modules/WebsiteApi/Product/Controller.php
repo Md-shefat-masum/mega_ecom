@@ -17,6 +17,7 @@ use App\Modules\WebsiteApi\Product\Actions\GetInitialProductDetails;
 use App\Modules\WebsiteApi\Product\Actions\GetSingleCategoryGroupWithProduct;
 use App\Modules\WebsiteApi\Product\Actions\GetProductCategoryVarients;
 use App\Modules\WebsiteApi\Product\Actions\GetProductCategoryWiseBrands;
+use App\Modules\WebsiteApi\Product\Actions\GetAllProductsByCategoryIdWithVerientAndBrand;
 
 class Controller extends ControllersController
 {
@@ -84,6 +85,11 @@ class Controller extends ControllersController
     public function GetProductCategoryBrands($slug)
     {
         $data = GetProductCategoryWiseBrands::execute($slug);
+        return $data;
+    }
+    public function GetAllProductsByCategoryIdWithVerientAndBrand($slug)
+    {
+        $data = GetAllProductsByCategoryIdWithVerientAndBrand::execute($slug);
         return $data;
     }
 }

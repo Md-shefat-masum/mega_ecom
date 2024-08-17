@@ -24,10 +24,10 @@
                 <tr class="information">
                     <td style="width: 50%">
                         <h4>Delivery Information</h4><br>
-                        {{ order_info.order_delivery_address.address }}.<br />
-                        {{ order_info.order_delivery_address.station?.name }} ,
-                        {{ order_info.order_delivery_address.district?.name }}, {{
-        order_info.order_delivery_address.division?.name }} <br><br>
+                        {{ order_info.order_delivery_address?.address }}.<br />
+                        {{ order_info.order_delivery_address?.station?.name }} ,
+                        {{ order_info.order_delivery_address?.district?.name }}, {{
+        order_info.order_delivery_address?.division?.name }} <br><br>
                     </td>
 
                     <td>
@@ -57,7 +57,8 @@
             </table>
         </div>
         <div class="text-center">
-            <button id="printBtn" @click="printInvoice" class="btn btn-info mt-3 fw-bold text-white w-50 py-2">Print Invoice</button>
+            <button id="printBtn" @click="printInvoice" class="btn btn-info mt-3 fw-bold text-white w-50 py-2">Print
+                Invoice</button>
         </div>
     </ProfileLayout>
 </template>
@@ -198,30 +199,38 @@ export default {
     header {
         display: none;
     }
+
     footer {
         display: none;
     }
+
     .account-sidebar {
         display: none;
     }
+
     .breadcrumb {
         display: none;
     }
+
     .category_modal_toggler {
         display: none;
     }
+
     #printBtn {
         display: none;
     }
-    .card{
-      border: none !important;
+
+    .card {
+        border: none !important;
     }
-    .invoice-box{
-      border: none !important;
-      box-shadow: none !important;
+
+    .invoice-box {
+        border: none !important;
+        box-shadow: none !important;
     }
-    .cart_total{
-      display: none;
+
+    .cart_total {
+        display: none;
     }
 }
 </style>

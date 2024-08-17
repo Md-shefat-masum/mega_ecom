@@ -65,9 +65,9 @@ export const use_home_page_store = defineStore("use_home_page_store", {
                 if (this.side_nav_categories.length > 0) {
                     return
                 }
-                let res = await axios.get('/nav-categories');
-                let data = res.data;
-                this.side_nav_categories = data;
+                let res = await axios.get('/get-all-nav-categories?get_all=1&limit=15');
+                this.side_nav_categories = res.data?.data;
+
             } finally {
                 this.preloader = false;
             }
@@ -76,8 +76,8 @@ export const use_home_page_store = defineStore("use_home_page_store", {
             if (this.parent_categories.length > 0) {
                 return
             }
-            let res = await axios.get('/all-categories');
-            let data = res.data;
+            let res = await axios.get('/get-all-parent-categories?get_all=1');
+            let data = res.data?.data;
             this.parent_categories = data;
         },
         get_sub_categories: async function (slug) {

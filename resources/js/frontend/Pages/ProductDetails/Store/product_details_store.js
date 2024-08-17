@@ -30,6 +30,7 @@ export const useProductDetailsStore = defineStore("useProductDetailsStore", {
             "slug",
         ]
 
+
     }),
     getters: {},
     actions: {
@@ -54,9 +55,13 @@ export const useProductDetailsStore = defineStore("useProductDetailsStore", {
         },
 
         get_top_products: async function () {
-            let response = await axios.get('/featured-products');
-            this.top_products = response.data;
-            // console.log(this.top_products);
+            if (this.top_products.length > 0) {
+                return
+            }
+            const fieldsQuery = this.fields.map((field, index) => `fields[${index}]=${field}`).join('&');
+            let res = await axios.get("/get-all-featured-products?get_all=1&limit=24&" + fieldsQuery);
+            this.top_products = res.data?.data;
+
         },
 
         /**

@@ -1,22 +1,19 @@
 <template>
-    <Layout>
-        <h1>General Product</h1>
-        <!-- <div class="breadcrumb-main py-3">
+    <div class="breadcrumb-main py-3">
+        <div class="custom-container">
+            <BreadCumb :bread_cumb="bread_cumb" />
+        </div>
+    </div>
+    <section class="section-big-pt-space b-g-light">
+        <div class="collection-wrapper">
             <div class="custom-container">
-                <BreadCumb :bread_cumb="bread_cumb" />
+                <div class="container-fluid">
+                    <ProductBasicInfo :product="product_initial_data"></ProductBasicInfo>
+                </div>
+                <ProductBottomDetails :product="product_details"></ProductBottomDetails>
             </div>
         </div>
-        <section v-if="loaded" class="section-big-pt-space b-g-light">
-            <div class="collection-wrapper">
-                <div class="custom-container">
-                    <div class="container-fluid">
-                        <ProductBasicInfo :product="product_initial_data"></ProductBasicInfo>
-                    </div>
-                    <ProductBottomDetails :product="product_details"></ProductBottomDetails>
-                </div>
-            </div>
-        </section> -->
-    </Layout>
+    </section>
 </template>
 <script>
 

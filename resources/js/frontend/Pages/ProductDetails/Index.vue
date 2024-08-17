@@ -3,23 +3,27 @@
 
         <Head>
             <title>
-                {{ product_initial_data.title }}
+                {{ product_initial_data?.title }}
             </title>
         </Head>
+
         <section v-if="preloader">
             <div class="custom-container">
                 <img src="/frontend/images/product_skeleton.png" class="w-100" alt="product-loading">
             </div>
         </section>
         <section v-else>
+
             <template v-if="product_details.type == 'medicine'">
                 <medicine-product></medicine-product>
             </template>
             <template v-if="product_details.type == 'product'">
                 <general-product></general-product>
             </template>
+
             <TopProducts :products="top_products"></TopProducts>
         </section>
+
 
     </layout>
 </template>
@@ -32,9 +36,10 @@ import MedicineProduct from './MedicineProduct.vue';
 import GeneralProduct from './GeneralProduct.vue';
 import { useProductDetailsStore } from './Store/product_details_store.js';
 import { mapActions, mapState, mapWritableState } from 'pinia';
+import TopProducts from './Components/TopProducts.vue';
 
 export default {
-    components: { MedicineProduct, GeneralProduct, BreadCumb, Layout, },
+    components: { MedicineProduct, GeneralProduct, BreadCumb, Layout, TopProducts, },
     props: {
         slug: String,
     },
@@ -56,9 +61,8 @@ export default {
 
         await this.get_single_product_initial_data(this.slug);
 
-        this.preloader = false;
-
         await this.get_single_product_details(this.slug);
+
 
         let bread_cumb = [];
 
@@ -80,8 +84,10 @@ export default {
 
         await this.get_all_question_and_answers(this.slug);
 
+
         await this.get_top_products();
 
+        this.preloader = false;
 
     },
     methods: {

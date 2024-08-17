@@ -95,7 +95,7 @@ export const product_store = defineStore("product_store", {
                 let response = await axios.get(url);
                 this.products = response.data.data;
             } else {
-                let set_query_params = new URL(location.origin + `/api/v1/category/${this.slug}`);
+                let set_query_params = new URL(location.origin + `/api/v1/get-all-products-by-category-id-with-verient-and-brand/${this.slug}`);
                 set_query_params.searchParams.set('page', 1);
 
                 if (this.variant_values_id.length > 0) {
@@ -174,7 +174,7 @@ export const product_store = defineStore("product_store", {
             try {
                 let link_url = new URL(location.origin + link.url);
 
-                let url = new URL(location.origin + `/api/v1/category/${this.slug}`);
+                let url = new URL(location.origin + `/api/v1/get-all-products-by-category-id-with-verient-and-brand/${this.slug}`);
                 url.searchParams.set('page', link_url.searchParams.get('page'));
 
                 let res = await axios.get(url.href);
