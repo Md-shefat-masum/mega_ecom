@@ -93,7 +93,7 @@
 
                     <li>
                         <div class="total">
-                            total<span>$ {{ total_cart_price }}</span>
+                            total<span> {{ total_cart_price }} ৳</span>
                         </div>
                     </li>
                     <li>

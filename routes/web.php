@@ -68,10 +68,12 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
     Route::get('/upload_product_list', 'Website\TestController@upload_product_list');
     Route::get('/upload_product', 'Website\TestController@upload_product');
-
 });
 
 
+
+
 require_once __DIR__ . '/test_route.php';
+require_once __DIR__ . '/ssl_route.php';
 // require_once __DIR__ . '/shefat_route.php';
 // require_once __DIR__ . '/website_api_route.php';

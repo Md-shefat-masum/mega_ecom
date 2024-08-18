@@ -270,6 +270,7 @@ export default {
         order_track_show: false
     }),
     created: async function () {
+
         await this.check_is_auth();
         await this.get_all_website_settings();
         await this.get_all_website_navbar_menu();

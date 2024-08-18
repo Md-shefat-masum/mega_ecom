@@ -122,7 +122,7 @@
                                                     </tr>
                                                 </thead>
 
-                                                <tbody>
+                                                <tbody class="">
                                                     <tr v-for="cart in all_cart_data" :key="cart.id">
 
                                                         <td width="250px">
@@ -151,18 +151,27 @@
                                                         </td>
 
                                                         <td>
-                                                            <h5>${{ total_cart_price }}</h5>
+                                                            <h5>{{ total_cart_price }} ৳ </h5>
                                                         </td>
                                                     </tr>
-                                                    <!-- <tr>
+                                                    <tr>
                                                         <td colspan="3">
-                                                            <h5>
-                                                                Shipping
-                                                            </h5>
+                                                            <div
+                                                                class=" d-flex align-items-center justify-content-between">
+                                                                <h5>
+                                                                    Shipping
+                                                                </h5>
+                                                                <select v-model="delivery_charge" id="" class="w-25 ">
+                                                                    <option :value="get_setting_value('inside_dhaka')">
+                                                                        Inside Dhaka</option>
+                                                                    <option :value="get_setting_value('outside_dhaka')">
+                                                                        Outside Dhaka</option>
+                                                                </select>
+                                                            </div>
                                                         </td>
                                                         <td>
-                                                            <div class="shipping">
-                                                                <div class="shopping-option">
+                                                            <div class=" d-flex ">
+                                                                <!-- <div class="shopping-option">
                                                                     <input type="checkbox" name="free-shipping"
                                                                         id="free-shipping">
                                                                     <label for="free-shipping">Free Shipping</label>
@@ -171,17 +180,19 @@
                                                                     <input type="checkbox" name="local-pickup"
                                                                         id="local-pickup">
                                                                     <label for="local-pickup">Local Pickup</label>
-                                                                </div>
+                                                                </div> -->
+
+                                                                <h5>{{ delivery_charge }} ৳</h5>
                                                             </div>
                                                         </td>
-                                                    </tr> -->
+                                                    </tr>
                                                     <tr>
                                                         <td colspan="3">
                                                             <h5>Grand Total</h5>
                                                         </td>
 
                                                         <td>
-                                                            <h5>${{ total_cart_price }}</h5>
+                                                            <h5>{{ total_cart_price }} ৳</h5>
                                                         </td>
                                                     </tr>
                                                 </tfoot>
@@ -260,6 +271,7 @@ export default {
         state_division_id: '',
         district_id: '',
         station_id: '',
+        delivery_charge: null,
 
 
     }),
@@ -273,8 +285,10 @@ export default {
     },
 
     created: async function () {
+
         const authStore = auth_store();
         await authStore.check_is_auth();
+
         if (!authStore.is_auth) {
             this.$inertia.visit('/login');
         } else {
@@ -283,6 +297,8 @@ export default {
             this.state_division_id = this.user_address_info?.state_division_id
             this.district_id = this.user_address_info?.district_id
             this.station_id = this.user_address_info?.station_id
+
+            this.delivery_charge = this.get_setting_value('inside_dhaka');
         }
     },
 
@@ -367,6 +383,7 @@ export default {
             all_cart_data: "all_cart_data",
             total_cart_price: "total_cart_price",
             get_price: "get_price",
+            get_setting_value: "get_setting_value",
         }),
     },
 };
