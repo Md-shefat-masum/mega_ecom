@@ -66,7 +66,7 @@ export const common_store = defineStore("common_store", {
         },
 
         cart_quantity_update: async function (cartId, action, quantity) {
-           
+
             const response = await axios.post(
                 `/update-cart-item-quantity`,
                 {
@@ -184,6 +184,10 @@ export const common_store = defineStore("common_store", {
 
 
         get_setting_value: function (key, multiple = false) {
+
+            // console.log(key, this.website_settings_data);
+
+
             this.preloader = true;
             try {
                 if (!multiple) {

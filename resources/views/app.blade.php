@@ -49,9 +49,9 @@
     <link rel="stylesheet" href="/cache/frontend/assets/css/custom.css">
 
     <script>
-        if(window.innerWidth < 991){
-            location.href = "https://m.etek.com.bd";
-        }
+        // if(window.innerWidth < 991){
+        //     location.href = "https://m.etek.com.bd";
+        // }
         window.load_image = function (url, cache = true) {
 
             try {
@@ -65,7 +65,7 @@
                 full_url.replaceAll('//', '/');
                 return full_url;
             }
-            
+
         }
     </script>
 

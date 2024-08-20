@@ -243,7 +243,7 @@
                             </div>
                             <div class="category-right">
                                 <div class="contact-block">
-                                    <a href="tel:+8801793199803">
+                                    <a :href="get_setting_value('phone_numbers')">
                                         <i class="fa fa-volume-control-phone"></i>
                                         <span>call us<span>{{ get_setting_value('phone_numbers') }}</span></span>
                                     </a>
@@ -290,6 +290,7 @@ export default {
             get_all_website_settings: "get_all_website_settings",
             get_all_website_navbar_menu: "get_all_website_navbar_menu",
             track_customer_order: "track_customer_order",
+            get_setting_value: "get_setting_value",
         }),
 
         ...mapActions(auth_store, {
@@ -310,7 +311,6 @@ export default {
             all_cart_data: "all_cart_data",
             website_settings_data: "website_settings_data",
             navbar_menu_data: "navbar_menu_data",
-            get_setting_value: "get_setting_value",
             preloader: "preloader",
         }),
         ...mapState(auth_store, {
