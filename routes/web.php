@@ -41,7 +41,9 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('/returns-exchanges', 'Website\WebsiteController@returns_exchanges')->name('website_returns_exchanges');
     Route::get('/shipping-delivery', 'Website\WebsiteController@shipping_delivery')->name('website_shipping_delivery');
     Route::get('/search-results', 'Website\WebsiteController@search_results')->name('search_results');
+    Route::get('/invoice', 'Website\WebsiteController@invoice');
 
+    
     Route::get('/profile', 'Website\ProfileController@profile')->name('website_profile');
     Route::get('/profile/orders', 'Website\ProfileController@orders')->name('website_profile_orders');
     Route::get('/profile/order-details/{slug}', 'Website\ProfileController@order_details')->name('order_details');

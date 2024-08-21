@@ -112,7 +112,8 @@
                                                 <h3>Order Details</h3>
                                                 <hr>
                                             </div>
-                                            <table class="table cart-table table-responsive-xs">
+                                            <table v-if="all_cart_data.length"
+                                                class="table cart-table table-responsive-xs">
                                                 <thead>
                                                     <tr class="table-head">
                                                         <th scope="col">Product</th>
@@ -200,7 +201,7 @@
                                             </table>
 
                                         </div>
-                                        <div class="payment-box">
+                                        <div v-if="all_cart_data.length" class="payment-box">
                                             <div class="upper-box">
                                                 <div class="payment-options">
                                                     <ul>
@@ -222,7 +223,7 @@
                                                                         value="online" name="payment_type"
                                                                         id="payment-online">
                                                                     <label for="payment-online">
-                                                                        Online
+                                                                        Online Payment
                                                                     </label>
                                                                 </div>
                                                             </li>
@@ -235,6 +236,10 @@
                                                 <button type="submit" class="btn-normal btn">Place Order</button>
                                             </div>
 
+                                        </div>
+                                        <div v-else class="text-center">
+                                            <h3 class="my-3">No product in cart</h3>
+                                            <Link href="/" class="btn-normal btn">Continue shopping</Link>
                                         </div>
                                     </div>
                                 </div>
@@ -315,19 +320,13 @@ export default {
         checkoutFormSubmit: async function ($event) {
             let formData = new FormData($event.target);
             let response = await window.privateAxios('/customer-ecommerce-order-placed', 'post', formData);
-
             if (response.status === "success") {
-
-                if (response.data.payment_method === 'cod') {
+                if (response.data.order_details?.payment_method === 'cod') {
                     window.s_alert(response.message);
-                } else if (response.data.payment_method === 'online') {
-                    let payment_res = await window.axios.get('/pay-via-ajax?amount=150&order_id=1');
-                    this.payment_link = payment_res.data?.data;
-                    window.open(this.payment_link, "_blank");
+                } else if (response.data.order_details?.payment_method === 'online') {
+                    this.checkoutPopUp(response.data)
                 }
-
             }
-
         },
 
         all_division: async function () {
@@ -375,8 +374,11 @@ export default {
 
         },
 
-        checkoutPopUp: function () {
-
+        checkoutPopUp: async function (data) {
+            let payload = JSON.stringify(data);
+            let payment_res = await window.axios.get(`http://127.0.0.1:9000/pay-via-ajax?payload=${payload}`);
+            this.payment_link = payment_res.data?.data;
+            window.open(this.payment_link, "_blank");
         }
 
     },

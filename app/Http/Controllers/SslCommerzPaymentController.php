@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Library\SslCommerz\SslCommerzNotification;
 use Illuminate\Support\Facades\DB;
+use App\Modules\SalesManagement\SalesEcommerceOrder\Models\Model as SalesEcommerceOrder;
 
 class SslCommerzPaymentController extends Controller
 {
@@ -95,27 +96,30 @@ class SslCommerzPaymentController extends Controller
         # Lets your oder trnsaction informations are saving in a table called "orders"
         # In orders table order uniq identity is "transaction_id","status" field contain status of the transaction, "amount" is the order amount to be paid and "currency" is for storing Site Currency which will be checked with paid currency.
 
+        $payload = json_decode($request->payload);
+        $order_details = $payload->order_details;
+        $address_details = $payload->address_details;
         $post_data = array();
-        $post_data['total_amount'] = request()->amount ?? 10; # You cant not pay less than 10
+        $post_data['total_amount'] = $order_details->total; # You cant not pay less than 10
         $post_data['currency'] = "BDT";
-        $post_data['tran_id'] = uniqid(); // tran_id must be unique
+        $post_data['tran_id'] = $order_details->order_id; // tran_id must be unique
 
         # CUSTOMER INFORMATION
-        $post_data['cus_name'] = 'Customer Name';
-        $post_data['cus_email'] = 'customer@mail.com';
-        $post_data['cus_add1'] = 'Customer Address';
+        $post_data['cus_name'] = $order_details->user?->name;
+        $post_data['cus_email'] = $order_details->user?->email;
+        $post_data['cus_add1'] = $address_details->address;
         $post_data['cus_add2'] = "";
         $post_data['cus_city'] = "";
         $post_data['cus_state'] = "";
         $post_data['cus_postcode'] = "";
         $post_data['cus_country'] = "Bangladesh";
-        $post_data['cus_phone'] = '8801XXXXXXXXX';
+        $post_data['cus_phone'] = $order_details->user?->phone_number;
         $post_data['cus_fax'] = "";
 
         # SHIPMENT INFORMATION
         $post_data['ship_name'] = "Store Test";
-        $post_data['ship_add1'] = "Dhaka";
-        $post_data['ship_add2'] = "Dhaka";
+        $post_data['ship_add1'] = $address_details->address;
+        $post_data['ship_add2'] = $address_details->address;
         $post_data['ship_city'] = "Dhaka";
         $post_data['ship_state'] = "Dhaka";
         $post_data['ship_postcode'] = "1000";
@@ -136,15 +140,15 @@ class SslCommerzPaymentController extends Controller
 
         #Before  going to initiate the payment order status need to update as Pending.
         $update_product = DB::table('orders')
-            ->where('transaction_id', $post_data['tran_id'])
+            ->where('transaction_id', $order_details->order_id)
             ->updateOrInsert([
-                'name' => $post_data['cus_name'],
-                'email' => $post_data['cus_email'],
-                'phone' => $post_data['cus_phone'],
-                'amount' => $post_data['total_amount'],
+                'name' => $address_details->user_name,
+                'email' => $address_details->email,
+                'phone' => $address_details->phone,
+                'amount' => $order_details->total,
                 'status' => 'Pending',
-                'address' => $post_data['cus_add1'],
-                'transaction_id' => $post_data['tran_id'],
+                'address' => $address_details->address,
+                'transaction_id' => $order_details->order_id,
                 'currency' => $post_data['currency']
             ]);
 
@@ -160,8 +164,8 @@ class SslCommerzPaymentController extends Controller
 
     public function success(Request $request)
     {
-        return redirect('/');
-        echo "Transaction is Successful";
+
+
 
         $tran_id = $request->input('tran_id');
         $amount = $request->input('amount');
@@ -185,23 +189,49 @@ class SslCommerzPaymentController extends Controller
                 */
                 $update_product = DB::table('orders')
                     ->where('transaction_id', $tran_id)
-                    ->update(['status' => 'Processing']);
+                    ->update(['status' => 'Complete']);
 
-                echo "<br >Transaction is successfully Completed";
+                $orderInfo = SalesEcommerceOrder::with(
+                    'order_products',
+                    'order_products.product',
+                    'order_products.product.product_image'
+                )->where("order_id", $tran_id)->first();
+
+                $orderInfo->paid_status = "paid";
+                $orderInfo->paid_amount = $amount;
+                $orderInfo->save();
+                return redirect()->to('invoice?order_id=' . $tran_id . '&status=success');
             }
         } else if ($order_details->status == 'Processing' || $order_details->status == 'Complete') {
+
             /*
              That means through IPN Order status already updated. Now you can just show the customer that transaction is completed. No need to udate database.
              */
-            echo "Transaction is successfully Completed";
+            $orderInfo = SalesEcommerceOrder::with(
+                'order_products',
+                'order_products.product',
+                'order_products.product.product_image'
+            )->where("order_id", $tran_id)->first();
+
+            $orderInfo->paid_status = "paid";
+            $orderInfo->paid_amount = $amount;
+            $orderInfo->save();
+            return redirect()->to('invoice?order_id=' . $tran_id . '&status=success');
         } else {
+            $orderInfo = SalesEcommerceOrder::with(
+                'order_products',
+                'order_products.product',
+                'order_products.product.product_image'
+            )->where("order_id", $tran_id)->first();
+
             #That means something wrong happened. You can redirect customer to your product page.
-            echo "Invalid Transaction";
+            return redirect()->to('invoice?order_id=' . $tran_id . '&status=invalid');
         }
     }
 
     public function fail(Request $request)
     {
+        dd($request->all());
         $tran_id = $request->input('tran_id');
 
         $order_details = DB::table('orders')

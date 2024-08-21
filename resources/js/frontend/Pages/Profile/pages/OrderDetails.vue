@@ -1,72 +1,17 @@
 <template>
     <ProfileLayout :bread_cumb="bread_cumb">
 
-        <div class="invoice-box">
-            <table cellpadding="0" cellspacing="0">
-                <tr class="top">
-                    <td colspan="2">
-                        <table>
-                            <tr>
-                                <td class="title">
-                                    <img src="http://127.0.0.1:8000/frontend/images/etek_logo.png"
-                                        style="width: 100%; max-width: 150px" />
-                                </td>
+        <order-invoice :order_info="order_info"></order-invoice>
 
-                                <td>
-                                    Invoice #: <span class="fw-bold"> {{ order_info.order_id }}</span><br />
-                                    Date : {{ new Date(order_info.created_at).toDateString() }}<br />
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
 
-                <tr class="information">
-                    <td style="width: 50%">
-                        <h4>Delivery Information</h4><br>
-                        {{ order_info.order_delivery_address?.address }}.<br />
-                        {{ order_info.order_delivery_address?.station?.name }} ,
-                        {{ order_info.order_delivery_address?.district?.name }}, {{
-        order_info.order_delivery_address?.division?.name }} <br><br>
-                    </td>
-
-                    <td>
-                        <h4>User Information</h4><br>
-                        {{ order_info.user?.name }}.<br />
-                        {{ order_info.user?.email }}<br />
-                        {{ order_info.user?.phone_number }}
-                    </td>
-                </tr>
-
-                <tr class="heading ">
-                    <td>Item</td>
-
-                    <td>Price</td>
-                </tr>
-
-                <tr class="item" v-for="item in order_info.order_products" :key="item.id">
-                    <td>{{ item.product?.title }}</td>
-
-                    <td>{{ item.product?.current_price }}</td>
-                </tr>
-                <tr class="total">
-                    <td></td>
-
-                    <td>Total: {{ order_info.total }}</td>
-                </tr>
-            </table>
-        </div>
-        <div class="text-center">
-            <button id="printBtn" @click="printInvoice" class="btn btn-info mt-3 fw-bold text-white w-50 py-2">Print
-                Invoice</button>
-        </div>
     </ProfileLayout>
 </template>
 
 <script>
+import OrderInvoice from '../../../Components/Invoice/OrderInvoice.vue';
 import ProfileLayout from "../shared/ProfileLayout.vue";
 export default {
-    components: { ProfileLayout },
+    components: { ProfileLayout, OrderInvoice },
     props: {
         order_id: String,
     },
@@ -95,9 +40,7 @@ export default {
 
 
         },
-        printInvoice() {
-            window.print();
-        }
+      
     },
 
 };

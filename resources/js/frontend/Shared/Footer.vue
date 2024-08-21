@@ -819,9 +819,9 @@ export default {
             total_cart_price: "total_cart_price",
             get_setting_value: "get_setting_value",
         }),
-
-
     },
+
+
 };
 </script>
 

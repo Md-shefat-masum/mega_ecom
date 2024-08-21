@@ -243,7 +243,7 @@
                             </div>
                             <div class="category-right">
                                 <div class="contact-block">
-                                    <a :href="get_setting_value('phone_numbers')">
+                                    <a  :tel="get_setting_value('phone_numbers')">
                                         <i class="fa fa-volume-control-phone"></i>
                                         <span>call us<span>{{ get_setting_value('phone_numbers') }}</span></span>
                                     </a>

@@ -40,7 +40,7 @@ class EcommerceOrder
                 "order_status" => 'pending',
                 // "user_address_id" => ($orderDetails["address_id"] ?? auth()->user()?->user_address->id) ?? null,
                 "delivery_method" => "home_delivery",
-                // "delivery_address_id" =>  ($orderDetails["address_id"] ?? auth()->user()?->user_address->id) ?? null,
+                // "delivery_address_id" => ($orderDetails["address_id"] ?? auth()->user()?->user_address->id) ?? null,
 
                 "delivery_charge" => $orderDetails["delivery_charge"] ?? 0,
                 "additional_charge" => 0,
@@ -54,7 +54,7 @@ class EcommerceOrder
                 "payment_method" => $orderDetails["payment_type"],
 
                 "subtotal" => $cartSubtotal,
-                "total" =>  $total,
+                "total" =>  $total + $orderDetails["delivery_charge"] ?? 0,
             ];
 
             // dd($orderInfo);
@@ -86,12 +86,17 @@ class EcommerceOrder
                 }
 
 
-                // self::$cartModel::where('user_id', auth()->id())->delete();
-
+                self::$cartModel::where('user_id', auth()->id())->delete();
             }
 
+            $order_details = self::$model::with('user')->where('order_id', $orderInfo['order_id'])->first();
 
-            return messageResponse('Order Successfully completed', $orderInfo, 200, 'success');
+            $payload = [
+                "order_details" => $order_details,
+                "address_details" =>  $orderDetails,
+            ];
+
+            return messageResponse('Order Successfully completed', $payload, 200, 'success');
         } catch (\Exception $e) {
             dd($e);
             return messageResponse($e->getMessage(), [], 500, 'server_error');
