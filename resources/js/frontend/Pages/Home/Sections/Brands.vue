@@ -4,6 +4,7 @@
             <h2 class="title">Brands We Are Working With</h2>
             <ul class="brand_items">
                 <li v-for="item in brands" :key="item.id">
+                    <Link :href="`/brand/${item.slug}`">
                     <template v-if="item.image">
                         <img :src="check_image_url(item.image)" :alt="item.title">
                     </template>
@@ -13,6 +14,7 @@
                             {{ item.title }}
                         </div>
                     </template>
+                    </Link>
 
                 </li>
             </ul>
@@ -47,10 +49,15 @@ export default {
 
 <style>
 .no-image {
-    width: 100px;
-    height: 100px;
-    background: #e2e2e2;
+    background-image: url("/dummy.png");
+    height: 90px;
+    width: 90px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    border: 1px solid rgba(128, 128, 128, 0.274);
     border-radius: 50%;
-
+    padding: 10px;
+    text-align: center;
 }
 </style>

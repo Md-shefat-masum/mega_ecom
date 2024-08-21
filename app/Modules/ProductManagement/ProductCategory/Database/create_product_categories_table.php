@@ -34,6 +34,9 @@ return new class extends Migration
 
             $table->string('related_product_title', 200)->nullable();
 
+            $table->string('bc_url', 200)->nullable();
+            $table->bigInteger('bc_id')->nullable();
+
 
             $table->bigInteger('creator')->unsigned()->nullable();
             $table->string('slug', 150)->nullable();

@@ -1,11 +1,11 @@
 <template>
     <div id="myAccount" class="add_to_cart right account-bar">
-        <a href="javascript:void(0)" class="overlay" onclick="closeAccount()"></a>
+        <a href="javascript:void(0)" class="overlay" @click="closeAccount()"></a>
         <div class="cart-inner">
             <div class="cart_top">
                 <h3>my account</h3>
                 <div class="close-cart">
-                    <a href="javascript:void(0)" onclick="closeAccount()">
+                    <a href="javascript:void(0)" @click="closeAccount()">
                         <i class="fa fa-times" aria-hidden="true"></i>
                     </a>
                 </div>
@@ -16,7 +16,7 @@
                     <label>Enter your Phone</label>
                     <input type="number" name="phone_number" id="phone_number" class="form-control"
                         placeholder="Enter your phone number" />
-                    <button class="btn btn-normal my-2" >Login</button>
+                    <button class="btn btn-normal my-2">Login</button>
 
                     <div class="accout-fwd">
 
@@ -54,6 +54,7 @@ export default {
         phone_number: "",
     }),
     methods: {
+
         loginFormHandler: async function (event) {
             let formData = new FormData(event.target);
             let response = await axios.post('/login', formData)
@@ -70,6 +71,8 @@ export default {
             formData.append("phone_number", this.phone_number);
             let response = await axios.post('/verify-user-otp', formData)
             if (response.data?.status === "success") {
+                console.log(response.data);
+
                 localStorage.setItem("token", response.data?.data?.access_token);
                 window.s_alert(response.data?.message);
                 setTimeout(() => {
@@ -79,6 +82,10 @@ export default {
 
             }
         },
+
+        closeAccount() {
+            document.getElementById("myAccount").classList.remove('open-side');
+        }
 
     }
 }

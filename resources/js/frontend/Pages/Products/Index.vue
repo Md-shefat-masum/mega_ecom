@@ -176,7 +176,7 @@ import Layout from "../../Shared/Layout.vue";
 import PriceRange from "./CategoryVarients/PriceRange.vue";
 import BrandVarients from "./CategoryVarients/BrandVarients.vue";
 import AllVarients from "./CategoryVarients/AllVarients.vue";
-import ProductItem from "./Components/ProductItem.vue";
+import ProductItem from "../../Components/ProductItem.vue";
 
 import BreadCumb from '../../Components/BreadCumb.vue';
 import { product_store } from "./Store/product_store.js"

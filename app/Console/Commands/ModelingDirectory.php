@@ -101,7 +101,7 @@ class ModelingDirectory extends Command
             File::makeDirectory($DatabaseDirectory);
         }
 
-        // dd($module_name);
+
         foreach ($actionFiles as $file) {
             if ($file == 'All.php') {
                 File::put($actionsDirectory . '/' . $file, all($module_name));

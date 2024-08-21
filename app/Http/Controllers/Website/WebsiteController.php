@@ -25,7 +25,7 @@ class WebsiteController extends Controller
     {
         return Inertia::render('Blogs/Index', [
             'event' => [
-                'title' => 'ETEK Blogs',
+                'title' => 'ETEK - Blogs',
                 'image' => 'https://etek.com.bd/cache/frontend/images/etek_logo.png',
                 'description' => 'Best eCommerce in bangladesh'
             ]
@@ -36,7 +36,7 @@ class WebsiteController extends Controller
         return Inertia::render('Blogs/Details', [
             'slug' => $slug,
             'event' => [
-                'title' => 'ETEK Blog Details',
+                'title' => 'ETEK - Blog Details',
                 'image' => 'https://etek.com.bd/cache/frontend/images/etek_logo.png',
                 'description' => 'Best eCommerce in bangladesh'
             ]
@@ -45,13 +45,38 @@ class WebsiteController extends Controller
 
     public function products($slug)
     {
-        $category = DB::table('product_categories')->select('title','slug')->where('slug',$slug)->first();
+        $category = DB::table('product_categories')->select('title', 'slug')->where('slug', $slug)->first();
         $page = request()->page ? request()->page : 1;
         return Inertia::render('Products/Index', [
             'slug' => $slug,
             'page' => $page,
             'event' => [
-                'title' => $category->title .' price in bangladesh',
+                'title' => $category->title ?? 'ETEK - Products' . ' price in bangladesh',
+                'image' => 'https://etek.com.bd/cache/frontend/images/etek_logo.png',
+                'description' => 'Best eCommerce in bangladesh'
+            ]
+        ]);
+    }
+    public function categoryProducts($slug)
+    {
+        $category = DB::table('product_categories')->select('title', 'slug')->where('slug', $slug)->first();
+        $page = request()->page ? request()->page : 1;
+        return Inertia::render('Category/ProductByCategory', [
+            'slug' => $slug,
+            'page' => $page,
+            'event' => [
+                'title' => $category->title ?? 'ETEK - Products' . ' price in bangladesh',
+                'image' => 'https://etek.com.bd/cache/frontend/images/etek_logo.png',
+                'description' => 'Best eCommerce in bangladesh'
+            ]
+        ]);
+    }
+    public function brandProducts($slug)
+    {
+        return Inertia::render('Brand/ProductsByBrand', [
+            'slug' => $slug,
+            'event' => [
+                'title' => $slug . ' price in bangladesh',
                 'image' => 'https://etek.com.bd/cache/frontend/images/etek_logo.png',
                 'description' => 'Best eCommerce in bangladesh'
             ]
@@ -63,7 +88,7 @@ class WebsiteController extends Controller
         return Inertia::render('Products/CategoryGroupProduct', [
             'slug' => $slug,
             'event' => [
-                'title' => 'ETEK Products',
+                'title' => 'ETEK - Products',
                 'image' => 'https://etek.com.bd/frontend/images/etek_logo.png',
                 'description' => 'Best eCommerce in bangladesh'
             ]
@@ -77,12 +102,11 @@ class WebsiteController extends Controller
             'slug' => $slug,
             // 'product_details' => $product,
             'event' => [
-                'title' => 'ETEK Product Details',
+                'title' => 'ETEK - Product Details',
                 'image' => 'https://etek.com.bd/frontend/images/etek_logo.png',
                 'description' => 'Best eCommerce in bangladesh'
             ]
         ]);
-
     }
     public function offer_products($slug)
     {
@@ -91,7 +115,7 @@ class WebsiteController extends Controller
             'slug' => $slug,
             // 'product_details' => $product,
             'event' => [
-                'title' => 'ETEK Product Details',
+                'title' => 'ETEK - Product Details',
                 'image' => 'https://etek.com.bd/frontend/images/etek_logo.png',
                 'description' => 'Best eCommerce in bangladesh'
             ]
@@ -102,7 +126,7 @@ class WebsiteController extends Controller
     {
         return Inertia::render('Cart/Index', [
             'event' => [
-                'title' => 'ETEK Cart',
+                'title' => 'ETEK - Cart',
                 'image' => 'https://etek.com.bd/frontend/images/etek_logo.png',
                 'description' => 'Best eCommerce in bangladesh'
             ]
@@ -113,7 +137,7 @@ class WebsiteController extends Controller
     {
         return Inertia::render('Checkout/Index', [
             'event' => [
-                'title' => 'ETEK Checkout',
+                'title' => 'ETEK - Checkout',
                 'image' => 'https://etek.com.bd/frontend/images/etek_logo.png',
                 'description' => 'Best eCommerce in bangladesh'
             ]
@@ -123,7 +147,7 @@ class WebsiteController extends Controller
     {
         return Inertia::render('Contact/Index', [
             'event' => [
-                'title' => 'ETEK Contact Us',
+                'title' => 'ETEK - Contact Us',
                 'image' => 'https://etek.com.bd/frontend/images/etek_logo.png',
                 'description' => 'Best eCommerce in bangladesh'
             ]
@@ -133,7 +157,7 @@ class WebsiteController extends Controller
     {
         return Inertia::render('About/Index', [
             'event' => [
-                'title' => 'ETEK About Us',
+                'title' => 'ETEK - About Us',
                 'image' => 'https://etek.com.bd/frontend/images/etek_logo.png',
                 'description' => 'Best eCommerce in bangladesh'
             ]
@@ -143,7 +167,7 @@ class WebsiteController extends Controller
     {
         return Inertia::render('TermsConditions/Index', [
             'event' => [
-                'title' => 'ETEK Terms & Conditions',
+                'title' => 'ETEK - Terms & Conditions',
                 'image' => 'https://etek.com.bd/frontend/images/etek_logo.png',
                 'description' => 'Best eCommerce in bangladesh'
             ]
@@ -153,7 +177,7 @@ class WebsiteController extends Controller
     {
         return Inertia::render('ReturnsExchanges/Index', [
             'event' => [
-                'title' => 'ETEK Returns & Exchanges',
+                'title' => 'ETEK - Returns & Exchanges',
                 'image' => 'https://etek.com.bd/frontend/images/etek_logo.png',
                 'description' => 'Best eCommerce in bangladesh'
             ]
@@ -163,7 +187,7 @@ class WebsiteController extends Controller
     {
         return Inertia::render('ShippingDelivery/Index', [
             'event' => [
-                'title' => 'ETEK Shipping & Delivery',
+                'title' => 'ETEK - Shipping & Delivery',
                 'image' => 'https://etek.com.bd/frontend/images/etek_logo.png',
                 'description' => 'Best eCommerce in bangladesh'
             ]
@@ -174,7 +198,18 @@ class WebsiteController extends Controller
     {
         return Inertia::render('GlobalSearchResult/Index', [
             'event' => [
-                'title' => 'ETEK Shipping & Delivery',
+                'title' => 'ETEK - Shipping & Delivery',
+                'image' => 'https://etek.com.bd/frontend/images/etek_logo.png',
+                'description' => 'Best eCommerce in bangladesh'
+            ]
+        ]);
+    }
+
+    public function invoice()
+    {
+        return Inertia::render('Profile/pages/Invoice', [
+            'event' => [
+                'title' => 'ETEK - Invoice',
                 'image' => 'https://etek.com.bd/frontend/images/etek_logo.png',
                 'description' => 'Best eCommerce in bangladesh'
             ]

@@ -10,7 +10,7 @@
 
                 <div class="card order_history_card my-3" v-for="order in order_list.data" :key="order.id">
                     <div class="card-header align-items-center">
-                        <div class="left">
+                        <div class="">
                             <b>Order# {{ order.order_id }}</b>
                             <p>Date Added: {{ new Date(order.created_at).toDateString() }}</p>
                         </div>
@@ -34,9 +34,11 @@
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="product_info_table table border-0 mb-0">
-                                <tr v-for="item in order.order_products" :key="item.id">
+                                <tr v-for="(item, index) in order.order_products" :key="item.id">
+
                                     <td>
-                                        <img :src="`/${item.product.product_image.url}`" alt="">
+                                        <span>{{ index + 1 }}</span>
+                                        <img :src="load_image(`/${item.product.product_image.url}`)" alt="">
                                         <span>
                                             {{ item.product.title }}
                                         </span>
@@ -92,6 +94,7 @@ export default {
             console.log("dd", this.order_list);
 
         },
+        load_image: window.load_image,
     },
 
 };

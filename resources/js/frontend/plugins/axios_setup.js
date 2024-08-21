@@ -120,7 +120,7 @@ window.axios.interceptors.response.use(
                 error?.response?.data ? error?.response?.data : error.response
             );
         } else {
-            console.log(error.response || error);
+            // console.log(error.response || error);
             if (error.response?.data?.status == "server_error") {
                 window.s_warning(error.response?.data?.message);
             }

@@ -38118,7 +38118,7 @@ ul.sosiyal.sosiyal-inverse li:hover {
 }
 
 .add_to_cart .cart-inner .cart_media ul.cart_product li .media img {
-    width: 83px;
+    width: 60px;
     height: auto;
 }
 
@@ -38367,7 +38367,7 @@ ul.sosiyal.sosiyal-inverse li:hover {
 
 .add_to_cart.left .cart-inner .cart_media ul.cart_product,
 .add_to_cart.right .cart-inner .cart_media ul.cart_product {
-    height: calc(100vh - 335px);
+    height: calc(100vh - 220px);
     overflow-y: auto;
 }
 

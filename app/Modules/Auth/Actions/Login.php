@@ -15,11 +15,20 @@ class Login
         try {
             // dd($request->all());
             $requestData = $request->validated();
+
+            $user = self::$model::where('phone_number', $requestData['phone_number'])->first();
+
+            if (!$user) {
+                return messageResponse('User not found please register', $requestData, 400, 'error');
+            }
+
             $otp = self::generateOTPCode();
+
             $isExist = DB::table('otp_codes')->where('phone_number', $requestData['phone_number'])->exists();
             if ($isExist) {
                 DB::table('otp_codes')->where('phone_number', $requestData['phone_number'])->delete();
             }
+
             DB::table('otp_codes')->insert([
                 'phone_number' => $requestData['phone_number'],
                 'type' => 'login',
@@ -27,8 +36,9 @@ class Login
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+
             // sendOTP($otp,$requestData['phone_number']);
-            return messageResponse('OTP sent successfully', ['phone_number' => $requestData['phone_number'],]);
+            return messageResponse('OTP sent successfully', ['phone_number' => $requestData['phone_number']]);
         } catch (\Exception $e) {
             return messageResponse($e->getMessage(), [], 500, 'server_error');
         }

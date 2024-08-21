@@ -20,7 +20,7 @@
                     <h5 class="my-2 mt-4">Brands</h5>
                     <ul class="page_sub_category_lists">
                         <li v-for="brand in search_result?.brand?.data" :key="brand.id">
-                            <Link :href="`/category/${brand.slug}`">{{ brand.title }}</Link>
+                            <Link :href="`/brand/${brand.slug}`">{{ brand.title }}</Link>
                         </li>
                     </ul>
                 </div>
@@ -76,14 +76,14 @@
                                                             <div class="product-search-count-bottom">
                                                                 <h5>Showing Products
                                                                     {{
-                                                                        search_result?.product?.from
-                                                                    }}
+                    search_result?.product?.from
+                }}
                                                                     -{{
-                                                                        search_result?.product?.to
-                                                                     }}
-                                                                     of
+                                                                    search_result?.product?.to
+                                                                    }}
+                                                                    of
                                                                     {{
-                                                                        search_result?.product?.total
+                                                                    search_result?.product?.total
                                                                     }}
                                                                     Result
                                                                 </h5>
@@ -114,7 +114,7 @@ import BreadCumb from '../../Components/BreadCumb.vue';
 
 import { use_global_search_store } from "./Store/global_search_store.js"
 
-import ProductItem from "../Products/Components/ProductItem.vue";
+import ProductItem from "../../Components/ProductItem.vue";
 import { mapActions, mapState, mapWritableState } from 'pinia';
 
 export default {
@@ -128,7 +128,7 @@ export default {
             },
         ],
     }),
-    created: async function(){
+    created: async function () {
         let url = window.location.href;
         url = new URL(url);
         let key = url.searchParams.get('search_key');
@@ -136,21 +136,21 @@ export default {
         this.global_search();
     },
     methods: {
-        ...mapActions(use_global_search_store,[
+        ...mapActions(use_global_search_store, [
             'set_search_key',
             'global_search',
             'reset_search',
         ])
     },
     computed: {
-        ...mapState(use_global_search_store,{
+        ...mapState(use_global_search_store, {
             search_result: 'search_result_data'
         }),
-        ...mapWritableState(use_global_search_store,{
+        ...mapWritableState(use_global_search_store, {
             search_key: 'search_key'
         }),
     },
-    beforeUnmount: function(){
+    beforeUnmount: function () {
         this.reset_search();
     }
 };
@@ -159,6 +159,6 @@ export default {
 
 <style scoped>
 .product_list.product_left {
-    grid-template-columns: repeat(auto-fit, minmax(87px, 240px))!important;
+    grid-template-columns: repeat(auto-fit, minmax(87px, 240px)) !important;
 }
 </style>

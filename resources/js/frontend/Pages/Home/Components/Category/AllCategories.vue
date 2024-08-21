@@ -39,7 +39,7 @@
                     </li>
                     <li v-else v-for="category in nav_categories" :key="category.id">
                         <div @click="visit_category(category.slug)">
-                            <img :src="load_image(`/${category.image}`)" :alt="category.title">
+                            <img :src="load_image(`${category.image}`)" :alt="category.title">
                             <span class="link_title">
                                 {{ category.title }}
                             </span>
@@ -67,6 +67,7 @@ export default {
         }
     },
     methods: {
+
         load_image: window.load_image,
         close_category: function () {
             document.querySelector('.modal_category_all_page').classList.toggle('active');
@@ -79,11 +80,13 @@ export default {
             router.visit(`/category/${slug}`);
         },
         get_sub_categories: function(){
-            axios.get(`/category/${this.selected.slug}/subcategories`)
+
+            axios.get(`get-all-sub-category-by-category-id/${this.selected.slug}?get_all=1`)
                 .then(res=>{
-                    this.sub_categories = res.data;
+                    this.sub_categories = res.data?.data;
                 });
         }
+
     },
     computed: {
         ...mapState(use_home_page_store, {

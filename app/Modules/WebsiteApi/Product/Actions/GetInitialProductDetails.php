@@ -13,7 +13,7 @@ class GetInitialProductDetails
             $with = [
                 'product_image:id,product_id,url',
                 'product_categories:id,title',
-                'product_brand:id,title',
+                'product_brand:id,title,image',
                 'product_region',
                 'product_region.country',
             ];
@@ -29,14 +29,31 @@ class GetInitialProductDetails
                 ->where('slug', $slug)
                 ->first();
 
+            if ($data->type == 'medicine') {
+                $data->load(['medicine_product', 'medicine_product_verient']);
+                $related_brand_product = [];
+                if ($data->medicine_product && $data->medicine_product->p_generic_name) {
+
+                    $related_brand_product = self::$ProductModel::with(['medicine_product', 'medicine_product_verient','product_image:id,product_id,url'])
+                        ->select($fields)
+                        ->whereHas('medicine_product', function ($query) use ($data) {
+                            $query->where('p_generic_name', $data->medicine_product->p_generic_name);
+                        })->get();
+                    $data->related_brand_product = $related_brand_product;
+
+                }
+            }
+
+
+
+            $data->product_images = $data->product_images()->select('id', 'product_id', 'url')->skip(1)->take(10)->get();
+
             if (!$data) {
                 return messageResponse('Data not found...', [], 404, 'error');
             }
             $data->product_images = $data->product_images()->select('id', 'product_id', 'url')->skip(1)->take(10)->get();
 
             $response = entityResponse($data);
-            $response->header('Cache-Control', 'public, max-age=300')
-                ->header('Expires', now()->addMinutes(20)->toRfc7231String());
             return $response;
         } catch (\Exception $e) {
             return messageResponse($e->getMessage(), [], 500, 'server_error');

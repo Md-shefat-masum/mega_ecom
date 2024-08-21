@@ -30,4 +30,6 @@ public/uploads/medicines
 public/product_source
 public/build
 public/arogga
-public/build
+public/medicines
+public/uploads/*
+public/uploads/medicines/*
