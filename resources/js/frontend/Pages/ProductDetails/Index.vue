@@ -100,7 +100,7 @@ export default {
             set_slug: "set_slug",
         }),
 
-    // },
+    },
     data: () => ({
         loaded: false,
     }),
@@ -123,13 +123,7 @@ export default {
             store_slug: 'slug',
             product_initial_data: 'product_initial_data',
         })
-
     }
-
-
-};
+}
 </script>
 
-<style scoped>
-/* Add your styles here */
-</style>

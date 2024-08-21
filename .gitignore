@@ -28,3 +28,6 @@ eteksql.sql
 public/uploads/products
 public/product_source
 public/build
+public/medicines
+public/uploads/*
+public/uploads/medicines/*
