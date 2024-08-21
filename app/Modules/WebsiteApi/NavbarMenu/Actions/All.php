@@ -1,31 +1,31 @@
 <?php
 
-namespace App\Modules\WebsiteApi\Product\Actions;
+namespace App\Modules\WebsiteApi\NavbarMenu\Actions;
 
-class GetAllFeaturedProductsByBrandId
+class All
 {
-    static $ProductModel = \App\Modules\ProductManagement\Product\Models\Model::class;
-    static $BrandModel = \App\Modules\ProductManagement\ProductBrand\Models\Model::class;
+    static $model = \App\Modules\WebsiteApi\NavbarMenu\Models\Model::class;
 
-    public static function execute($slug)
+    public static function execute($request)
     {
         try {
-
             $pageLimit = request()->input('limit') ?? 10;
             $orderByColumn = request()->input('sort_by_col') ?? 'id';
             $orderByType = request()->input('sort_type') ?? 'asc';
             $status = request()->input('status') ?? 'active';
-            $fields = request()->input('fields') ?? '*';
-            $with = ['product_images:id,product_id,url', 'product_categories:id,title', 'product_brand:id,title'];
+            $fields = request()->input('fields') ?? "*";
+            $with = [];
             $condition = [];
 
-            $brand = self::$BrandModel::query()->where('slug', $slug)->first();
-            if (!$brand) {
-                return messageResponse('Brand not found', $slug, 404, 'error');
+            $data = self::$model::query();
+
+            if (request()->has('search') && request()->input('search')) {
+                $searchKey = request()->input('search');
+                $data = $data->where(function ($q) use ($searchKey) {
+                    $q->where('title', $searchKey);
+                    $q->orWhere('description', 'like', '%' . $searchKey . '%');
+                });
             }
-
-
-            $data = self::$ProductModel::query() ->where('is_featured', 1)->where('product_brand_id', $brand->id);
 
             if (request()->has('get_all') && (int)request()->input('get_all') === 1) {
                 $data = $data
@@ -45,7 +45,6 @@ class GetAllFeaturedProductsByBrandId
                     ->orderBy($orderByColumn, $orderByType)
                     ->paginate($pageLimit);
             }
-
             return entityResponse($data);
         } catch (\Exception $e) {
             return messageResponse($e->getMessage(), [], 500, 'server_error');

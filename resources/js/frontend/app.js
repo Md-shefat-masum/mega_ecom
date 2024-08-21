@@ -12,6 +12,7 @@ const pinia = createPinia();
 window.page_data = () => JSON.parse(document.querySelector('#app').dataset.page);
 
 let window_width = window.innerWidth;
+
 createInertiaApp({
     // title: title => title ? `${title} - Ping CRM` : 'Ping CRM',
     resolve: (name) => {

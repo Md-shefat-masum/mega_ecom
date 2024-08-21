@@ -13,6 +13,9 @@ class Model extends EloquentModel
         "image" => "array",
     ];
 
+    static $blogCategoryModel = \App\Modules\BlogManagement\BlogCategory\Models\Model::class;
+
+
     protected static function booted()
     {
         static::created(function ($data) {
@@ -32,5 +35,10 @@ class Model extends EloquentModel
     public function scopeActive($q)
     {
         return $q->where('status', 'active');
+    }
+
+    public function blog_categories()
+    {
+        return $this->belongsToMany(self::$blogCategoryModel, 'blog_post_categories', 'blog_id', 'blog_category_id');
     }
 }

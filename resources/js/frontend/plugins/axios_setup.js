@@ -22,6 +22,19 @@ window.publicAxios = async function (apiEndPoint = null, type = 'get', payload =
 
 window.privateAxios = async function (apiEndPoint = null, type = 'get', payload = {}) {
     window.axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem('token')}`;
+
+    try {
+
+        await axios.get("/check_user");
+
+    } catch (error) {
+        localStorage.removeItem("token");
+        document.getElementById("myAccount").classList.add('open-side');
+        return false;
+    }
+
+
+
     try {
         let response;
         if (type == 'get') {
@@ -35,6 +48,7 @@ window.privateAxios = async function (apiEndPoint = null, type = 'get', payload 
     } catch (error) {
         return error.response;
     }
+
 }
 
 axios.interceptors.request.use(
@@ -106,12 +120,12 @@ window.axios.interceptors.response.use(
                 error?.response?.data ? error?.response?.data : error.response
             );
         } else {
-            console.log(error.response || error);
-            if (error.response.data.status == "server_error") {
-                window.s_warning(error.response.data.message);
+            // console.log(error.response || error);
+            if (error.response?.data?.status == "server_error") {
+                window.s_warning(error.response?.data?.message);
             }
-            if (error.response.data.status == "error") {
-                window.s_error(error.response.data.message);
+            if (error.response?.data?.status == "error") {
+                window.s_error(error.response?.data?.message);
             }
         }
         // console.log(error);
@@ -124,4 +138,4 @@ window.axios.interceptors.response.use(
     }
 );
 
-  // axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('[name="csrf-token"]').content;
+// axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('[name="csrf-token"]').content;

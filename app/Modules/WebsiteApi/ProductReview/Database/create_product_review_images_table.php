@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('product_review_images', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->nullable();
+            $table->bigInteger('product_review_id')->nullable();
             $table->bigInteger('product_id')->nullable();
             $table->string('image', 100)->nullable();
 

@@ -1,12 +1,29 @@
-import { defineStore } from "pinia";
-import axios from "axios";
+import { defineStore, mapState } from "pinia";
+import { auth_store } from "./auth_store";
+
 export const common_store = defineStore("common_store", {
     state: () => ({
         all_cart_data: [],
         all_wish_list_data: [],
         all_compare_list_data: [],
+        navbar_menu_data: [],
+        website_settings_data: {},
         total_cart_price: 0,
-        api_prefix: "api/v1",
+        preloader: false,
+        fields: ['title', 'external_link'],
+        productFields: [
+            "id",
+            "title",
+            "customer_sales_price",
+            "discount_type",
+            "discount_amount",
+            "product_brand_id",
+            "sku",
+            "type",
+            "slug",
+            "is_available",
+        ]
+
     }),
 
     actions: {
@@ -16,13 +33,15 @@ export const common_store = defineStore("common_store", {
             let token = localStorage.getItem('token');
             if (token) {
                 this.total_cart_price = 0;
-                let response = await window.privateAxios(`/get-cart-items?get_all=1`);
+                let that = this
+                const fieldsQuery = this.productFields.map((field, index) => `fields[${index}]=${field}`).join('&');
+                let response = await window.privateAxios(`/get-cart-items?get_all=1&${fieldsQuery}`);
                 if (response.status == "success") {
-                    this.all_cart_data = response.data;
-                    if (this.all_cart_data) {
-                        let itemTotal = this.all_cart_data.map(
-                            (item) => item.quantity * item.product?.current_price
-                        );
+                    this.all_cart_data = response?.data;
+                    if (this.all_cart_data.length) {
+                        let itemTotal = this.all_cart_data.map(function (item) {
+                            return item.quantity * that.get_price(item.product).new_price
+                        });
                         itemTotal.forEach((item2) => {
                             this.total_cart_price = this.total_cart_price + item2;
                         });
@@ -32,19 +51,22 @@ export const common_store = defineStore("common_store", {
         },
 
         add_to_cart: async function (productId) {
+            console.log(productId);
             const response = await window.privateAxios(`/add-to-cart`, 'post',
                 {
                     product_id: productId,
                 }
             );
 
-            if (response.status === "success") {
+            if (response?.status === "success") {
                 window.s_alert(response.message);
                 this.get_all_cart_data();
             }
+
         },
 
         cart_quantity_update: async function (cartId, action, quantity) {
+
             const response = await axios.post(
                 `/update-cart-item-quantity`,
                 {
@@ -144,5 +166,144 @@ export const common_store = defineStore("common_store", {
                 }
             }
         },
+
+        //website settigns
+        //website settigns
+        get_all_website_settings: async function () {
+            this.preloader = true;
+            try {
+                let response = await axios.get(`/get-website-settings`);
+                if (response.data.status == "success") {
+                    this.website_settings_data = response.data.data;
+                }
+            } finally {
+                this.preloader = false;
+            }
+
+        },
+
+
+        get_setting_value: function (key, multiple = false) {
+
+            // console.log(key, this.website_settings_data);
+
+
+            this.preloader = true;
+            try {
+                if (!multiple) {
+                    let data = ''
+                    let value = this.website_settings_data.find(item => item.title === key);
+                    if (value && value.setting_values.length > 0) {
+                        data = value.setting_values[0].value
+                        this.preloader = false;
+                    }
+                    return data
+                } else {
+                    let values = this.website_settings_data.filter(item => item.title === key);
+                    if (values && values.length > 0) {
+                        return values[0].setting_values;
+                        this.preloader = false;
+                    }
+                    return [];
+                }
+            } catch (error) {
+                // console.error(error.message);
+            }
+        },
+
+        //navbar_menu
+        //navbar_menu
+        get_all_website_navbar_menu: async function () {
+            let fieldsQueryString = this.fields.map((field, index) => `fields[${index}]=${field}`).join('&');
+            let response = await axios.get(`/navbar-menus?get_all=1&${fieldsQueryString}`);
+            if (response.data.status == "success") {
+                this.navbar_menu_data = response.data.data;
+            }
+        },
+
+
+        get_price(product) {
+
+            // console.log("search",product);
+
+
+            let old_price = 0;
+            let new_price = 0;
+
+
+            let authStore = mapState(auth_store, {
+                auth_info: "auth_info",
+                is_auth: "is_auth",
+            });
+
+            if (authStore.is_auth()) {
+                let userType = authStore.auth_info().role?.name;
+                if (userType == 'customer') {
+                    if (product.type == "medicine") {
+
+                        if (product.medicine_product_verient?.pv_b2c_discount_percent) {
+                            new_price = Math.round(product.medicine_product_verient?.pv_b2c_price)
+                            old_price = Math.round(product.medicine_product_verient?.pv_b2c_mrp)
+                        } else {
+                            old_price = Math.round(product.medicine_product_verient?.pv_b2c_mrp)
+                        }
+
+                    } else if (product.type == "product") {
+                        if (product.is_discount) {
+                            new_price = Math.round(product.current_price)
+                            old_price = Math.round(product.customer_sales_price)
+                        } else {
+                            old_price = Math.round(product.customer_sales_price)
+                        }
+                    }
+                } else if (userType == 'retailer') {
+
+                    if (product.type == "medicine") {
+
+                        if (product.medicine_product_verient?.pv_b2b_discount_percent) {
+                            new_price = Math.round(product.medicine_product_verient?.pv_b2b_price)
+                            old_price = Math.round(product.medicine_product_verient?.pv_b2b_mrp)
+                        } else {
+                            old_price = Math.round(product.medicine_product_verient?.pv_b2b_mrp)
+                        }
+
+                    } else if (product.type == "product") {
+
+                        if (product.is_discount) {
+                            new_price = Math.round(product.current_price)
+                            old_price = Math.round(product.customer_sales_price)
+                        } else {
+                            old_price = Math.round(product.customer_sales_price)
+                        }
+
+                    }
+
+                }
+            } else {
+                if (product.type == "medicine") {
+
+                    if (product.medicine_product_verient?.pv_b2c_discount_percent) {
+                        new_price = Math.round(product.medicine_product_verient?.pv_b2c_price)
+                        old_price = Math.round(product.medicine_product_verient?.pv_b2c_mrp)
+                    } else {
+                        old_price = Math.round(product.medicine_product_verient?.pv_b2c_mrp)
+                    }
+
+                } else if (product.type == "product") {
+                    if (product.is_discount) {
+                        new_price = Math.round(product.current_price)
+                        old_price = Math.round(product.customer_sales_price)
+                    } else {
+                        old_price = Math.round(product.customer_sales_price)
+                    }
+                }
+            }
+
+            return {
+                old_price: old_price,
+                new_price: new_price
+            }
+        }
+
     },
 });

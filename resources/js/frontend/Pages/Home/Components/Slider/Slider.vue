@@ -1,10 +1,12 @@
 <template>
+
     <div class="theme-slider">
         <carousel :items-to-show="1">
             <slide v-for="slider in home_hero_sliders" :key="slider.id">
-                <div>
-                    <div class="slider-banner">
-                        <img :src="`${load_image(slider.image, true)}`" alt="top gadgets in bd" class="w-100" />
+                <div v-if="slider.image">
+                    <div class="slider-banner" style="min-height: 400px;background-image: url('/frontend/assets/images/banners/12.png');background-size:cover ;">
+                        <img  :src="`${check_image_url(slider.image, true)}`" alt="top gadgets in bd"
+                            class="w-100" />
                     </div>
                 </div>
             </slide>
@@ -40,6 +42,8 @@ import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
 
 import { use_home_page_store } from '../../Store/home_page_store.js';
 import { mapState } from 'pinia';
+import Skeleton from '../../../../Components/Skeleton.vue';
+
 
 export default {
     components: {
@@ -47,14 +51,27 @@ export default {
         Slide,
         Pagination,
         Navigation,
+        Skeleton
     },
 
-    data: () => ({
+
+
+    SkeletonSkeletondata: () => ({
         is_loaded: false
     }),
 
     methods: {
         load_image: window.load_image,
+        check_image_url: function (url) {
+            try {
+                new URL(url);
+                return url;
+            } catch (e) {
+                url = "/cache/" + url;
+                url.replaceAll('//', '/');
+                return url;
+            }
+        },
     },
 
     computed: {

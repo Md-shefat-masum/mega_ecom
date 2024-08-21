@@ -29,7 +29,7 @@ return new class extends Migration
 
             $table->string('barcode', 100)->nullable();
 
-            $table->enum('type', ['service', 'product'])->nullable();
+            $table->enum('type', ['service', 'product','medicine'])->nullable();
             $table->string('title')->nullable();
             $table->text('short_description')->nullable();
             $table->longText('description')->nullable();

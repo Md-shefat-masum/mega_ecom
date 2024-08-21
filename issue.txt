@@ -13,7 +13,6 @@ tag blog  tag management-dn
 tag website  tag management-dn
 
 
-
 product faq -> product_id , questions , ans, user_id, is_approved-dn
 
 product retaled products -> product_id ,related_product_id-dn
@@ -74,3 +73,13 @@ dynamic site map
 website url slug
 
 order product exchange management
+
+
+------27-7--
+
+* - sms provider
+* - email provider
+* - telegram bot
+* - payment gateway
+* - email deye subscripber form frontend ->table name subscribers
+* - setting and setting value

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Modules\BlogManagement\Blog\Database;
 
 use Illuminate\Database\Seeder as SeederClass;
@@ -15,19 +16,18 @@ class Seeder extends SeederClass
 
         self::$model::truncate();
         for ($i = 1; $i < 10; $i++) {
-        self::$model::create([
-            'title' => facker()->name,
-            'description' => facker()->name,
-            'tags' => facker()->name,
-            'publish_date' => facker()->date(),
-            'writer' => facker()->name,
-            'meta_title' => facker()->name,
-            'meta_description' => facker()->name,
-            'meta_keywords' => facker()->name,
-            'thumbnail_image' => facker()->imageUrl(250, 300),
-            'image' => [facker()->imageUrl(250, 300),facker()->imageUrl(250, 300),facker()->imageUrl(250, 300)],
-            'blog_type' => facker()->name,
-            'video_url' => facker()->url(),
+            self::$model::create([
+                'title' => facker()->name,
+                'description' => facker()->text(),
+                'tags' => facker()->name,
+                'publish_date' => facker()->date(),
+                'writer' => facker()->name,
+                'meta_title' => facker()->name,
+                'meta_description' => facker()->name,
+                'meta_keywords' => facker()->name,
+                'thumbnail_image' => facker()->imageUrl(250, 300),
+                'image' => [facker()->imageUrl(250, 300), facker()->imageUrl(250, 300), facker()->imageUrl(250, 300)],
+                'video_url' => facker()->url(),
             ]);
         }
     }

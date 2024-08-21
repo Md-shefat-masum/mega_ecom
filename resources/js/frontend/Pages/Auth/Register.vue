@@ -14,6 +14,11 @@
                             <h3 class="text-center">Register</h3>
                             <form class="theme-form" @submit.prevent="registerFormHandler($event)" method="post">
                                 <div class="form-group">
+                                    <label>Enter your Full name</label>
+                                    <input type="text" v-model="name" name="name" id="name" class="form-control"
+                                        placeholder="Enter your full name" />
+                                </div>
+                                <div class="form-group">
                                     <label>Enter your Phone</label>
                                     <input type="number" name="phone_number" id="phone_number" class="form-control"
                                         placeholder="Enter your phone number" />
@@ -28,9 +33,9 @@
                                     </div>
                                 </div> -->
                                 <button class="btn btn-normal">Register</button>
-                                <a class="float-end txt-default mt-2" href="#">
+                                <!-- <a class="float-end txt-default mt-2" href="#">
                                     Forgot your password?
-                                </a>
+                                </a> -->
                             </form>
 
                             <p class="mt-3 d-flex align-items-center gap-2">
@@ -81,6 +86,7 @@ export default {
         is_register: true,
         is_otp_verify: false,
         phone_number: "",
+        name: "",
 
     }),
     created: async function () {
@@ -109,7 +115,8 @@ export default {
         OtpVerifyFormHandler: async function (event) {
             let formData = new FormData(event.target);
             formData.append("phone_number", this.phone_number);
-            let response = await axios.post('/verify-user-otp', formData)
+            formData.append("name", this.name);
+            let response = await axios.post('/verify-user-otp?type=customer', formData)
             if (response.data?.status === "success") {
                 localStorage.setItem("token", response.data?.data?.access_token);
                 window.s_alert(response.data?.message);

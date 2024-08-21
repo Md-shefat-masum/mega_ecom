@@ -47,19 +47,72 @@ if (!function_exists('additionalValidation')) {
 
 
 if (!function_exists('sendToTelegram')) {
-    function sendToTelegram($chatId = '6555657006', $text = 'this is test message')
+    function sendToTelegram($chatId = '6555657006', $content = [])
     {
+        $date = $content['date'];
+        $order_id =  $content['order_id'];
+        $name =  $content['user_name'];
+        $phone =  $content['phone'];
+        $address =  $content['address'];
+        $product_items =  $content['product_items'];
+        $total =  $content['total'];
+        $message = "
+আসসালামু আলাইকুম ওয়ারহমাতুল্লাহ।
+নতুন অর্ডার এসেছে
+অর্ডার এর সময়: $date
+অর্ডার এর বিবরণ
+-------------------
+$product_items
+-------------------
+সর্বমোট মূল্য - ৳ $total
+-------------------
+অর্ডারকারীর বিবরণ
+নাম : $name
+মোবাইল নাম্বার : $phone
+ঠিকানা : $address
+-------------------
+বিস্তারিত : https://etek.com.bd/invoice/$order_id";
+
         $bot_token = env('BOT_TOKEN');
         $method = "sendMessage";
         $parameters = [
             // 'chat_id' => 812239513,//shifat
             'chat_id' => $chatId,
-            'text' => $text,
+            'text' => $message,
         ];
         $url = "https://api.telegram.org/bot$bot_token/$method";
         $response = Http::get($url . '?chat_id=' . $parameters['chat_id'] . '&text=' . $parameters['text']);
         return $response->json();
     }
+
+
+
+    // try {
+    //     $chatId = '6555657006'; // "812239513"; // shifat
+    //     $content = [
+    //         "date" => Carbon::now()->toDateTimeString(),
+    //         "user_name" => $orderDetails["user_name"],
+    //         "phone" => $orderDetails["phone"],
+    //         "address" => $orderDetails["address"],
+    //         "order_id" => $order->order_id,
+    //         "product_items" => $product_items,
+    //         "total" => $total,
+    //     ];
+
+    //     sendToTelegram($chatId, $content);
+
+    // } catch (\Exception $e) {
+    //     dd($e);
+    // }
+
+
+
+
+
+
+
+
+
 }
 
 if (!function_exists('uploader')) {
@@ -104,7 +157,7 @@ if (!function_exists('uploader')) {
         $image->save(public_path($full_name));
 
         try {
-            Storage::disk('etek')->putFileAs($path, public_path($full_name),$file_name);
+            Storage::disk('etek')->putFileAs($path, public_path($full_name), $file_name);
         } catch (\Throwable $th) {
         }
 
@@ -121,12 +174,34 @@ function numercToAlphabet($number)
 
     //A function to convert numbers into Indian readable words with Cores, Lakhs and Thousands.
     $words = array(
-        '0' => '', '1' => 'one', '2' => 'two', '3' => 'three', '4' => 'four', '5' => 'five',
-        '6' => 'six', '7' => 'seven', '8' => 'eight', '9' => 'nine', '10' => 'ten',
-        '11' => 'eleven', '12' => 'twelve', '13' => 'thirteen', '14' => 'fouteen', '15' => 'fifteen',
-        '16' => 'sixteen', '17' => 'seventeen', '18' => 'eighteen', '19' => 'nineteen', '20' => 'twenty',
-        '30' => 'thirty', '40' => 'fourty', '50' => 'fifty', '60' => 'sixty', '70' => 'seventy',
-        '80' => 'eighty', '90' => 'ninty'
+        '0' => '',
+        '1' => 'one',
+        '2' => 'two',
+        '3' => 'three',
+        '4' => 'four',
+        '5' => 'five',
+        '6' => 'six',
+        '7' => 'seven',
+        '8' => 'eight',
+        '9' => 'nine',
+        '10' => 'ten',
+        '11' => 'eleven',
+        '12' => 'twelve',
+        '13' => 'thirteen',
+        '14' => 'fouteen',
+        '15' => 'fifteen',
+        '16' => 'sixteen',
+        '17' => 'seventeen',
+        '18' => 'eighteen',
+        '19' => 'nineteen',
+        '20' => 'twenty',
+        '30' => 'thirty',
+        '40' => 'fourty',
+        '50' => 'fifty',
+        '60' => 'sixty',
+        '70' => 'seventy',
+        '80' => 'eighty',
+        '90' => 'ninty'
     );
 
     //First find the length of the number
@@ -218,3 +293,4 @@ function facker()
 // dd(__DIR__);
 include_once(__DIR__ . '\Stock.php');
 include_once(__DIR__ . '\Product.php');
+include_once(__DIR__ . '\SMSGateway.php');

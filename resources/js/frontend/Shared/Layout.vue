@@ -14,8 +14,12 @@ import { use_home_page_store } from '../Pages/Home/Store/home_page_store';
 export default {
     components: { Header, Footer },
     created: function(){
-        this.get_parent_categories();
         this.get_side_nav_categories();
+
+        let that = this;
+        setTimeout(() => {
+            that.get_parent_categories();
+        }, 500);
     },
     methods: {
         ...mapActions(use_home_page_store,[

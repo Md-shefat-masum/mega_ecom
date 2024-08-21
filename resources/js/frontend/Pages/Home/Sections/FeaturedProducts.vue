@@ -23,11 +23,16 @@
 
     <section class="my-5 py-5">
         <div class="custom-container">
-            <div class="product_list">
-                <div v-for="product in feature_products" :key="product.name">
-                    <ProductItem :product="product" />
+            <template v-if="preloader">
+                <product-card-skeleton v-for="i in 30" :key="i"></product-card-skeleton>
+            </template>
+            <template v-else>
+                <div class="product_list">
+                    <div v-for="product in feature_products" :key="product.name">
+                        <ProductItem :product="product" />
+                    </div>
                 </div>
-            </div>
+            </template>
         </div>
     </section>
 
@@ -38,15 +43,32 @@
 import ProductItem from "../../../Components/ProductItem.vue";
 import { use_home_page_store } from "../Store/home_page_store.js";
 import { mapState } from "pinia";
-export default {
 
+import ProductCardSkeleton from '../../../Components/Skeliton/ProductCardSkeleton.vue';
+export default {
     components: {
         ProductItem,
+        ProductCardSkeleton,
+    },
+    data: () => ({
+        preloader: true
+    }),
+    created: async function () {
+        if (this.feature_products.length) {
+            this.preloader = false;
+        }
     },
     computed: {
         ...mapState(use_home_page_store, {
             feature_products: "feature_products",
         }),
+    },
+    watch: {
+        feature_products(newVal) {
+            if (newVal) {
+                this.preloader = false;
+            }
+        },
     },
 };
 </script>

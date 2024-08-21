@@ -13,27 +13,31 @@
                                 <div class="footer-contant">
                                     <div class="footer-logo">
                                         <Link href="/">
-                                            <img src="/cache/frontend/images/etek_logo.png" class="img-fluid" alt="logo">
+                                        <img :src="`/${get_setting_value('footer_logo')}`" class="img-fluid" alt="logo">
                                         </Link>
                                     </div>
                                     <div>
                                         <h2 class="mb-3" style="font-size: 20px;">
-                                            ETEK Enterprise: Your One-Stop Shop for Electronics, Gadgets, and Medicines
+                                            {{ get_setting_value('title') }}
                                         </h2>
                                         <p style="text-align: justify;">
-                                            Discover the best in electronics, cutting-edge gadgets, and essential medicines at ETEK Enterprise.
-                                            Our wide range of high-quality products ensures you find exactly what you need,
-                                            whether it's the latest tech innovations or reliable health solutions. Shop with confidence,
-                                            enjoy great deals, and experience exceptional customer service.
-                                            Stay connected with ETEK Enterprise - where technology meets healthcare.
+                                            {{ get_setting_value('description') }}
                                         </P>
                                     </div>
                                     <ul class="sosiyal">
-                                        <li><a href="javascript:void(0)"><i class="fa fa-facebook"></i></a></li>
-                                        <li><a href="javascript:void(0)"><i class="fa fa-google-plus"></i></a></li>
-                                        <li><a href="javascript:void(0)"><i class="fa fa-twitter"></i></a></li>
-                                        <li><a href="javascript:void(0)"><i class="fa fa-instagram"></i></a></li>
-                                        <li><a href="javascript:void(0)"><i class="fa fa-rss"></i></a></li>
+                                        <li><a :href="get_setting_value('facebook')"><i class="fa fa-facebook"></i></a>
+                                        </li>
+                                        <li><a :href="get_setting_value('google')"><i class="fa fa-google-plus"></i></a>
+                                        </li>
+                                        <li><a :href="get_setting_value('twitter')"><i class="fa fa-twitter"></i></a>
+                                        </li>
+                                        <li><a :href="get_setting_value('instagram')"><i
+                                                    class="fa fa-instagram"></i></a>
+                                        </li>
+                                        <li><a :href="get_setting_value('telegram')"><i class="fa fa-telegram"></i></a>
+                                        </li>
+                                        <li><a :href="get_setting_value('youtube')"><i class="fa fa-youtube"></i></a>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -50,13 +54,13 @@
                                             <Link href="/contact">contact us</Link>
                                         </li>
                                         <li>
-                                            <Link href="/terms_conditions">terms &amp; conditions</Link>
+                                            <Link href="/terms-conditions">terms &amp; conditions</Link>
                                         </li>
                                         <li>
-                                            <Link href="/returns_exchanges">returns &amp; exchanges</Link>
+                                            <Link href="/returns-exchanges">returns &amp; exchanges</Link>
                                         </li>
                                         <li>
-                                            <Link href="/shipping_delivery">shipping &amp; delivery</Link>
+                                            <Link href="/shipping-delivery">shipping &amp; delivery</Link>
                                         </li>
                                     </ul>
                                 </div>
@@ -67,12 +71,14 @@
                                 </div>
                                 <div class="footer-contant">
                                     <ul class="contact-list">
-                                        <li><i class="fa fa-map-marker"></i>ETEK BD
-                                            <br> bangladesh-<span>3654123</span>
+                                        <li><i class="fa fa-map-marker"></i>{{ get_setting_value('address') }}
                                         </li>
-                                        <li><i class="fa fa-phone"></i>call us: <span>123-456-7898</span></li>
-                                        <li><i class="fa fa-envelope-o"></i>email us: support@etek.com.bd</li>
-                                        <li><i class="fa fa-fax"></i>fax <span>123456</span></li>
+                                        <li><i class="fa fa-phone"></i>call us: <span>{{
+                                            get_setting_value('phone_numbers') }}</span></li>
+                                        <li><i class="fa fa-envelope-o"></i>email us: {{ get_setting_value('emails') }}
+                                        </li>
+                                        <li><i class="fa fa-fax"></i>fax <span>{{ get_setting_value('fax') }}</span>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -81,24 +87,28 @@
                                     <h5>newsletter</h5>
                                 </div>
                                 <div class="footer-contant">
-                                    <div class="newsletter-second">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" placeholder="enter full name">
-                                                <span class="input-group-text"><i class="ti-user"></i></span>
+                                    <form action="" @submit.prevent="submitHandler">
+                                        <div class="newsletter-second">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i class="ti-user"></i></span>
+                                                    <input type="text" name="name" id="name" class="form-control"
+                                                        placeholder="enter full name" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i class="ti-email"></i>
+                                                    </span>
+                                                    <input type="email" name="email" id="email" class="form-control"
+                                                        placeholder="enter email address" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-solid btn-sm">submit now</button>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control"
-                                                    placeholder="enter email address">
-                                                <span class="input-group-text"><i class="ti-email"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group"> <a href="javascript:void(0)"
-                                                class="btn btn-solid btn-sm">submit now</a> </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -111,7 +121,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="footer-left">
-                            <p>2019-24 Copy Right by ETEK.com.bd</p>
+                            <p>{{ get_setting_value('copy_right') }}</p>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -566,113 +576,7 @@
     <!-- edit product modal end-->
 
     <!-- Add to cart bar -->
-    <div id="cart_side" class="add_to_cart right">
-        <a href="javascript:void(0)" class="overlay" onclick="closeCart()"></a>
-        <div class="cart-inner">
-            <div class="cart_top">
-                <h3>my cart</h3>
-                <div class="close-cart">
-                    <a href="javascript:void(0)" onclick="closeCart()">
-                        <i class="fa fa-times" aria-hidden="true"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="cart_media">
-                <ul class="cart_product">
-                    <li v-for="cart in all_cart_data" :key="cart.id">
-                        <div class="media">
-                            <Link :href="`/product-details/${cart?.product?.slug}`">
-                            <img alt="megastore1" class="me-3" :src="`/${cart.product.product_image.url}`" />
-                            </Link>
-                            <div class="media-body">
-                                <Link :href="`/product-details/${cart?.product?.slug}`">
-                                <h4>{{ cart?.product?.title }}</h4>
-                                </Link>
-                                <h6 class="d-flex gap-1">
-                                    <p v-if="cart?.product?.is_discount">${{ cart?.product?.current_price }}</p>
-                                    <span v-else>${{ cart?.product?.customer_sales_price }}</span>
-                                </h6>
-                                <div class="addit-box">
-                                    <div class="qty-box">
-                                        <div class="input-group">
-                                            <button class="qty-minus" @click="
-                        cart_quantity_update(
-                            cart.id,
-                            'minus',
-                            null
-                        )
-                        "></button>
-                                            <input class="qty-adj form-control" type="number" min="1"
-                                                v-model="cart.quantity" @keyup="
-                        cart_quantity_update(
-                            cart.id,
-                            null,
-                            $event.target.value
-                        )
-                        " />
-                                            <button class="qty-plus" @click="
-                        cart_quantity_update(
-                            cart.id,
-                            'plus',
-                            null
-                        )
-                        "></button>
-                                        </div>
-                                    </div>
-                                    <div class="pro-add">
-                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                            data-bs-target="#edit-product">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round"
-                                                class="feather feather-edit">
-                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7">
-                                                </path>
-                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z">
-                                                </path>
-                                            </svg>
-                                        </a>
-                                        <a href="javascript:void(0)" @click="remove_cart_item(cart.id)">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round"
-                                                class="feather feather-trash-2">
-                                                <polyline points="3 6 5 6 21 6"></polyline>
-                                                <path
-                                                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                                                </path>
-                                                <line x1="10" y1="11" x2="10" y2="17"></line>
-                                                <line x1="14" y1="11" x2="14" y2="17"></line>
-                                            </svg>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-                <ul class="cart_total">
-                    <li>
-                        subtotal : <span>${{ total_cart_price }}</span>
-                    </li>
-                    <li>shpping <span>free</span></li>
-                    <li>taxes <span>$0.00</span></li>
-                    <li>
-                        <div class="total">
-                            total<span>$ {{ total_cart_price }}</span>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="buttons">
-                            <Link href="/cart" class="btn btn-solid btn-sm">view cart
-                            </Link>
-                            <Link href="/checkout" class="btn btn-solid btn-sm">checkout</Link>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
+    <side-card></side-card>
     <!-- Add to cart bar end-->
 
     <!-- wishlistbar bar -->
@@ -818,44 +722,7 @@
     <!-- wishlistbar bar end-->
 
     <!-- My account bar start-->
-    <div id="myAccount" class="add_to_cart right account-bar">
-        <a href="javascript:void(0)" class="overlay" onclick="closeAccount()"></a>
-        <div class="cart-inner">
-            <div class="cart_top">
-                <h3>my account</h3>
-                <div class="close-cart">
-                    <a href="javascript:void(0)" onclick="closeAccount()">
-                        <i class="fa fa-times" aria-hidden="true"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="p-2 alert-danger mx-2 my-4">Please login to perform this action</div>
-            <form class="theme-form" @submit.prevent="loginFormHandler($event)" method="post">
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="text" name="email" id="email" class="form-control" placeholder="Email" />
-
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" name="password" id="password" class="form-control"
-                        placeholder="Enter your password" />
-
-                </div>
-                <button class="btn btn-normal">Login</button>
-                <a class="float-end txt-default mt-3" href="#">
-                    Forgot your password?
-                </a>
-                <div class="accout-fwd">
-
-                    <Link href="/login" class="d-block">
-                    <h6>you have no account ?<span>signup now</span></h6>
-                    </Link>
-                </div>
-            </form>
-
-        </div>
-    </div>
+    <login-modal></login-modal>
     <!-- Add to account bar end-->
 
     <!-- add to  setting bar  start-->
@@ -910,12 +777,14 @@
 <script>
 import { mapActions, mapState } from "pinia";
 import { common_store } from "../Store/common_store";
+import { use_home_page_store } from "../Pages/Home/Store/home_page_store"
 
-import { auth_store } from "../Store/auth_store.js";
 import AllCategories from '../Pages/Home/Components/Category/AllCategories.vue';
+import LoginModal from '../Pages/Auth/Components/LoginModal.vue';
+import SideCard from './Components/SideCard.vue';
 
 export default {
-    components: { AllCategories },
+    components: { AllCategories, LoginModal, SideCard },
     created: async function () {
         // Uncomment the following line if you want to call the method on creation
 
@@ -929,14 +798,18 @@ export default {
             remove_cart_item: "remove_cart_item",
             cart_quantity_update: "cart_quantity_update",
         }),
-
-        ...mapActions(auth_store, {
-            user_login: "user_login",
+        ...mapActions(use_home_page_store, {
+            store_news_letter_subscriber: 'store_news_letter_subscriber'
         }),
-
-        loginFormHandler: async function (event) {
-            this.user_login(event.target);
+        submitHandler() {
+            let formData = event.target
+            this.store_news_letter_subscriber(formData)
+            event.target.reset()
         },
+
+        load_image: window.load_image,
+
+
 
     },
 
@@ -944,10 +817,11 @@ export default {
         ...mapState(common_store, {
             all_cart_data: "all_cart_data",
             total_cart_price: "total_cart_price",
+            get_setting_value: "get_setting_value",
         }),
-
-
     },
+
+
 };
 </script>
 

@@ -49,10 +49,11 @@
     <link rel="stylesheet" href="/cache/frontend/assets/css/custom.css">
 
     <script>
-        if(window.innerWidth < 991){
-            location.href = "https://m.etek.com.bd";
-        }
+        // if(window.innerWidth < 991){
+        //     location.href = "https://m.etek.com.bd";
+        // }
         window.load_image = function (url, cache = true) {
+
             try {
                 new URL(url);
                 return url;
@@ -64,13 +65,10 @@
                 full_url.replaceAll('//', '/');
                 return full_url;
             }
+
         }
     </script>
-</head>
 
-<body>
-    @inertia
-    {{-- <h1>loaded</h1> --}}
     <script src="/cache/frontend/assets/js/jquery-3.3.1.min.js.download"></script>
     <script src="/cache/frontend/assets/js/popper.min.js.download"></script>
     <script src="/cache/frontend/assets/js/bootstrap.js.download"></script>
@@ -80,6 +78,10 @@
     <script defer src="/cache/plugins/sweet_alert.js"></script>
 
     @vite(['resources/js/frontend/app.js'])
+</head>
+
+<body>
+    @inertia
 </body>
 
 </html>

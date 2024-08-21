@@ -60,11 +60,11 @@
                         Edit Address
                         </Link>
                     </li>
-                    <li :class="{ 'active': $page.url === '/profile/password' }">
+                    <!-- <li :class="{ 'active': $page.url === '/profile/password' }">
                         <Link href="/profile/password">
                         Password
                         </Link>
-                    </li>
+                    </li> -->
 
                     <li class="last"><a @click="log_out()" href="javascript:void(0)">Log Out</a></li>
                 </ul>

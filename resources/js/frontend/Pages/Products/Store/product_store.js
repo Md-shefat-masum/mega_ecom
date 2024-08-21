@@ -47,7 +47,7 @@ export const product_store = defineStore("product_store", {
                 }
             }
 
-            console.log(this.search_data)
+            // console.log(this.search_data)
         },
         get_all_products_and_single_group_by_category_group_id: async function (url) {
             if (url) {
@@ -60,7 +60,7 @@ export const product_store = defineStore("product_store", {
                 }
             }
 
-            console.log(this.search_data)
+            // console.log(this.search_data)
         },
         get_product_category_varients: async function (slug) {
             let response = await axios.get(`/get-product-category-varients/${slug}`, {
@@ -95,7 +95,7 @@ export const product_store = defineStore("product_store", {
                 let response = await axios.get(url);
                 this.products = response.data.data;
             } else {
-                let set_query_params = new URL(location.origin + `/api/v1/category/${this.slug}`);
+                let set_query_params = new URL(location.origin + `/api/v1/get-all-products-by-category-id-with-verient-and-brand/${this.slug}`);
                 set_query_params.searchParams.set('page', 1);
 
                 if (this.variant_values_id.length > 0) {
@@ -133,18 +133,48 @@ export const product_store = defineStore("product_store", {
         },
 
         set_bread_cumb: function () {
-            this.bread_cumb.push({
-                title: this.category.title,
-                url: '/category/' + this.category.slug,
-                active: true,
-            },)
+            function getParentsArray(obj, seenObjects = new Set()) {
+                let parentsArray = [];
+                function helper(currentObj) {
+                    if (seenObjects.has(currentObj)) {
+                        throw new Error("Infinite parents detected");
+                    }
+                    seenObjects.add(currentObj);
+                    parentsArray.push(currentObj);
+                    if (currentObj && typeof currentObj === 'object' && currentObj.parents) {
+                        helper(currentObj.parents);
+                    }
+                }
+                helper(obj);
+                return parentsArray;
+            }
+
+            function reverseArray(arr) {
+                let reversedArray = [];
+                for (let i = arr.length - 1; i >= 0; i--) {
+                    reversedArray.push(arr[i]);
+                }
+                return reversedArray;
+            }
+
+            let parents = getParentsArray(this.category);
+            parents = reverseArray(parents);
+
+            this.bread_cumb = [];
+            parents.forEach((parent) => {
+                this.bread_cumb.push({
+                    title: parent.title,
+                    url: '/products/' + parent.slug,
+                    active: false,
+                })
+            });
         },
 
         load_product: async function (link) {
             try {
                 let link_url = new URL(location.origin + link.url);
 
-                let url = new URL(location.origin + `/api/v1/category/${this.slug}`);
+                let url = new URL(location.origin + `/api/v1/get-all-products-by-category-id-with-verient-and-brand/${this.slug}`);
                 url.searchParams.set('page', link_url.searchParams.get('page'));
 
                 let res = await axios.get(url.href);
@@ -170,6 +200,7 @@ export const product_store = defineStore("product_store", {
         },
 
         set_brand_id: function (id) {
+
             this.min_price = 0
             this.max_price = 0
             if (this.brand_id.includes(id)) {

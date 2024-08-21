@@ -62,7 +62,7 @@
                                             <div class="form-group col-md-12 col-sm-12 col-xs-12">
                                                 <label class="field-label">Address</label>
                                                 <input type="text" name="address" id="address"
-                                                    :value="user_info.user_delivery_address?.address"
+                                                    :value="user_info.user_delivery_address?.address ?? 'aaa'"
                                                     placeholder="Street address">
                                             </div>
                                             <div class="form-group required">
@@ -112,7 +112,8 @@
                                                 <h3>Order Details</h3>
                                                 <hr>
                                             </div>
-                                            <table class="table cart-table table-responsive-xs">
+                                            <table v-if="all_cart_data.length"
+                                                class="table cart-table table-responsive-xs">
                                                 <thead>
                                                     <tr class="table-head">
                                                         <th scope="col">Product</th>
@@ -122,7 +123,7 @@
                                                     </tr>
                                                 </thead>
 
-                                                <tbody>
+                                                <tbody class="">
                                                     <tr v-for="cart in all_cart_data" :key="cart.id">
 
                                                         <td width="250px">
@@ -131,7 +132,7 @@
                                                             </Link>
                                                         </td>
                                                         <td>
-                                                            <p>{{ cart.product.current_price }}</p>
+                                                            <p>{{ get_price(cart?.product).new_price }}</p>
                                                         </td>
                                                         <td>
                                                             <p>{{ cart.quantity }}</p>
@@ -139,7 +140,7 @@
 
                                                         <td>
                                                             <p class="td-color">{{ cart.quantity *
-                            cart.product.current_price }}</p>
+                            get_price(cart?.product).new_price }}</p>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -151,18 +152,28 @@
                                                         </td>
 
                                                         <td>
-                                                            <h5>${{ total_cart_price }}</h5>
+                                                            <h5>{{ total_cart_price }} ৳ </h5>
                                                         </td>
                                                     </tr>
-                                                    <!-- <tr>
+                                                    <tr>
                                                         <td colspan="3">
-                                                            <h5>
-                                                                Shipping
-                                                            </h5>
+                                                            <div
+                                                                class=" d-flex align-items-center justify-content-between">
+                                                                <h5>
+                                                                    Shipping
+                                                                </h5>
+                                                                <select v-model="delivery_charge" name="delivery_charge"
+                                                                    class="w-25 ">
+                                                                    <option :value="get_setting_value('inside_dhaka')">
+                                                                        Inside Dhaka</option>
+                                                                    <option :value="get_setting_value('outside_dhaka')">
+                                                                        Outside Dhaka</option>
+                                                                </select>
+                                                            </div>
                                                         </td>
                                                         <td>
-                                                            <div class="shipping">
-                                                                <div class="shopping-option">
+                                                            <div class=" d-flex ">
+                                                                <!-- <div class="shopping-option">
                                                                     <input type="checkbox" name="free-shipping"
                                                                         id="free-shipping">
                                                                     <label for="free-shipping">Free Shipping</label>
@@ -171,61 +182,64 @@
                                                                     <input type="checkbox" name="local-pickup"
                                                                         id="local-pickup">
                                                                     <label for="local-pickup">Local Pickup</label>
-                                                                </div>
+                                                                </div> -->
+
+                                                                <h5>{{ delivery_charge }} ৳</h5>
                                                             </div>
                                                         </td>
-                                                    </tr> -->
+                                                    </tr>
                                                     <tr>
                                                         <td colspan="3">
                                                             <h5>Grand Total</h5>
                                                         </td>
 
                                                         <td>
-                                                            <h5>${{ total_cart_price }}</h5>
+                                                            <h5>{{ total_cart_price + Number(delivery_charge) }} ৳</h5>
                                                         </td>
                                                     </tr>
                                                 </tfoot>
                                             </table>
 
                                         </div>
-                                        <div class="payment-box">
+                                        <div v-if="all_cart_data.length" class="payment-box">
                                             <div class="upper-box">
                                                 <div class="payment-options">
                                                     <ul>
+                                                        <ul>
+                                                            <li>
+                                                                <div class="radio-option">
+                                                                    <input type="radio" v-model="payment_type"
+                                                                        name="payment_type" value="cod"
+                                                                        id="payment-cod">
+                                                                    <label for="payment-cod">
+                                                                        Cash On Delivery
 
-                                                        <li>
-                                                            <div class="radio-option">
-                                                                <input type="radio" name="payment_type" id="payment-2"
-                                                                    checked="checked" value="cod">
-                                                                <label for="payment-2">Cash On Delivery<span
-                                                                        class="small-text">Please send a check to Store
-                                                                        Name, Store Street, Store Town, Store State /
-                                                                        County, Store Postcode.</span></label>
-                                                            </div>
-                                                        </li>
-                                                        <!-- <li>
-                                                            <div class="radio-option">
-                                                                <input type="radio" value="check_payment"
-                                                                    name="payment_type" id="payment-1">
-                                                                <label for="payment-1">Check Payments<span
-                                                                        class="small-text">Please send a check to Store
-                                                                        Name, Store Street, Store Town, Store State /
-                                                                        County, Store Postcode.</span></label>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="radio-option paypal">
-                                                                <input type="radio" value="paypal" name="payment_type"
-                                                                    id="payment-3">
-                                                                <label for="payment-3">PayPal</label>
-                                                            </div>
-                                                        </li> -->
+                                                                    </label>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="radio-option paypal">
+                                                                    <input type="radio" v-model="payment_type"
+                                                                        value="online" name="payment_type"
+                                                                        id="payment-online">
+                                                                    <label for="payment-online">
+                                                                        Online Payment
+                                                                    </label>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+
                                                     </ul>
                                                 </div>
                                             </div>
                                             <div class="text-right">
                                                 <button type="submit" class="btn-normal btn">Place Order</button>
                                             </div>
+
+                                        </div>
+                                        <div v-else class="text-center">
+                                            <h3 class="my-3">No product in cart</h3>
+                                            <Link href="/" class="btn-normal btn">Continue shopping</Link>
                                         </div>
                                     </div>
                                 </div>
@@ -235,6 +249,7 @@
                 </div>
             </div>
         </section>
+
     </Layout>
 </template>
 
@@ -248,7 +263,7 @@ import { computed, ref } from "vue"
 export default {
     components: { Layout },
     data: () => ({
-
+        user_address_info: {},
 
         isSelectDistrictDisabled: true,
         isSelectStationDisabled: true,
@@ -260,31 +275,38 @@ export default {
         state_division_id: '',
         district_id: '',
         station_id: '',
-
+        delivery_charge: 0,
+        payment_type: 'cod',
+        payment_link: "",
 
     }),
 
     setup() {
         const authStore = auth_store();
         const user_info = computed(() => authStore.auth_info);
-
-
         return { user_info };
     },
 
     created: async function () {
+
         const authStore = auth_store();
         await authStore.check_is_auth();
+
         if (!authStore.is_auth) {
             this.$inertia.visit('/login');
         } else {
+
             await this.all_division();
-            this.user_address_info = authStore.auth_info?.user_delivery_address
+            this.user_address_info = authStore.auth_info?.user_delivery_address ?? "asasdf"
             this.state_division_id = this.user_address_info?.state_division_id
             this.district_id = this.user_address_info?.district_id
             this.station_id = this.user_address_info?.station_id
         }
+
+        this.checkoutPopUp();
+
     },
+
 
 
     methods: {
@@ -292,17 +314,19 @@ export default {
         ...mapActions(common_store, {
             remove_cart_item: "remove_cart_item",
             cart_quantity_update: "cart_quantity_update",
+            get_setting_value: "get_setting_value",
         }),
 
         checkoutFormSubmit: async function ($event) {
             let formData = new FormData($event.target);
             let response = await window.privateAxios('/customer-ecommerce-order-placed', 'post', formData);
-
             if (response.status === "success") {
-                window.s_alert(response.message);
-                this.$inertia.visit('/profile/orders');
+                if (response.data.order_details?.payment_method === 'cod') {
+                    window.s_alert(response.message);
+                } else if (response.data.order_details?.payment_method === 'online') {
+                    this.checkoutPopUp(response.data)
+                }
             }
-
         },
 
         all_division: async function () {
@@ -348,9 +372,17 @@ export default {
                 this.isSelectStationDisabled = false;
             }
 
+        },
+
+        checkoutPopUp: async function (data) {
+            let payload = JSON.stringify(data);
+            let payment_res = await window.axios.get(`http://127.0.0.1:9000/pay-via-ajax?payload=${payload}`);
+            this.payment_link = payment_res.data?.data;
+            window.open(this.payment_link, "_blank");
         }
 
     },
+
 
     watch: {
         state_division_id: function (divisionId) {
@@ -358,7 +390,15 @@ export default {
         },
         district_id: function (districtId) {
             this.get_station_by_district_id(districtId);
-        }
+        },
+
+        website_settings_data: {
+            handler: function () {
+                this.delivery_charge = this.get_setting_value('inside_dhaka');
+            },
+            deep: true
+        },
+
     },
 
 
@@ -366,9 +406,10 @@ export default {
         ...mapState(common_store, {
             all_cart_data: "all_cart_data",
             total_cart_price: "total_cart_price",
+            get_price: "get_price",
+            website_settings_data: "website_settings_data",
+
         }),
     },
 };
 </script>
-
-<style></style>

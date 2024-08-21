@@ -26,7 +26,7 @@
             <div class="collection-wrapper">
                 <div class="custom-container">
                     <div class="row">
-                        <div class="col-sm-3 collection-filter category-page-side">
+                        <!-- <div class="col-sm-3 collection-filter category-page-side">
 
                             <div
                                 class="collection-filter-block filter_varient_group creative-card creative-inner category-side">
@@ -39,29 +39,30 @@
 
                                 <PriceRange />
 
-                                <!-- <BrandVarients /> -->
+                                <template v-if="preloader">
+                                    <skeleton :width="`300px`" :height="`100vh`"></skeleton>
+                                </template>
+<template v-else>
+                                    <BrandVarients />
+                                    <AllVarients />
+                                </template>
 
-                                <!-- <AllVarients /> -->
-                            </div>
 
-                        </div>
-                        <div class="collection-content col">
+</div>
+
+</div> -->
+                        <div class="collection-content col-md-10 mx-auto">
                             <div class="page-main-content">
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="top-banner-wrapper mb-2">
-                                            <img v-if="products?.productOfferDetails"
+                                            <skeleton v-if="preloader" :width="`100%`" :height="`300px`"></skeleton>
+                                            <img v-else-if="products?.productOfferDetails.image"
                                                 :src="products?.productOfferDetails?.image" class="img-fluid"
                                                 :alt="products?.productOfferDetails?.title">
-                                            <img v-else
-                                                src="https://files.etek.com.bd/cache/uploads/categories/etek-category.png"
-                                                class="img-fluid">
-                                            <!-- <div class="top-banner-content small-section">
-                                                <h1 class="category_page_heading">
-                                                    {{ category.title }}
-                                                </h1>
-                                            </div> -->
+                                            <img v-else src="/dummy.png" class="img-fluid" alt="">
                                         </div>
+
                                         <div class="top-bar ws-box">
                                             <div class="row">
                                                 <div class="col-sm-4 col-xs-2 actions">
@@ -74,7 +75,7 @@
                                                     </label>
                                                 </div>
                                                 <div class="col-sm-8 col-xs-10 show-sort">
-                                                    <div class="form-group rs-none">
+                                                    <!-- <div class="form-group rs-none">
                                                         <label>Show:</label>
                                                         <div class="custom-select">
                                                             <select id="input-limit">
@@ -97,22 +98,31 @@
                                                                 </option>
                                                             </select>
                                                         </div>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="collection-product-wrapper">
-
                                             <div class=" py-5">
-                                                <div class="product_list"
+                                                <template v-if="preloader">
+                                                    <product-card-skeleton v-for="i in 30"
+                                                        :key="i"></product-card-skeleton>
+                                                </template>
+                                                <div v-else class="product_list"
                                                     :class="{ product_left: products?.data?.data?.length < 5 }">
-                                                    <div v-for="i in products?.data?.data" :key="i.name">
-                                                        <ProductItem :product="i" />
-                                                    </div>
+                                                    <template v-if="products?.data?.data?.length">
+                                                        <div v-for="i in products?.data?.data" :key="i.name">
+                                                            <ProductItem :product="i" />
+                                                        </div>
+                                                    </template>
+                                                    <template v-else>
+                                                        <p class="p-3 alert-danger text-center text-danger">No Products
+                                                            Found</p>
+                                                    </template>
                                                 </div>
                                             </div>
-                                            <div class="product-pagination">
+                                            <div class="product-pagination" v-if="products?.data?.data.length">
                                                 <div class="theme-paggination-block">
                                                     <div class="row">
                                                         <div class="col-xl-6 col-md-6 col-sm-12">
@@ -177,11 +187,12 @@ import BreadCumb from '../../Components/BreadCumb.vue';
 
 import { product_store } from "./Store/product_store.js"
 import { mapActions, mapState } from 'pinia';
-
+import Skeleton from '../../Components/Skeleton.vue';
+import ProductCardSkeleton from '../../Components/Skeliton/ProductCardSkeleton.vue';
 
 
 export default {
-    components: { Layout, PriceRange, BrandVarients, AllVarients, ProductItem, BreadCumb },
+    components: { Layout, PriceRange, BrandVarients, AllVarients, ProductItem, BreadCumb, Skeleton, ProductCardSkeleton },
     props: {
         slug: String,
     },
@@ -194,10 +205,10 @@ export default {
                 active: false,
             },
         ],
+        preloader: true
     }),
 
     setup(props) {
-
         const top_offer_store = product_store();
         top_offer_store.slug = props.slug;
 
@@ -228,7 +239,14 @@ export default {
         ...mapState(product_store, {
             products: 'products',
         })
-    }
+    },
+    watch: {
+        products(newVal) {
+            if (newVal) {
+                this.preloader = false;
+            }
+        },
+    },
 
 
 };

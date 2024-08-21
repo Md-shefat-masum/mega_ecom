@@ -14,11 +14,13 @@ return new class extends Migration
     {
         Schema::create('user_retailer_informations', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('user_id')->nullable();
+            $table->bigInteger('retailer_id')->nullable();
             $table->bigInteger('retailer_type_id')->nullable();
             $table->string('alt_email', 50)->nullable();
             $table->string('alt_mobile_number', 20)->nullable();
-            $table->bigInteger('retailer_id')->nullable();
-            $table->bigInteger('user_id')->nullable();
+            $table->string('shop_name', 50)->nullable();
+            $table->string('license_number', 50)->nullable();
 
             $table->bigInteger('creator')->unsigned()->nullable();
             $table->string('slug', 50)->nullable();

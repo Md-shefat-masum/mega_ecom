@@ -9,21 +9,27 @@ use Illuminate\Support\Facades\Hash;
 class VerifyOtp
 {
     static $model = \App\Modules\UserManagement\User\Models\Model::class;
+    static $UserRetailerInformationModel = \App\Modules\UserManagement\User\Models\UserRetailerInformationModel::class;
 
     public static function execute($request)
     {
         try {
+
             $requestData = $request->validated();
+
+
+
+
             $otpRecord = DB::table('otp_codes')
                 ->where('phone_number', $requestData['phone_number'])
                 ->where('otp', $requestData['otp'])
-                ->where('type', 'register')
                 ->latest('created_at')
                 ->first();
 
             if (!$otpRecord) {
-                return messageResponse('Invalid OTP', [], 400, 'error');
+                return messageResponse('Invalid OTP', $requestData, 400, 'error');
             }
+            // Remove used OTP
             DB::table('otp_codes')
                 ->where('phone_number', $requestData['phone_number'])
                 ->where('otp', $requestData['otp'])
@@ -32,12 +38,39 @@ class VerifyOtp
                 ->delete();
             // Proceed with user registration
             unset($requestData['otp']);
-            $user = self::$model::create($requestData);
-            // Remove used OTP
+            $user = self::$model::where('phone_number', $requestData['phone_number'])->first();
+            $data = [];
+            if ($user) {
+                $data['access_token'] = $user->createToken('accessToken')->accessToken;
+                $data['user'] = $user;
+            } else {
 
-            $data['access_token'] = $user->createToken('accessToken')->accessToken;
-            $data['user'] = $user;
-            return messageResponse('OTP Matched', $data, 200, 'success');
+                if ($request->type == 'retailer') {
+                    $requestData['role_id'] = 6;
+                    if ($user = self::$model::create($requestData)) {
+                        $retailerData = [
+                            'user_id' => $user->id,
+                            'shop_name' => $request->shop_name,
+                            'license_number' => $request->license_number
+                        ];
+
+                        self::$UserRetailerInformationModel::create($retailerData);
+
+                        $data['access_token'] = $user->createToken('accessToken')->accessToken;
+                        $data['user'] = $user;
+                    }
+                }
+
+                if ($request->type == 'customer') {
+                    $requestData['role_id'] = 3;
+                    $user = self::$model::create($requestData);
+                    $data['access_token'] = $user->createToken('accessToken')->accessToken;
+                    $data['user'] = $user;
+                }
+            }
+ 
+
+            return messageResponse('Your OTP successfully Matched', $data, 200, 'success');
         } catch (\Exception $e) {
             return messageResponse($e->getMessage(), [], 500, 'server_error');
         }

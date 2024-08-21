@@ -14,11 +14,13 @@ class GetAllFeaturedProduct
             $orderByColumn = request()->input('sort_by_col') ?? 'id';
             $orderByType = request()->input('sort_type') ?? 'asc';
             $status = request()->input('status') ?? 'active';
-            $fields = request()->input('fields') ?? '*' ;
-            $with = ['product_images:id,product_id,url', 'product_categories:id,title', 'product_brand:id,title'];
+            $fields = request()->input('fields') ?? '*';
+            $with = ['product_image:id,product_id,url', 'product_categories:id,title', 'product_brand:id,title'];
             $condition = [];
 
             $data = self::$ProductModel::query()->where('is_featured', 1)->where('is_available', 1);
+
+
 
             if (request()->has('get_all') && (int)request()->input('get_all') === 1) {
                 $data = $data
@@ -28,7 +30,13 @@ class GetAllFeaturedProduct
                     ->where('status', $status)
                     ->limit($pageLimit)
                     ->orderBy($orderByColumn, $orderByType)
-                    ->get();
+                    ->get()
+                    ->map(function ($item) {
+                        if ($item->type == 'medicine') {
+                            $item->load(['medicine_product', 'medicine_product_verient']);
+                        }
+                        return $item;
+                    });
             } else {
                 $data = $data
                     ->with($with)
@@ -36,7 +44,13 @@ class GetAllFeaturedProduct
                     ->where($condition)
                     ->where('status', $status)
                     ->orderBy($orderByColumn, $orderByType)
-                    ->paginate($pageLimit);
+                    ->paginate($pageLimit)
+                    ->map(function ($item) {
+                        if ($item->type == 'medicine') {
+                            $item->load(['medicine_product', 'medicine_product_verient']);
+                        }
+                        return $item;
+                    });
             }
 
             return entityResponse($data);
