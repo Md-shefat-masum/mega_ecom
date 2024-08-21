@@ -72,6 +72,7 @@ Route::group([
 ], function () {
     Route::view('cache-check', 'cache');
     Route::get('/cache/{file_name}', 'AssetController@cache')->where('file_name', '.*');
+    Route::get('/resize/cache/{file_name}', 'AssetController@cache_resize')->where('file_name', '.*');
 });
 
 // Route::get("/about", function () {

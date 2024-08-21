@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class AssetController extends Controller
 {
@@ -30,17 +31,58 @@ class AssetController extends Controller
 
         $cache_days = 1;
         $one_day_secs = 86400;
-        if(request()->cache_days && request()->cache_days > 1){
+        if (request()->cache_days && request()->cache_days > 1) {
             $cache_days = request()->cache_days;
         }
         $cache_seconds = round($one_day_secs * $cache_days);
         $headers = [
             'Content-Type' => $mimeType,
-            'Cache-Control' => 'public, max-age='.$cache_seconds,
+            'Cache-Control' => 'public, max-age=' . $cache_seconds,
             'Expires' => gmdate('D, d M Y H:i:s \G\M\T', time() + $cache_seconds),
             'Last-Modified' => gmdate('D, d M Y H:i:s \G\M\T', $lastModified),
         ];
 
         return response()->make($filePath, 200, $headers);
+    }
+
+    public function cache_resize($req_file_name)
+    {
+        $file_name = public_path($req_file_name);
+        $width = 200;
+        $height = 200;
+        if (request()->has('width')) {
+            $width = request()->width;
+        }
+        if (request()->has('height')) {
+            $height = request()->height;
+        }
+        $image = Image::make($file_name)->resize($width, $height, function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize();
+        });
+
+        // return $image->response('webp',100);
+
+        $file_name = public_path($req_file_name);
+        $filePath = Storage::drive('public')->get($req_file_name);
+
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $lastModified = filemtime($file_name);
+        finfo_close($finfo);
+
+        $cache_days = 1;
+        $one_day_secs = 86400;
+        if (request()->cache_days && request()->cache_days > 1) {
+            $cache_days = request()->cache_days;
+        }
+        $cache_seconds = round($one_day_secs * $cache_days);
+        $headers = [
+            'Content-Type' => "image/webp",
+            'Cache-Control' => 'public, max-age=' . $cache_seconds,
+            'Expires' => gmdate('D, d M Y H:i:s \G\M\T', time() + $cache_seconds),
+            'Last-Modified' => gmdate('D, d M Y H:i:s \G\M\T', $lastModified),
+        ];
+
+        return response()->make($image->encode('webp', 100), 200, $headers);
     }
 }
