@@ -35,7 +35,59 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        $SettingValueModel = \App\Modules\ConfigurationManagement\WebsiteConfiguration\Models\SettingValueModel::class;
+        $fields = [
+            'header_logo' ,
+            'footer_logo' ,
+            
+            'title' ,
+            'site_name' ,
+            'tag' ,
+            'keywords' ,
+            'image' ,
+            'map_link' ,
+            'address',
+
+            // 'sitemap' ,
+            // 'terms_and_condition' ,
+
+            'youtube',
+            'whatsapp' ,
+            'telegram' ,
+            'facebook' ,
+            'phone_numbers',
+            'emails',
+
+            'short_intro' ,
+            'shiping_on_order' ,
+            'shiping_and_delivery' ,
+
+            // 'schema_tag' ,
+            
+            'return_and_exchange' ,
+            'payment_gateway_logo' ,
+            
+            'outside_dhaka' ,
+            'inside_dhaka',
+
+            'home_page_description' ,
+            'description' ,
+
+            'fabicon' ,
+            'copy_right' ,
+            'breaking_news' ,
+
+            // 'cookies_policy' ,
+            // 'about_us' ,
+        ];
+
+        $SettingModel = \App\Modules\ConfigurationManagement\WebsiteConfiguration\Models\SettingTitleModel::class;
+        $settings = $SettingModel::query()
+            ->select('id','title')
+            ->whereIn('title', $fields)
+            ->with('setting_values:id,setting_title_id,value')
+            ->get();
+
+        $all_category_parents = \App\Modules\WebsiteApi\Category\Actions\GetAllCategoryParent::execute();
 
         return array_merge(parent::share($request), [
             'auth' => function () use ($request) {
@@ -43,7 +95,8 @@ class HandleInertiaRequests extends Middleware
                     ? $request->user()->only('slug', 'name', 'user_name', 'email', 'phone_number', 'photo') // Add more fields as needed
                     : null;
             },
-
+            'settings' => $settings,
+            'all_category_parents' => $all_category_parents,
         ]);
     }
 }
