@@ -20,8 +20,6 @@ class GetAllCategory
 
             $data = self::$CategoryModel::query()->whereIn('parent_id', [0, null]);
 
-
-
             if (request()->has('get_all') && (int)request()->input('get_all') === 1) {
                 if (request()->has('all_parent') && (int)request()->input('all_parent') === 1) {
 
@@ -53,10 +51,7 @@ class GetAllCategory
                     ->paginate($pageLimit);
             }
 
-            $response = entityResponse($data);
-            $response->header('Cache-Control', 'public, max-age=300')
-                ->header('Expires', now()->addMinutes(5)->toRfc7231String());
-            return $response;
+            return $data;
         } catch (\Exception $e) {
             return messageResponse($e->getMessage(), [], 500, 'server_error');
         }
