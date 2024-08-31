@@ -77,6 +77,8 @@
     <script defer src="/frontend/assets/js/modal.js"></script>
     <script defer src="/plugins/sweet_alert.js"></script>
 
+    <script src="http://localhost:8098"></script>
+
     @vite(['resources/js/frontend/app.js'])
 </head>
 
