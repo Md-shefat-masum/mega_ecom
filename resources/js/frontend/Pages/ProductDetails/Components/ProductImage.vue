@@ -14,6 +14,9 @@
             </li>
         </ul>
     </template>
+    <template v-else>
+        <img src="/dummy.png" :alt="product.title" class="img-fluid image_zoom_cls-0" />
+    </template>
 </template>
 
 <script>
@@ -30,15 +33,6 @@ export default {
     watch: {
         product() {
             this.imageUrl = this.load_image(this.product.product_images?.length ? this.product.product_images[0].url : '');
-        }
-    },
-    watch: {
-        product: {
-            handler: function(v){
-                this.imageUrl = this.check_image_url(this.product.product_images[0].url);
-            },
-            deep: true,
-
         }
     },
     methods: {

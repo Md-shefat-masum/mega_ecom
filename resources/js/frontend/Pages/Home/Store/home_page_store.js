@@ -13,7 +13,12 @@ export const use_home_page_store = defineStore("use_home_page_store", {
         all_category_groups: [],
         feature_products: [],
         all_brands: [],
-        preloader: false,
+        preloader: {
+            banner: true,
+            side_nav_category: true,
+            top_products: true,
+            category_group: true,
+        },
         fields: [
             "id",
             "title",
@@ -37,46 +42,59 @@ export const use_home_page_store = defineStore("use_home_page_store", {
 
     actions: {
         get_all_home_hero_sliders: async function () {
-            this.preloader = true
+            this.preloader.banner = true
             try {
                 let response = await axios.get('/get-home-page-hero-sliders?get_all=1&is_show=1');
                 if (response.data.status === "success") {
                     this.home_hero_sliders = response.data.data;
                 }
             } finally {
-                this.preloader = false;
+                this.preloader.banner = false;
             }
         },
 
         get_all_home_slider_side_banners: async function () {
-            this.preloader = true;
+
             try {
                 let response = await axios.get('/get-home-page-hero-slider-side-banners');
                 if (response.data.status === "success") {
                     this.home_hero_slider_side_banner = response.data.data;
                 }
             } finally {
-                this.preloader = false;
+
             }
         },
         get_side_nav_categories: async function () {
-            this.preloader = true;
+            this.preloader.side_nav_category = true;
+
             try {
+
                 if (this.side_nav_categories.length > 0) {
+                    this.preloader.side_nav_category = false;
                     return
                 }
-                let res = await axios.get('/get-all-nav-categories?get_all=1&limit=15');
+
+                let url = `/get-all-nav-categories?get_all=1`;
+                let res = await axios.get(url);
                 this.side_nav_categories = res.data?.data;
 
             } finally {
-                this.preloader = false;
+                this.preloader.side_nav_category = false;
             }
+
+
+
+
         },
-        get_parent_categories: async function () {
+        get_parent_categories: async function (all_parent = true) {
             if (this.parent_categories.length > 0) {
                 return
             }
-            let res = await axios.get('/get-all-parent-categories?get_all=1');
+            let url = `/get-all-parent-categories?get_all=1&`;
+            if (all_parent) {
+                url = `/get-all-parent-categories?get_all=1&all_parent=1`;
+            }
+            let res = await axios.get(url);
             let data = res.data?.data;
             this.parent_categories = data;
         },
@@ -88,7 +106,7 @@ export const use_home_page_store = defineStore("use_home_page_store", {
 
 
         get_all_top_products_offer: async function () {
-            this.preloader = true;
+            this.preloader.top_products = true;
             try {
                 if (this.all_top_products_offer.length > 0) {
                     return
@@ -98,12 +116,12 @@ export const use_home_page_store = defineStore("use_home_page_store", {
                     this.all_top_products_offer = response.data.data
                 }
             } finally {
-                this.preloader = false;
+                this.preloader.top_products = false;
             }
         },
 
         get_all_category_groups: async function () {
-            this.preloader = true;
+            this.preloader.category_group = true;
             try {
                 if (this.all_category_groups.length > 0) {
                     return
@@ -113,7 +131,7 @@ export const use_home_page_store = defineStore("use_home_page_store", {
                     this.all_category_groups = response.data.data
                 }
             } finally {
-                this.preloader = false;
+                this.preloader.category_group = false;
             }
         },
 

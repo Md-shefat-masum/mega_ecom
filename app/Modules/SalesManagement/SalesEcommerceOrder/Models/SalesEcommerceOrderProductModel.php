@@ -10,7 +10,7 @@ class SalesEcommerceOrderProductModel extends EloquentModel
 
     static $stockLogModel = \App\Modules\StockManagement\ProductStock\Models\StockLogModel::class;
     static $productModel = \App\Modules\ProductManagement\Product\Models\Model::class;
-
+    static $productImageModel = \App\Modules\ProductManagement\Product\Models\ProductImageModel::class;
     protected $table = "sales_ecommerce_order_products";
     protected $guarded = [];
     protected $appends = ['stock_available'];
@@ -54,5 +54,10 @@ class SalesEcommerceOrderProductModel extends EloquentModel
     public function product()
     {
         return $this->belongsTo(self::$productModel, 'product_id', 'id');
+    }
+
+    public function product_image()
+    {
+        return $this->hasOne(self::$productImageModel,  'product_id','product_id')->orderBy('is_thumb', 'desc');
     }
 }

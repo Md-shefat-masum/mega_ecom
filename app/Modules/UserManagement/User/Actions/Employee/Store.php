@@ -2,6 +2,8 @@
 
 namespace App\Modules\UserManagement\User\Actions\Employee;
 
+use Illuminate\Support\Facades\Hash;
+
 class Store
 {
     static $model = \App\Modules\UserManagement\User\Models\Model::class;
@@ -18,7 +20,11 @@ class Store
             $requestData['role_id'] = 9;
             unset($requestData['confirmed']);
 
-
+            if(request()->get('password')) {
+                $requestData['password'] = Hash::make(request()->get('password'));
+            }else{
+             unset( $requestData['password'] );
+            }
 
             //store data
             if ($userData = self::$model::create($requestData)) {
@@ -38,23 +44,21 @@ class Store
 
                         $address = (object) $address;
                         $userAddressData = [
-                            'user_id' => $userData->id,
-                            'is_shipping' => $address->is_shipping,
-                            'is_billing' => $address->is_billing,
-                            'address_types' => $address->address_types,
-                            'address' => $address->address,
-                            'country_id' => $address->country_id,
-                            'state_division_id' => $address->state_division_id,
-                            'division_id' => $address->division_id,
-                            'district_id' => $address->district_id,
-                            'station_id' => $address->station_id,
-                            'city_id' => $address->city_id,
-                            'zip_code' => $address->zip_code,
-                            'is_present_address' => $address->is_present_address,
-                            'is_permanent_address' => $address->is_permanent_address,
+                            'user_id' => $userData->id ?? null,
+                            'is_shipping' => $address->is_shipping ?? null,
+                            'is_billing' => $address->is_billing ?? null,
+                            'address_types' => $address->address_types ?? null,
+                            'address' => $address->address ?? null,
+                            'country_id' => $address->country_id ?? null,
+                            'state_division_id' => $address->state_division_id ?? null,
+                            'division_id' => $address->division_id ?? null,
+                            'district_id' => $address->district_id ?? null,
+                            'station_id' => $address->station_id ?? null,
+                            'city_id' => $address->city_id ?? null,
+                            'zip_code' => $address->zip_code ?? null,
+                            'is_present_address' => $address->is_present_address ?? null,
+                            'is_permanent_address' => $address->is_permanent_address ?? null,
                         ];
-
-
 
                         $userAddressDataStore = self::$userAddress::create($userAddressData);
 
@@ -62,11 +66,11 @@ class Store
                             foreach ($address->contact_persons as $contactPerson) {
                                 $contactPerson = (object) $contactPerson;
                                 $userAddressContactPersons[] = [
-                                    'user_id' => $userData->id,
-                                    'user_address_id' => $userAddressDataStore->id,
-                                    'name' => $contactPerson->name,
-                                    'phone_number' => $contactPerson->phone_number,
-                                    'email' => $contactPerson->email,
+                                    'user_id' => $userData->id ?? null,
+                                    'user_address_id' => $userAddressDataStore->id ?? null,
+                                    'name' => $contactPerson->name ?? null,
+                                    'phone_number' => $contactPerson->phone_number ?? null,
+                                    'email' => $contactPerson->email ?? null,
                                 ];
                             }
                         }

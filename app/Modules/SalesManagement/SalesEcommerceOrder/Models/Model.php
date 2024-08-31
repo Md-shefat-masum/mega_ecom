@@ -15,6 +15,9 @@ class Model extends EloquentModel
 
     protected $table = "sales_ecommerce_orders";
     protected $guarded = [];
+    protected $casts = [
+        'delivery_address_details' => 'json',
+    ];
 
     protected static function booted()
     {
@@ -49,5 +52,4 @@ class Model extends EloquentModel
     {
         return $this->belongsTo(self::$userModel, 'user_id', 'id');
     }
-
 }

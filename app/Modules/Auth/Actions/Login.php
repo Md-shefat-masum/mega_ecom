@@ -37,7 +37,8 @@ class Login
                 'updated_at' => now(),
             ]);
 
-            // sendOTP($otp,$requestData['phone_number']);
+            SendOTPViaSMS($otp, $requestData['phone_number']);
+            
             return messageResponse('OTP sent successfully', ['phone_number' => $requestData['phone_number']]);
         } catch (\Exception $e) {
             return messageResponse($e->getMessage(), [], 500, 'server_error');

@@ -44,6 +44,7 @@ class OTPValidation extends FormRequest
         return [
             'otp' => 'required',
             'phone_number' => 'sometimes',
+            'name' => 'sometimes',
         ];
     }
 }

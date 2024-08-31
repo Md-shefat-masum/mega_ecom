@@ -13,7 +13,12 @@ class All
             $offset = request()->input('offset') ?? 10;
             $condition = [];
             $with = [];
-            $data = self::$model::query();
+
+            $fields = request()->input('fields') ?? ['id','name','email','phone_number', "status", 'slug', 'created_at'];
+
+            $data = self::$model::query()->select($fields);
+
+            // $data = self::$model::query();
             if (request()->has('status') && request()->input('status')) {
                 $condition['status'] = request()->input('status');
             }

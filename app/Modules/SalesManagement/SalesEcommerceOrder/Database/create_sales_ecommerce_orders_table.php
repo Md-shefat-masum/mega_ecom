@@ -28,6 +28,9 @@ return new class extends Migration
             $table->enum('delivery_method', ['pickup', 'courier', 'home_delivery'])->nullable();
             $table->string('delivery_address_id')->nullable();
 
+            $table->json('delivery_address_details')->nullable();
+
+
             $table->float('subtotal')->nullable();
 
             $table->float('delivery_charge')->nullable();

@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,7 +44,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('/search-results', 'Website\WebsiteController@search_results')->name('search_results');
     Route::get('/invoice', 'Website\WebsiteController@invoice');
 
-    
+
     Route::get('/profile', 'Website\ProfileController@profile')->name('website_profile');
     Route::get('/profile/orders', 'Website\ProfileController@orders')->name('website_profile_orders');
     Route::get('/profile/order-details/{slug}', 'Website\ProfileController@order_details')->name('order_details');
@@ -72,10 +73,74 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('/upload_product', 'Website\TestController@upload_product');
 });
 
+Route::get('/lo',function(){
+    // auth()->login(\App\Models\User::first());
+    auth()->logout();
+});
+
+Route::post('verify-user-otp', [\App\Modules\Auth\Controller::class, 'VerifyOtp']);
+Route::post('logout', function(){
+    auth()->logout();
+});
+
+Route::get('/tt', function () {
+
+    Storage::disk('etek')->putFileAs("uploads/banner", public_path("avatar.png"), "shefat-text.png");
+
+    return 0;
+    $images = DB::table('product_images')
+        ->where('url', 'LIKE', '%\%20%')
+        // ->where('product_id', 67553)
+        // ->take(2)
+        ->get();
+
+    foreach ($images as $key => $image) {
+        $currentFilePath = public_path($image->url);
+        $newFileName = str_replace('%20', '-', basename($currentFilePath)); // Replace '%20' with '-'
+        $newFilePath = dirname($currentFilePath) . '/' . $newFileName;
+
+        if (rename($currentFilePath, $newFilePath)) {
+            DB::table('product_images')
+                ->where('id', $image->id)
+                ->update([
+                    'url' => "uploads/products/".$image->product_id."/".$newFileName,
+                ]);
+            echo "File renamed successfully to: $newFilePath </br>";
+        } else {
+            echo "<mark>Failed to rename file.</mark>";
+        }
+        // dd($newFileName, $newFilePath);
+    }
+    // dd($images);
+});
+Route::get('/t', function () {
+    function readAllFilesFromFolder($directory)
+    {
+        $files = [];
+        $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory));
+        foreach ($iterator as $file) {
+            if ($file->isDir()) {
+                continue;
+            }
+            $files[] = str_replace('\\', '/', $file->getPathname());
+        }
+        return $files;
+    }
+    $directory = public_path('uploads/files');
+    $fileList = readAllFilesFromFolder($directory);
+
+    foreach ($fileList as $currentFilePath) {
+        $newFileName = str_replace('%20', '-', basename($currentFilePath)); // Replace '%20' with '-'
+        $newFilePath = dirname($currentFilePath) . '/' . $newFileName;
+        if (rename($currentFilePath, $newFilePath)) {
+            echo "File renamed successfully to: $newFilePath";
+        } else {
+            echo "Failed to rename file.";
+        }
+    }
+    dd($fileList);
+});
 
 
-
-require_once __DIR__ . '/test_route.php';
 require_once __DIR__ . '/ssl_route.php';
-// require_once __DIR__ . '/shefat_route.php';
-// require_once __DIR__ . '/website_api_route.php';
+require_once __DIR__ . '/test_route.php';

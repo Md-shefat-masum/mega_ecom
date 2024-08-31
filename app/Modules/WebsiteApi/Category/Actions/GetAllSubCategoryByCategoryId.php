@@ -9,6 +9,7 @@ class GetAllSubCategoryByCategoryId
     public static function execute($slug)
     {
         try {
+            // dd($slug);
 
             $pageLimit = request()->input('limit') ?? 10;
             $orderByColumn = request()->input('sort_by_col') ?? 'id';

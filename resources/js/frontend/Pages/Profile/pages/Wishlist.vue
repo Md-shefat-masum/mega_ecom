@@ -15,12 +15,12 @@
                                 <td>
                                     <img :src="`/${item.product?.product_image?.url}`" alt="">
                                     <span>
-                                        {{ item.product.title }}
+                                        {{ item.product?.title }}
                                     </span>
                                 </td>
                                 <td>
                                     <div class="price">
-                                        {{ item.product.current_price }}৳
+                                        {{get_price(item.product).new_price }}৳
                                     </div>
                                 </td>
                                 <td>
@@ -81,12 +81,14 @@ export default {
         ...mapActions(common_store, {
             get_all_wish_list_items: "get_all_wish_list_items",
             remove_wish_list_item: "remove_wish_list_item",
+            get_price: "get_price",
         }),
     },
 
     computed: {
         ...mapState(common_store, {
             all_wish_list_data: "all_wish_list_data",
+
         }),
     },
 };

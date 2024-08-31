@@ -16,10 +16,6 @@ class VerifyOtp
         try {
 
             $requestData = $request->validated();
-
-
-
-
             $otpRecord = DB::table('otp_codes')
                 ->where('phone_number', $requestData['phone_number'])
                 ->where('otp', $requestData['otp'])
@@ -29,46 +25,36 @@ class VerifyOtp
             if (!$otpRecord) {
                 return messageResponse('Invalid OTP', $requestData, 400, 'error');
             }
-            // Remove used OTP
-            DB::table('otp_codes')
-                ->where('phone_number', $requestData['phone_number'])
-                ->where('otp', $requestData['otp'])
-                ->where('type', 'register')
-                ->latest('created_at')
-                ->delete();
             // Proceed with user registration
             unset($requestData['otp']);
             $user = self::$model::where('phone_number', $requestData['phone_number'])->first();
             $data = [];
             if ($user) {
                 $data['access_token'] = $user->createToken('accessToken')->accessToken;
-                $data['user'] = $user;
+                $data['user'] =  $user->load('role');
             } else {
-
                 if ($request->type == 'retailer') {
-                    $requestData['role_id'] = 6;
+                    $requestData['role_id'] = config('role.retailer');
                     if ($user = self::$model::create($requestData)) {
                         $retailerData = [
                             'user_id' => $user->id,
                             'shop_name' => $request->shop_name,
                             'license_number' => $request->license_number
                         ];
-
                         self::$UserRetailerInformationModel::create($retailerData);
-
                         $data['access_token'] = $user->createToken('accessToken')->accessToken;
-                        $data['user'] = $user;
+                        $data['user'] =  $user->load('role');
                     }
-                }
-
-                if ($request->type == 'customer') {
-                    $requestData['role_id'] = 3;
+                } else {
+                    $requestData['role_id'] = config('role.customer');
                     $user = self::$model::create($requestData);
                     $data['access_token'] = $user->createToken('accessToken')->accessToken;
-                    $data['user'] = $user;
+                    $data['user'] = $user->load('role');
                 }
             }
- 
+
+            auth()->login($user);
+            // request()->session()->regenerate();
 
             return messageResponse('Your OTP successfully Matched', $data, 200, 'success');
         } catch (\Exception $e) {

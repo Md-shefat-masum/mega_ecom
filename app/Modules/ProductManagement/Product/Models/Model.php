@@ -3,6 +3,7 @@
 namespace App\Modules\ProductManagement\Product\Models;
 
 use Illuminate\Database\Eloquent\Model as EloquentModel;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class Model extends EloquentModel
@@ -24,7 +25,14 @@ class Model extends EloquentModel
 
     protected $table = "products";
     protected $guarded = [];
-    protected $appends = ['current_price', 'amount_in_percent', 'is_discount', 'average_rating'];
+    protected $appends = [
+        'current_price',
+        'amount_in_percent',
+        'is_discount',
+        'average_rating',
+        'total_views',
+        'medicine_price',
+    ];
     protected $casts = [
         'specifications' => 'array'
     ];
@@ -90,6 +98,10 @@ class Model extends EloquentModel
     {
         return $this->hasMany(self::$ProductReviewModel, 'product_id', 'id');
     }
+    public function getTotalViewsAttribute()
+    {
+        return DB::table('product_view')->where('product_id', $this->id)->count();
+    }
     public function medicine_product()
     {
         return $this->hasOne(self::$MedicineProductModel, 'product_id', 'id');
@@ -154,6 +166,23 @@ class Model extends EloquentModel
     public function getAverageRatingAttribute()
     {
         return $this->product_reviews()->avg('rating') ?? 0;
+    }
+
+    public function getMedicinePriceAttribute()
+    {
+        $price = 0;
+        $userType = auth()->user() ?? auth()->user()->role->name ?? 'customer';
+        if ($this->type == "medicine") {
+            if ($userType == 'customer') {
+                $price = $this->load('medicine_product_verient')->medicine_product_verient->pv_b2c_price;
+            } else {
+                $price =  $this->load('medicine_product_verient')->medicine_product_verient->pv_b2b_price;
+            }
+        }
+
+
+
+        return $price;
     }
 
     public function getCurrentPriceAttribute()

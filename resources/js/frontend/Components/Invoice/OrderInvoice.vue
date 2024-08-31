@@ -23,17 +23,17 @@
             <tr class="information">
                 <td style="width: 50%">
                     <h4>Delivery Information</h4><br>
-                    {{ order_info.order_delivery_address?.address }}.<br />
-                    {{ order_info.order_delivery_address?.station?.name }} ,
-                    {{ order_info.order_delivery_address?.district?.name }}, {{
-                                    order_info.order_delivery_address?.division?.name }} <br><br>
+                    {{ order_info.delivery_address_details?.address }}.<br />
+                    {{ order_info.delivery_address_details?.station_name }} ,
+                    {{ order_info.delivery_address_details?.district_name }}, {{
+                                    order_info.delivery_address_details?.division_name }} <br><br>
                 </td>
 
                 <td>
                     <h4>User Information</h4><br>
-                    Name : {{ order_info.user?.name }}.<br />
-                    Email : {{ order_info.user?.email }}<br />
-                    Phone : {{ order_info.user?.phone_number }}
+                    Name : {{ order_info.delivery_address_details?.user_name }}.<br />
+                    Email : {{ order_info.delivery_address_details?.email }}<br />
+                    Phone : {{ order_info.delivery_address_details?.phone }}
                 </td>
             </tr>
 
@@ -44,15 +44,15 @@
             </tr>
 
             <tr class="item" v-for="item in order_info.order_products" :key="item.id">
-                <td>{{ item.product?.title }}</td>
-                <!-- <td>{{ item.qty }}</td> -->
-                <td>{{ item.qty }} x {{ item.product?.current_price }} = {{ item.product?.current_price * item.qty }}
+
+                <td>{{ item.product_name }}</td>
+                <td>{{ item.qty }} x {{ Math.round(item.price) }} = {{ Math.round(item.price) * item.qty }}
                 </td>
             </tr>
             <tr class="total">
                 <td></td>
 
-                <td>Sub total: {{ order_info.subtotal }}</td>
+                <td>Sub total: {{ Math.round(order_info.subtotal) }}</td>
             </tr>
             <tr class="total">
                 <td></td>
@@ -62,12 +62,13 @@
             <tr class="total">
                 <td></td>
 
-                <td>Total: {{ order_info.total }}</td>
+                <td>Total: {{ Math.round(order_info.total) }}</td>
             </tr>
         </table>
     </div>
     <div class="text-center">
-        <button id="printBtn" @click="printInvoice" class="btn btn-info mt-3 fw-bold text-white  py-2 px-5 my-5">Print
+        <button id="printBtn" @click="printInvoice"
+            class="btn btn-success mt-3 fw-bold text-white  py-2 px-5 my-5">Print
             Invoice</button>
     </div>
 </template>

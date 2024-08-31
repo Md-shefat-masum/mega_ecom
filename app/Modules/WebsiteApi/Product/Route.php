@@ -10,6 +10,7 @@ Route::prefix('v1')->group(function () {
 
     Route::get('get-initial-product-details/{slug}', [Controller::class, 'GetInitialProductDetails']);
     Route::get('get-product-details/{slug}', [Controller::class, 'GetProductDetails']);
+    Route::get('get-related-generic-products/{slug}', [Controller::class, 'GetRelatedGenericProduct']);
 
     Route::get('get-all-featured-products', [Controller::class, 'GetAllFeaturedProduct']);
     Route::get('get-all-featured-products-by-category-id/{slug}', [Controller::class, 'GetAllFeaturedProductsByCategoryId']);

@@ -9,11 +9,11 @@
 
 <script>
 import { common_store } from "../../../Store/common_store";
-import { mapState } from "pinia";
+import { mapActions, mapState } from "pinia";
 export default {
-    
-    computed: {
-        ...mapState(common_store, {
+
+    methods: {
+        ...mapActions(common_store, {
             get_setting_value: "get_setting_value",
         }),
     },

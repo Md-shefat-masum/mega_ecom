@@ -787,16 +787,14 @@ export default {
     components: { AllCategories, LoginModal, SideCard },
     created: async function () {
         // Uncomment the following line if you want to call the method on creation
-
-
     },
 
     methods: {
-
         ...mapActions(common_store, {
             get_all_cart_data: "get_all_cart_data",
             remove_cart_item: "remove_cart_item",
             cart_quantity_update: "cart_quantity_update",
+            get_setting_value: "get_setting_value",
         }),
         ...mapActions(use_home_page_store, {
             store_news_letter_subscriber: 'store_news_letter_subscriber'
@@ -808,16 +806,12 @@ export default {
         },
 
         load_image: window.load_image,
-
-
-
     },
 
     computed: {
         ...mapState(common_store, {
             all_cart_data: "all_cart_data",
             total_cart_price: "total_cart_price",
-            get_setting_value: "get_setting_value",
         }),
     },
 

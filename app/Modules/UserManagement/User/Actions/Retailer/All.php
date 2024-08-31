@@ -16,11 +16,11 @@ class All
             $orderByColumn = request()->input('sort_by_col');
             $orderByType = request()->input('sort_type');
             $status = request()->input('status');
-
+            $fields = request()->input('fields') ?? ['id','name','email','phone_number', "status", 'slug', 'created_at'];
             $with = ['user_address', 'user_address.user_address_contact_person'];
 
-            $data = self::$model::query();
-
+            // $data = self::$model::query();
+            $data = self::$model::query()->select($fields);
 
 
             if (request()->has('search') && request()->input('search')) {

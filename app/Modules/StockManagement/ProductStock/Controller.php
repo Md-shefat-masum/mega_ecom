@@ -49,9 +49,9 @@ class Controller extends ControllersController
         $data = SoftDelete::execute();
         return $data;
     }
-    public function destroy($slug)
+    public function destroy()
     {
-        $data = Destroy::execute($slug);
+        $data = Destroy::execute();
         return $data;
     }
     public function restore()

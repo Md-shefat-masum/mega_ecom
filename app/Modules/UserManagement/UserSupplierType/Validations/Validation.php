@@ -31,7 +31,7 @@ class Validation extends FormRequest
         if ($this->wantsJson() || $this->ajax()) {
             throw new HttpResponseException($this->validateError($validator->errors()));
         }
-        parent::failedValidation($validator);
+        // parent::failedValidation($validator);
     }
 
     /**

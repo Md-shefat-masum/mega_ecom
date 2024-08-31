@@ -18,17 +18,31 @@ class GetAllCategory
             $with = [];
             $condition = [];
 
-            $data = self::$CategoryModel::query()->where('parent_id', 0);
+            $data = self::$CategoryModel::query()->whereIn('parent_id', [0, null]);
+
+
 
             if (request()->has('get_all') && (int)request()->input('get_all') === 1) {
-                $data = $data
-                    ->with($with)
-                    ->select($fields)
-                    ->where($condition)
-                    ->where('status', $status)
-                    ->limit($pageLimit)
-                    ->orderBy($orderByColumn, $orderByType)
-                    ->get();
+                if (request()->has('all_parent') && (int)request()->input('all_parent') === 1) {
+
+                    $data = $data
+                        ->with($with)
+                        ->select($fields)
+                        ->where($condition)
+                        ->where('status', $status)
+                        ->orderBy($orderByColumn, $orderByType)
+                        ->get();
+                } else {
+
+                    $data = $data
+                        ->with($with)
+                        ->select($fields)
+                        ->where($condition)
+                        ->where('status', $status)
+                        ->limit($pageLimit)
+                        ->orderBy($orderByColumn, $orderByType)
+                        ->get();
+                }
             } else {
                 $data = $data
                     ->with($with)
@@ -43,7 +57,6 @@ class GetAllCategory
             $response->header('Cache-Control', 'public, max-age=300')
                 ->header('Expires', now()->addMinutes(5)->toRfc7231String());
             return $response;
-
         } catch (\Exception $e) {
             return messageResponse($e->getMessage(), [], 500, 'server_error');
         }

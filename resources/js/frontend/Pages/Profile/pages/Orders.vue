@@ -6,7 +6,8 @@
                     Order History
                 </h2>
             </div>
-            <div class="box-account box-info">
+            <hr>
+            <div class="box-account box-info" v-if="order_list.data.length">
 
                 <div class="card order_history_card my-3" v-for="order in order_list.data" :key="order.id">
                     <div class="card-header align-items-center">
@@ -38,9 +39,9 @@
 
                                     <td>
                                         <span>{{ index + 1 }}</span>
-                                        <img :src="load_image(`/${item.product.product_image.url}`)" alt="">
+                                        <img :src="load_image(`${item.product?.product_image?.url}`)" alt="">
                                         <span>
-                                            {{ item.product.title }}
+                                            {{ item.product?.title }}
                                         </span>
                                     </td>
                                     <td>
@@ -60,6 +61,9 @@
                     </div>
                 </div>
 
+            </div>
+            <div v-else>
+                <h2 class="text-center">No order found</h2>
             </div>
         </div>
     </ProfileLayout>

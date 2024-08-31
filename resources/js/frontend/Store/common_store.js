@@ -7,7 +7,7 @@ export const common_store = defineStore("common_store", {
         all_wish_list_data: [],
         all_compare_list_data: [],
         navbar_menu_data: [],
-        website_settings_data: {},
+        website_settings_data: [],
         total_cart_price: 0,
         preloader: false,
         fields: ['title', 'external_link'],
@@ -23,7 +23,6 @@ export const common_store = defineStore("common_store", {
             "slug",
             "is_available",
         ]
-
     }),
 
     actions: {
@@ -51,7 +50,7 @@ export const common_store = defineStore("common_store", {
         },
 
         add_to_cart: async function (productId) {
-            console.log(productId);
+            // console.log(productId);
             const response = await window.privateAxios(`/add-to-cart`, 'post',
                 {
                     product_id: productId,
@@ -170,6 +169,9 @@ export const common_store = defineStore("common_store", {
         //website settigns
         //website settigns
         get_all_website_settings: async function () {
+            if(this.website_settings_data.length !== 0){
+               return false;
+            }
             this.preloader = true;
             try {
                 let response = await axios.get(`/get-website-settings`);
@@ -182,50 +184,54 @@ export const common_store = defineStore("common_store", {
 
         },
 
-
         get_setting_value: function (key, multiple = false) {
-
-            // console.log(key, this.website_settings_data);
-
-
-            this.preloader = true;
+            // this.preloader = true;
+            let is_empty = false;
+            if(this.website_settings_data.length == 0){
+                is_empty = true;
+            }
             try {
                 if (!multiple) {
+                    if(is_empty) return '';
+
                     let data = ''
                     let value = this.website_settings_data.find(item => item.title === key);
                     if (value && value.setting_values.length > 0) {
                         data = value.setting_values[0].value
-                        this.preloader = false;
+                        // this.preloader = false;
                     }
                     return data
                 } else {
+                    if(is_empty) return [];
+
                     let values = this.website_settings_data.filter(item => item.title === key);
                     if (values && values.length > 0) {
                         return values[0].setting_values;
-                        this.preloader = false;
+                        // this.preloader = false;
                     }
                     return [];
                 }
             } catch (error) {
-                // console.error(error.message);
+                console.error(error);
             }
         },
 
         //navbar_menu
         //navbar_menu
-        get_all_website_navbar_menu: async function () {
-            let fieldsQueryString = this.fields.map((field, index) => `fields[${index}]=${field}`).join('&');
-            let response = await axios.get(`/navbar-menus?get_all=1&${fieldsQueryString}`);
-            if (response.data.status == "success") {
-                this.navbar_menu_data = response.data.data;
-            }
+        get_all_website_navbar_menu: async function (all_parent = false) {
+            // let fieldsQueryString = this.fields.map((field, index) => `fields[${index}]=${field}`).join('&');
+            // let url = `/navbar-menus?get_all=1&${fieldsQueryString}`;
+            // if (all_parent) {
+            //     url = `/navbar-menus?get_all=1&all_parent=1&${fieldsQueryString}`;
+            // }
+            // let response = await axios.get(url);
+            // if (response.data.status == "success") {
+            //     this.navbar_menu_data = response.data.data;
+            // }
         },
 
 
         get_price(product) {
-
-            // console.log("search",product);
-
 
             let old_price = 0;
             let new_price = 0;
@@ -294,7 +300,7 @@ export const common_store = defineStore("common_store", {
                         new_price = Math.round(product.current_price)
                         old_price = Math.round(product.customer_sales_price)
                     } else {
-                        old_price = Math.round(product.customer_sales_price)
+                        old_price = Math.round(product.current_price)
                     }
                 }
             }

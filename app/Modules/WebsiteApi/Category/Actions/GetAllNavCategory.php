@@ -26,7 +26,7 @@ class GetAllNavCategory
                     ->select($fields)
                     ->where($condition)
                     ->where('status', $status)
-                    ->limit($pageLimit)
+                    ->limit(12)
                     ->orderBy($orderByColumn, $orderByType)
                     ->get();
             } else {

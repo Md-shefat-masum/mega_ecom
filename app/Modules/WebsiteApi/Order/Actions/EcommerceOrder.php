@@ -16,20 +16,41 @@ class EcommerceOrder
     {
         try {
 
+            // dd($request->all());
             $orderDetails = $request->all();
 
 
+            $userType = auth()->user()->role?->name;
 
-            $cartItems  = self::$cartModel::where('user_id', auth()->id())->get();
-            $cartSubtotal = $cartItems->sum(function ($cartItem) {
-                return $cartItem->product->current_price * $cartItem->quantity;
+            $cartItems = self::$cartModel::with(['product', 'product.medicine_product_verient'])
+                ->where('user_id', auth()->id())
+                ->get();
+
+            $cartSubtotal = $cartItems->sum(function ($cartItem) use ($userType) {
+                if ($cartItem->product_type == 'medicine') {
+                    return $cartItem->product->medicine_price * $cartItem->quantity;
+                } else {
+                    return $cartItem->product->current_price * $cartItem->quantity;
+                }
+
+                return 0;
             });
 
 
 
             $total = $cartSubtotal;
 
+
             // dd($orderDetails, auth()->user()->toArray(), $cartItems->toArray(), $cartSubtotal);
+            $delivery_address_details = [
+                "user_name" => $request->user_name,
+                "phone" => $request->phone,
+                "email" => $request->email,
+                "address" => $request->address,
+                "division_name" => DB::table('location_state_divisions')->where('id', $request->state_division_id)->first()->name,
+                "district_name" => DB::table('location_districts')->where('id', $request->district_id)->first()->name,
+                "station_name" => DB::table('location_stations')->where('id', $request->station_id)->first()->name,
+            ];
 
             $orderInfo = [
                 "order_id" => self::generateUniqueOrderId(),
@@ -37,11 +58,9 @@ class EcommerceOrder
                 "user_type" => "ecommerce",
                 "user_id" => auth()->user()->id,
                 "is_delivered" => 0,
+                "delivery_address_details" => ($delivery_address_details),
                 "order_status" => 'pending',
-                // "user_address_id" => ($orderDetails["address_id"] ?? auth()->user()?->user_address->id) ?? null,
                 "delivery_method" => "home_delivery",
-                // "delivery_address_id" => ($orderDetails["address_id"] ?? auth()->user()?->user_address->id) ?? null,
-
                 "delivery_charge" => $orderDetails["delivery_charge"] ?? 0,
                 "additional_charge" => 0,
                 "product_coupon_id" => null,
@@ -57,9 +76,6 @@ class EcommerceOrder
                 "total" =>  $total + $orderDetails["delivery_charge"] ?? 0,
             ];
 
-            // dd($orderInfo);
-
-
 
 
             if ($order = self::$model::create($orderInfo)) {
@@ -69,11 +85,11 @@ class EcommerceOrder
                     self::$orderProductmodel::create([
                         'sales_ecommerce_order_id' => $order->id,
                         'product_id' => $cartItem->product_id,
-                        'product_price' => $cartItem->product->current_price,
+                        'product_price' => $cartItem->product->type == 'medicine' ? $cartItem->product->medicine_price : $cartItem->product->current_price,
                         'product_name' => $cartItem->product->title,
                         'discount_type' => null,
                         'tax' => null,
-                        'price' => $cartItem->product->current_price,
+                        'price' => $cartItem->product->type == 'medicine' ? $cartItem->product->medicine_price : $cartItem->product->current_price,
                         'qty' => $cartItem->quantity,
                         'subtotal' => $order->subtotal,
                         'tax_total' =>  0,

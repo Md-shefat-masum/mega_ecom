@@ -15,8 +15,6 @@ class RetailerRegister
     {
         try {
 
-
-
             $requestData = $request->validated();
 
             $isUserExist = self::$model::where('phone_number', $requestData['phone_number'])->exists();
@@ -39,9 +37,12 @@ class RetailerRegister
                 'updated_at' => now(),
             ]);
 
-            // self::sendOTP($requestData['phone_number'], $otp);
+            SendOTPViaSMS($requestData['phone_number'], $otp);
 
-            return messageResponse('OTP sent successfully', ['phone_number' => $requestData['phone_number']]);
+            return messageResponse('OTP sent successfully', [
+                'phone_number' => $requestData['phone_number'],
+                'otp' => $otp
+            ]);
         } catch (\Exception $e) {
             return messageResponse($e->getMessage(), [], 500, 'server_error');
         }

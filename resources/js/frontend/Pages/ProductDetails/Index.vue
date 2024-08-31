@@ -101,16 +101,7 @@ export default {
         }),
 
     },
-    data: () => ({
-        loaded: false,
-    }),
-    created: async function () {
-        await this.set_slug(this.slug);
-        await this.get_single_product_initial_data();
-        this.loaded = true;
-        await this.get_single_product_details();
-        // await this.get_top_products();
-    },
+
     computed: {
 
         ...mapState(useProductDetailsStore, {
@@ -122,7 +113,13 @@ export default {
             store_slug: 'slug',
             product_initial_data: 'product_initial_data',
         })
+
     }
-}
+
+
+};
 </script>
 
+<style scoped>
+/* Add your styles here */
+</style>

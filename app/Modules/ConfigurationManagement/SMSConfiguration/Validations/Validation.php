@@ -47,8 +47,9 @@ class Validation extends FormRequest
             'port' => 'required | sometimes',
             'api_key' => 'required | sometimes',
             'secret_key' => 'required | sometimes',
-            'callder_id' => 'required | sometimes',
+            'caller_id' => 'required | sometimes',
             'user_name' => 'required | sometimes',
+            'caller_phone_number' => 'required | sometimes',
             'password' => 'required | sometimes',
             'status' => ['sometimes', Rule::in(['active', 'inactive'])],
         ];

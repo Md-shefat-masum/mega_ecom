@@ -58,9 +58,6 @@ export default {
             this.preloader = false;
         }
     },
-    data: () => ({
-        preloader: true
-    }),
     computed: {
         ...mapState(use_home_page_store, {
             feature_products: "feature_products",

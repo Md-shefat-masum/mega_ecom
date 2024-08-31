@@ -1,7 +1,7 @@
 <template>
-    <section class="color_bg_banner pb-4 pt-1">
+    <section class="   mt-5">
         <div class="custom-container">
-            <div class="marquee_body" @mouseover="is_paused = true" @mouseleave="is_paused = false">
+            <div class="marquee_body py-3" @mouseover="is_paused = true" @mouseleave="is_paused = false">
                 <marquee-text :paused="is_paused" :duration="60">
                     {{ get_setting_value('breaking_news') }}
                 </marquee-text>
@@ -13,7 +13,7 @@
 <script>
 import MarqueeText from 'vue-marquee-text-component'
 import { common_store } from "../../../Store/common_store";
-import { mapState } from "pinia";
+import { mapActions, mapState } from "pinia";
 export default {
     components: {
         MarqueeText
@@ -21,8 +21,8 @@ export default {
     data: () => ({
         is_paused: false,
     }),
-    computed: {
-        ...mapState(common_store, {
+    methods: {
+        ...mapActions(common_store, {
             get_setting_value: "get_setting_value",
         }),
     },

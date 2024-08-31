@@ -27,7 +27,9 @@ class SupplierController extends ControllersController
     }
 
     public function store(Validation $request)
+    // public function store()
     {
+        // return dd(request()->all());
         $data = Store::execute($request);
         return $data;
     }

@@ -11,12 +11,17 @@ class GetAllProductsByCategoryId
     {
         try {
 
-            $pageLimit = request()->input('limit') ?? 10;
+            $pageLimit = request()->input('limit') ?? 12;
             $orderByColumn = request()->input('sort_by_col') ?? 'id';
             $orderByType = request()->input('sort_type') ?? 'asc';
             $status = request()->input('status') ?? 'active';
             $fields = request()->input('fields') ?? '*';
-            $with = ['product_images:id,product_id,url', 'product_categories:id,title', 'product_brand:id,title'];
+            $with = [
+                'product_image:id,product_id,url',
+                'product_images:id,product_id,url',
+                'product_categories:id,title',
+                'product_brand:id,title'
+            ];
             $condition = [];
 
             $category = self::$CategoryModel::query()->where('slug', $slug)->first();
@@ -60,6 +65,3 @@ class GetAllProductsByCategoryId
         }
     }
 }
-
-
-

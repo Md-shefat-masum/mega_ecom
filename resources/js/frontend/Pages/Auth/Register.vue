@@ -108,7 +108,7 @@ export default {
                 this.is_register = false;
                 this.is_otp_verify = true;
                 this.phone_number = response.data?.data?.phone_number;
-                console.log(this.phone_number);
+
 
             }
         },

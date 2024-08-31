@@ -5,6 +5,7 @@ export const useProductDetailsStore = defineStore("useProductDetailsStore", {
     state: () => ({
         slug: '',
         product_initial_data: {},
+        related_generic_products_data: {},
         product_details: {},
         top_products: [],
         related_porducts: [],
@@ -43,6 +44,14 @@ export const useProductDetailsStore = defineStore("useProductDetailsStore", {
             let response = await axios.get(`/get-initial-product-details/${slug}?${fieldsQuery}`)
             if (response.data.status === "success") {
                 this.product_initial_data = response.data.data
+            }
+            // console.log(this.product_initial_data);
+        },
+        get_related_generic_products: async function () {
+            // const fieldsQuery = this.fields.map((field, index) => `fields[${index}]=${field}`).join('&');
+            let response = await axios.get(`/get-related-generic-products/${this.slug}`)
+            if (response.data.status === "success") {
+                this.related_generic_products_data = response.data.data
             }
             // console.log(this.product_initial_data);
         },
@@ -140,12 +149,13 @@ export const useProductDetailsStore = defineStore("useProductDetailsStore", {
         setReview(review) {
             this.review = review;
         },
+        set_slug(slug) {
+            this.slug = slug
+        }
         /**
         ## Review section
         ## end
         */
-        set_slug: function(data){
-            this.slug = data;
-        }
+
     }
 });

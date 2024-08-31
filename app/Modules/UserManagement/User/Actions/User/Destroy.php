@@ -9,7 +9,6 @@ class Destroy
     public static function execute()
     {
         try {
-
             if (!$data = self::$model::where('slug', request()->slug)->first()) {
                 return messageResponse('Data not found...',[], 404, 'error');
             }
@@ -18,15 +17,15 @@ class Destroy
                 $data->user_address()->where('user_id', $data->id)->delete();
             }
 
-            if ($data->user_address_contact_person()) {
+            if ($data->user_address_contact_person()->count()) {
                 $data->user_address_contact_person()->where('user_id', $data->id)->delete();
             }
 
-            $data->detele();
+            $data->delete();
 
             return messageResponse('Item Successfully deleted');
         } catch (\Exception $e) {
-            return messageResponse($e->getMessage(),[], 500, 'server_error');
+            return messageResponse($e->getMessage(), [], 500, 'server_error');
         }
     }
 }

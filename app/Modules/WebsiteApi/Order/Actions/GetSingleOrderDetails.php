@@ -15,11 +15,9 @@ class GetSingleOrderDetails
 
 
 
-
             $orderInfo = self::$model::with(
                 'order_products',
-                'order_products.product',
-                'order_products.product.product_image',
+                'order_products.product_image',
                 'order_delivery_address:id,address,district_id,division_id,station_id',
                 'order_delivery_address.division:id,name',
                 'order_delivery_address.district:id,name',
@@ -31,6 +29,8 @@ class GetSingleOrderDetails
             if (!$orderInfo) {
                 return messageResponse('No order found', [], 200, 'success');
             }
+
+
 
             return entityResponse($orderInfo);
         } catch (\Exception $e) {

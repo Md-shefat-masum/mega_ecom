@@ -15,7 +15,7 @@
                 <form class="theme-form" @submit.prevent="loginFormHandler($event)" method="post">
                     <label>Enter your Phone</label>
                     <input type="number" name="phone_number" id="phone_number" class="form-control"
-                        placeholder="Enter your phone number" />
+                        placeholder="Enter your phone number" v-model="phone_number" />
                     <button class="btn btn-normal my-2">Login</button>
 
                     <div class="accout-fwd">
@@ -28,14 +28,15 @@
             </template>
 
             <template v-if="is_otp_verify">
-                <div class="theme-card">
+                <div class="theme-card m-0 p-0">
                     <h3 class="text-center my-2">Verify otp</h3>
                     <form class="theme-form" @submit.prevent="OtpVerifyFormHandler($event)" method="post">
                         <div class="form-group">
                             <label>Enter your otp</label>
                             <input type="number" name="otp" id="otp" class="form-control">
                         </div>
-                        <button class="btn btn-normal">Send</button>
+                        <button class="btn btn-normal btn-sm">Send</button>
+                        <button type="button" @click="resendOtp" class="btn btn-normal mx-1 btn-sm">Resend</button>
                     </form>
                 </div>
             </template>
@@ -63,6 +64,14 @@ export default {
                 this.is_login = false;
                 this.is_otp_verify = true;
                 this.phone_number = response.data?.data?.phone_number;
+            }
+        },
+        resendOtp: async function () {
+            let response = await axios.post('/resend-otp', {
+                phone_number: this.phone_number
+            })
+            if (response.data?.status === "success") {
+                window.s_alert(response.data?.message);
             }
         },
 

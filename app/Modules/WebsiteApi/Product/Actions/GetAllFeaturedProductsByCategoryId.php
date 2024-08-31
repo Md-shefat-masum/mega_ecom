@@ -10,6 +10,7 @@ class GetAllFeaturedProductsByCategoryId
     public static function execute($slug)
     {
         try {
+            
 
             $pageLimit = request()->input('limit') ?? 10;
             $orderByColumn = request()->input('sort_by_col') ?? 'id';

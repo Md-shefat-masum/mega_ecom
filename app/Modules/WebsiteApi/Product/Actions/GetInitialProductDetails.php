@@ -2,6 +2,9 @@
 
 namespace App\Modules\WebsiteApi\Product\Actions;
 
+use App\Modules\ProductManagement\Product\Models\MedicineProductModel;
+use Illuminate\Support\Facades\DB;
+
 class GetInitialProductDetails
 {
     static $ProductModel = \App\Modules\ProductManagement\Product\Models\Model::class;
@@ -30,18 +33,13 @@ class GetInitialProductDetails
                 ->first();
 
             if ($data->type == 'medicine') {
-                $data->load(['medicine_product', 'medicine_product_verient']);
-                $related_brand_product = [];
-                if ($data->medicine_product && $data->medicine_product->p_generic_name) {
 
-                    $related_brand_product = self::$ProductModel::with(['medicine_product', 'medicine_product_verient','product_image:id,product_id,url'])
-                        ->select($fields)
-                        ->whereHas('medicine_product', function ($query) use ($data) {
-                            $query->where('p_generic_name', $data->medicine_product->p_generic_name);
-                        })->get();
-                    $data->related_brand_product = $related_brand_product;
+                $data->load([
+                    'medicine_product:id,product_id,p_description,p_strength,p_generic_name',
+                    'medicine_product_verient:id,product_id,pu_b2c_base_unit_multiplier,pu_base_unit_label,pu_b2c_sales_unit_label,pu_base_unit_multiplier,pv_b2c_price,pv_b2c_mrp,pv_b2c_discount_percent,pv_b2c_max_qty',
+                ]);
 
-                }
+                // dd($data);
             }
 
 
@@ -51,7 +49,6 @@ class GetInitialProductDetails
             if (!$data) {
                 return messageResponse('Data not found...', [], 404, 'error');
             }
-            $data->product_images = $data->product_images()->select('id', 'product_id', 'url')->skip(1)->take(10)->get();
 
             $response = entityResponse($data);
             return $response;

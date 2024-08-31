@@ -16,7 +16,7 @@ class All
             $orderByColumn = request()->input('sort_by_col') ?? 'id';
             $orderByType = request()->input('sort_type') ?? 'ASC';
             $status = request()->input('status') ?? 'active';
-            $fields = request()->input('fields') ?? ['id', 'title', "status", 'slug', 'created_at'];
+            $fields = request()->input('fields') ?? ['id','name','email','phone_number', "status", 'slug', 'created_at'];
             $condition = [];
 
             $with = ['user_address', 'user_address.user_address_contact_person'];

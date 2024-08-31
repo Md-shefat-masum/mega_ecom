@@ -20,7 +20,7 @@
                                 </td>
                                 <td>
                                     <div class="price">
-                                        {{ item.product.current_price }}৳
+                                        {{ get_price(item.product).new_price }}৳
                                     </div>
                                 </td>
                                 <td>
@@ -81,6 +81,7 @@ export default {
         ...mapActions(common_store, {
             get_all_compare_list_items: "get_all_compare_list_items",
             remove_compare_list_item: "remove_compare_list_item",
+            get_price: "get_price",
         }),
     },
 

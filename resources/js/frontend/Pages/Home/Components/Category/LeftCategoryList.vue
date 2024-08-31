@@ -20,16 +20,24 @@
 <script>
 
 import { use_home_page_store } from '../../Store/home_page_store.js';
-import { mapState } from 'pinia';
+import { mapState,mapActions } from 'pinia';
 
 export default {
     methods: {
+        ...mapActions(use_home_page_store, {
+            get_parent_categories: "get_parent_categories",
+
+        }),
         close_category: function () {
             document.querySelector('.modal_category_left_side_show').classList.toggle('modal_category');
             document.querySelector('.modal_category_left_side_show').classList.toggle('active');
         },
         load_image: window.load_image,
     },
+    created: async function() {
+
+    },
+
     computed: {
         ...mapState(use_home_page_store, {
             side_nav_categories: "side_nav_categories",

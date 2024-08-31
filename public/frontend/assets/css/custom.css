@@ -24,15 +24,35 @@
         margin-left: 10px;
     }
 }
+
 .c-pointer {
     cursor: pointer;
 }
+
+.c-bg-primary {
+    background-color: #6465a5 !important;
+}
+
+.w-15 {
+    width: 15% !important;
+}
+
+.bg-dummy-image {
+    background-image: url('/dummy.png');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    border: 1px solid rgba(128, 128, 128, 0.192);
+
+}
+
 .marquee_body {
     border-radius: 40px;
     background: white;
     padding: 5px 26px;
     font-size: 20px;
     padding-bottom: 5px;
+    box-shadow: 0px 0px 5px #717171;
 }
 
 .website_banner {
@@ -448,7 +468,7 @@
     display: flex;
     align-items: center;
     width: 50%;
-    margin-bottom: 24px;
+    margin-bottom: 10px;
 }
 
 .product-core-info-list:last-child {

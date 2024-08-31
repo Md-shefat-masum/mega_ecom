@@ -125,3 +125,5 @@ include_once  base_path("app/Modules/WebsiteApi/NavbarMenu/Route.php");
 
 include_once  base_path("app/Modules/WebsiteApi/Blog/Route.php");
 
+include_once  base_path("app/Modules/PaymentGateway/SSLCommerZ/Route.php");
+

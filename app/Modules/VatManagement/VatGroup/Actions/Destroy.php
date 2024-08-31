@@ -6,10 +6,10 @@ class Destroy
 {
     static $model = \App\Modules\VatManagement\VatGroup\Models\Model::class;
 
-    public static function execute($slug)
+    public static function execute()
     {
         try {
-            if (!$data=self::$model::where('slug', $slug)->first()) {
+            if (!$data=self::$model::where('slug', request()->slug)->first()) {
                 return messageResponse('Data not found...',$data, 404, 'error');
             }
             $data->delete();

@@ -26,7 +26,7 @@
     <meta name="description" content="etek">
     <meta name="keywords" content="etek enterprise">
     <meta name="author" content="etek">
-    <link rel="shortcut icon" href="/cache/frontend/images/etek_favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="/frontend/images/etek_favicon.png" type="image/x-icon">
 
     <meta property="og:title" content="ETEK Enterprise" />
     <meta property="og:site_name" content="ETEK Enterprise" />
@@ -44,9 +44,9 @@
     <meta name="twitter:image" content="https://etek.com.bd/frontend/images/etek_logo.png">
     <meta name="twitter:card" content="summary_large_image">
 
-    <link rel="stylesheet" href="/cache/frontend/assets/css/website.css">
-    <link rel="stylesheet" href="/cache/frontend/assets/css/lightbox.css">
-    <link rel="stylesheet" href="/cache/frontend/assets/css/custom.css">
+    <link rel="stylesheet" href="/frontend/assets/css/website.css">
+    <link rel="stylesheet" href="/frontend/assets/css/lightbox.css">
+    <link rel="stylesheet" href="/frontend/assets/css/custom.css">
 
     <script>
         // if(window.innerWidth < 991){
@@ -56,13 +56,12 @@
 
             try {
                 new URL(url);
-                url.replaceAll('//', '/');
                 return url;
             } catch (error) {
                 let full_url = `{{env('IMAGE_HOST')}}` + '/' + url;
-                // if(cache){
-                //     full_url = `{{env('IMAGE_HOST')}}` + '/cache/' + url;
-                // }
+                if(cache){
+                    full_url = `{{env('IMAGE_HOST')}}` + '/' + url;
+                }
                 full_url.replaceAll('//', '/');
                 return full_url;
             }
@@ -70,13 +69,13 @@
         }
     </script>
 
-    <script src="/cache/frontend/assets/js/jquery-3.3.1.min.js.download"></script>
-    <script src="/cache/frontend/assets/js/popper.min.js.download"></script>
-    <script src="/cache/frontend/assets/js/bootstrap.js.download"></script>
-    <script src="/cache/frontend/assets/js/lightbox.min.js"></script>
-    <script defer src="/cache/frontend/assets/js/script.js"></script>
-    <script defer src="/cache/frontend/assets/js/modal.js"></script>
-    <script defer src="/cache/plugins/sweet_alert.js"></script>
+    <script src="/frontend/assets/js/jquery-3.3.1.min.js.download"></script>
+    <script src="/frontend/assets/js/popper.min.js.download"></script>
+    <script src="/frontend/assets/js/bootstrap.js.download"></script>
+    <script src="/frontend/assets/js/lightbox.min.js"></script>
+    <script defer src="/frontend/assets/js/script.js"></script>
+    <script defer src="/frontend/assets/js/modal.js"></script>
+    <script defer src="/plugins/sweet_alert.js"></script>
 
     @vite(['resources/js/frontend/app.js'])
 </head>

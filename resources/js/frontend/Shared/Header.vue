@@ -1,7 +1,7 @@
 <template>
     <header>
         <!-- top header part -->
-        <div class="top-header" v-if="loaded">
+        <div class="top-header">
             <div class="custom-container">
                 <div class="row">
                     <div class="col-xl-5 col-md-7 col-sm-6">
@@ -243,7 +243,7 @@
                             </div>
                             <div class="category-right">
                                 <div class="contact-block">
-                                    <a  :tel="get_setting_value('phone_numbers')">
+                                    <a :href="'tel:'+get_setting_value('phone_numbers')">
                                         <i class="fa fa-volume-control-phone"></i>
                                         <span>call us<span>{{ get_setting_value('phone_numbers') }}</span></span>
                                     </a>
@@ -309,7 +309,7 @@ export default {
     computed: {
         ...mapState(common_store, {
             all_cart_data: "all_cart_data",
-            website_settings_data: "website_settings_data",
+            // website_settings_data: "website_settings_data",
             navbar_menu_data: "navbar_menu_data",
             preloader: "preloader",
         }),

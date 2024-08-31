@@ -3,7 +3,9 @@ import axios from "axios";
 window.axios = axios;
 
 window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+window.axios.defaults.headers.common["X-CSRF-TOKEN"] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 axios.defaults.baseURL = location.origin + "/api/v1/";
+// axios.defaults.baseURL = "https://etek.shefat.info/api/v1/";
 
 window.publicAxios = async function (apiEndPoint = null, type = 'get', payload = {}) {
     delete window.axios.defaults.headers.common["Authorization"];
@@ -22,18 +24,17 @@ window.publicAxios = async function (apiEndPoint = null, type = 'get', payload =
 
 window.privateAxios = async function (apiEndPoint = null, type = 'get', payload = {}) {
     window.axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem('token')}`;
-
     try {
-
-        await axios.get("/check_user");
+        await axios.get("/auth-check");
 
     } catch (error) {
         localStorage.removeItem("token");
-        document.getElementById("myAccount").classList.add('open-side');
+        let myaccount = document.getElementById("myAccount");
+        if (myaccount) {
+            // myaccount.classList.add('open-side');
+        }
         return false;
     }
-
-
 
     try {
         let response;

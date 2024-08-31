@@ -13,7 +13,7 @@
 
 ### get all data without pagination
 ### will return:  {  }
-GET {{url}} HTTP/1.1
+GET {{url}}/ HTTP/1.1
 content-type: application/json
 # Authorization: {{token}}
 

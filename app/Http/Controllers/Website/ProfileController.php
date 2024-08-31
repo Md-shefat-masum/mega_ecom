@@ -77,6 +77,7 @@ class ProfileController extends Controller
             'user_info' => auth()->user(),
         ]);
     }
+
     public function address()
     {
 
@@ -88,6 +89,19 @@ class ProfileController extends Controller
             ],
         ]);
     }
+
+    public function address_create()
+    {
+
+        return Inertia::render('Profile/pages/AddressForm', [
+            'event' => [
+                'title' => 'Order Address',
+                'image' => 'https://etek.com.bd/frontend/images/etek_logo.png',
+                'description' => 'Best eCommerce in bangladesh'
+            ],
+        ]);
+    }
+    
     public function password()
     {
         return Inertia::render('Profile/pages/Password', [

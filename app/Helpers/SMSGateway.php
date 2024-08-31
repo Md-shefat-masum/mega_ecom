@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
  * ```js
   sendOTP($otp,$number)
  */
-function sendOTP($otp, $number)
+function SendOTPViaSMS($otp, $number)
 {
     // dd($otp, $number);
     try {

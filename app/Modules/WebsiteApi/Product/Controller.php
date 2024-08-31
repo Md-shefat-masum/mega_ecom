@@ -18,6 +18,7 @@ use App\Modules\WebsiteApi\Product\Actions\GetSingleCategoryGroupWithProduct;
 use App\Modules\WebsiteApi\Product\Actions\GetProductCategoryVarients;
 use App\Modules\WebsiteApi\Product\Actions\GetProductCategoryWiseBrands;
 use App\Modules\WebsiteApi\Product\Actions\GetAllProductsByCategoryIdWithVerientAndBrand;
+use App\Modules\WebsiteApi\Product\Actions\GetRelatedGenericProduct;
 
 class Controller extends ControllersController
 {
@@ -45,6 +46,11 @@ class Controller extends ControllersController
     public function GetAllProductsByBrandId($slug)
     {
         $data = GetAllProductsByBrandId::execute($slug);
+        return $data;
+    }
+    public function GetRelatedGenericProduct($slug)
+    {
+        $data = GetRelatedGenericProduct::execute($slug);
         return $data;
     }
     public function GetAllProductsByCategoryId($slug)

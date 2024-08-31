@@ -33,10 +33,7 @@ Route::prefix('v1')->middleware('auth:api')->group(function () {
         Route::post('import', [CustomerController::class, 'import']);
         Route::post('bulk-actions', [CustomerController::class, 'bulkAction']);
 
-        Route::post('account-info-update', [CustomerController::class, 'AccountInfoUpdate']);
-        Route::post('address-info-update', [CustomerController::class, 'AddressInfoUpdate']);
-        Route::post('update-profile-picture', [CustomerController::class, 'UpdateProfilePicture']);
-        Route::post('change-password', [CustomerController::class, 'ChangePassword']);
+
     });
 
     Route::prefix('suppliers')->group(function () {

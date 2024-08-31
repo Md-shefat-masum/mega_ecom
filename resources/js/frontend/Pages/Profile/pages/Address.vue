@@ -1,60 +1,104 @@
 <template>
     <ProfileLayout :bread_cumb="bread_cumb">
-        <div class="dashboard">
-            <div class="page-title">
+        <div class="dashboard position-relative">
+            <div class="page-title d-flex justify-content-between">
                 <h2>
-                    Edit Address
+                    Address book
                 </h2>
+                <div>
+                    <Link href="address/create" class="btn btn-normal">Add new</Link>
+                </div>
             </div>
-            <div class="box-account box-info">
-                <form action="" method="post" @submit.prevent="addressFormSubmitHandler($event)"
-                    enctype="multipart/form-data" class="form-horizontal">
-                    <input type="text" name="id" :value="user_address_info.id" class="d-none" />
-                    <div class="form-group required">
-                        <label for="address">Address</label>
-                        <input type="text" name="address" id="address" :value="user_address_info.address"
-                            placeholder="Address" class="form-control" />
-                    </div>
-                    <div class="form-group required">
-                        <label for="country_id">Country</label>
-                        <select name="country_id" id="country_id" class="form-control">
-                            <option value=""> --- Please Select --- </option>
-                            <option selected value="216">Bangladesh</option>
-                        </select>
-                    </div>
-                    <div class="form-group required">
-                        <label for="state_division_id">Division</label>
-                        <select name="state_division_id" id="state_division_id" class="form-control"
-                            v-model="state_division_id">
-                            <option value=""> --- Please Select --- </option>
-                            <option v-for="(division, index) in divisions" :key="index" :value="division.id"
-                                :selected="division.id == user_address_info?.state_division_id ? 'selected' : ''">{{
-        division.name }}</option>
-                        </select>
-                    </div>
-                    <div class="form-group required">
-                        <label for="district_id">District</label>
-                        <select name="district_id" id="district_id" class="form-control" v-model="district_id"
-                            :disabled="isSelectDistrictDisabled">
-                            <option value=""> --- Please Select --- </option>
-                            <option v-for="(district, index) in districts" :key="index" :value="district.id"
-                                :selected="false">{{ district.name }}</option>
-                        </select>
-                    </div>
+            <hr>
 
-                    <div class="form-group required">
-                        <label for="station_id">Station</label>
-                        <select name="station_id" id="station_id" class="form-control" v-model="station_id"
-                            :disabled="isSelectStationDisabled">
-                            <option value=""> --- Please Select --- </option>
-                            <option v-for="(station, index) in stations" :key="index" :value="station.id"
-                                :selected="false">{{ station.name }}</option>
-                        </select>
+            <div v-if="user_address_info.length">
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th>Set Default</th>
+                            <th>Street Address</th>
+                            <th>division</th>
+                            <th>district</th>
+                            <th>station</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in user_address_info" :key="item.id">
+                            <td> <i @click="setDefault(item.id)" title="default address"
+                                    :class="item.is_default ? 'text-success fw-bold' : 'text-secondary'"
+                                    class="fa fa-check c-pointer "></i> {{ item.address }}</td>
+                            <td>{{ item.address }}</td>
+                            <td>{{ item.division?.name }}</td>
+                            <td>{{ item.district?.name }}</td>
+                            <td>{{ item.station?.name }}</td>
+                            <td>
+                                <div>
+                                    <button title="show contact person" type="button" class="btn btn-info btn-sm"
+                                        @click="getContactPersonByAddress(item.id)">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                    <Link :href="`address/create?id=${item.id}`"  type="button" title="Edit"
+                                        class="btn btn-info btn-sm mx-1"><i class="fa fa-edit"></i></Link>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+
+            <div v-if="contact_person_modal_show" class="contact-person-modal">
+                <div class="">
+                    <div class="card">
+                        <span @click="contact_person_modal_show = false" class="c-pointer position-absolute"
+                            style="right: 10px;">x</span>
+                        <div class="card-body">
+                            <table class="table table-bordered text-center">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Phone</th>
+                                        <th>Email</th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template v-if="contact_person.length">
+                                        <tr v-for="item in contact_person" :key="item">
+                                            <td>{{ item.name }}</td>
+                                            <td>{{ item.phone_number }}</td>
+                                            <td>{{ item.email }}</td>
+                                        </tr>
+                                    </template>
+                                    <template v-else>
+                                        <tr>
+                                            <td colspan="3">Not found</td>
+
+                                        </tr>
+                                    </template>
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Continue</button>
-                </form>
+                </div>
+            </div>
+
+
+            <div v-if="address_contact_form_show" class="address-contact-form">
+                <span @click="address_contact_form_show = fasle"
+                    class="position-absolute border p-1 m-1 c-pointer text-danger fw-bold"
+                    style="right: 0px;top:0px;z-index: 10;">x</span>
+                <div class="card px-2 py-5">
+
+                    <address-form :user_address="user_address"></address-form>
+                </div>
             </div>
         </div>
+
     </ProfileLayout>
 </template>
 
@@ -62,14 +106,15 @@
 import axios from "axios";
 import ProfileLayout from "../shared/ProfileLayout.vue";
 import { auth_store } from "../../../Store/auth_store.js";
+import AddressForm from '../components/AddressForm.vue';
 
 export default {
-    components: { ProfileLayout },
+    components: { ProfileLayout, AddressForm },
     props: {
         user_address: Object,
     },
     data: () => ({
-        user_address_info: {},
+        user_address_info: [],
         bread_cumb: [
             {
                 title: 'profile',
@@ -82,96 +127,77 @@ export default {
                 active: true,
             },
         ],
+        contact_person_modal_show: false,
+        address_contact_form_show: false,
+        contact_person: [],
 
-        isSelectDistrictDisabled: true,
-        isSelectStationDisabled: true,
 
-        divisions: null,
-        districts: null,
-        stations: null,
-
-        state_division_id: '',
-        district_id: '',
-        station_id: '',
 
 
     }),
     created: async function () {
         const authStore = auth_store();
-        await this.all_division();
         await authStore.check_is_auth();
-        if (authStore.auth_info) {
+        if (authStore.auth_info && authStore.auth_info?.user_delivery_address.length) {
             this.user_address_info = authStore.auth_info?.user_delivery_address
-            this.state_division_id = this.user_address_info?.state_division_id
-            this.district_id = this.user_address_info?.district_id
-            this.station_id = this.user_address_info?.station_id
         }
     },
-    watch: {
-        state_division_id: function (divisionId) {
-            this.get_district_by_state_division_id(divisionId);
-        },
-        district_id: function (districtId) {
-            this.get_station_by_district_id(districtId);
-        }
-    },
+
     methods: {
-        addressFormSubmitHandler: async function (event) {
-            let formData = new FormData(event.target);
-            let response = await window.privateAxios('/customers/address-info-update', 'post', formData);
-            if (response.status === "success") {
-                window.s_alert(response.message);
+        setDefault: async function (id) {
+            var data = await window.s_confirm('Are you want set it default?');
+            if (data) {
+                let response = await window.privateAxios('set-default-address', 'post', { id: id })
+                window.s_alert(response.message)
+                this.user_address_info = this.user_address_info.map(item => ({
+                    ...item,
+                    is_default: item.id === id ? 1 : 0 // Set the selected item as default and reset others
+                }));
             }
         },
-
-        all_division: async function () {
-            let response = await axios.get('/state-divisions', {
-                params: {
-                    sort_by_col: 'id',
-                    sort_type: 'asc',
-                    status: 'active',
-                    fields: ['id', 'name'],
-                    get_all: 1,
-                }
-            })
-            if (response.data.status === 'success') {
-                this.divisions = response.data.data
+        getContactPersonByAddress: async function (id) {
+            let response = await window.privateAxios('get-contact-person-by-address-id/' + id)
+            if (response.status == 'success') {
+                this.contact_person = response.data
+                this.contact_person_modal_show = true
             }
         },
-        get_district_by_state_division_id: async function (state_division_id) {
-            let response = await axios.get(`/get-district-by-division-id/${state_division_id}`, {
-                params: {
-                    sort_by_col: 'id',
-                    sort_type: 'asc',
-                    status: 'active',
-                    fields: ['id', 'name']
-                }
-            })
-            if (response.data.status === 'success') {
-                this.districts = response.data.data
-                this.isSelectDistrictDisabled = false;
+        getSingleAddressInformation: async function (id) {
+            let response = await window.privateAxios('get-single-address/' + id)
+            if (response.status == 'success') {
+                this.contact_person = response.data
+                this.contact_person_modal_show = true
             }
-
-        },
-        get_station_by_district_id: async function (district_id) {
-            let response = await axios.get(`/get-station-by-district-id/${district_id}`, {
-                params: {
-                    sort_by_col: 'id',
-                    sort_type: 'asc',
-                    status: 'active',
-                    fields: ['id', 'name']
-                }
-            })
-            if (response.data.status === 'success') {
-                this.stations = response.data.data
-                this.isSelectStationDisabled = false;
-            }
-
         }
-    },
+    }
+}
 
 
-};
+
+
+
 </script>
 
-<style></style>
+<style>
+.contact-person-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50%;
+    height: auto;
+    transform: translate(-50%, -50%);
+    box-shadow: 0px 0px 5px #717171;
+}
+
+.address-contact-form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: auto;
+    max-height: 500px;
+    overflow-y: auto;
+    transform: translate(-50%, -50%);
+    box-shadow: 0px 0px 5px #717171;
+}
+</style>

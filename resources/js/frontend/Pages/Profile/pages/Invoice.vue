@@ -4,7 +4,7 @@
             <i class="checkmark">✓</i>
         </div>
         <h1>Success</h1>
-        <p>Your payment was successful</p>
+        <p class="fw-bold">Your payment was successful</p>
 
     </div>
 

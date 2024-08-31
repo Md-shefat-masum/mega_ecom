@@ -1,5 +1,5 @@
 <template>
-    <div  style="width: 240px;display:inline-block;margin-right: 30px;">
+    <div  style="width: 220px;display:inline-block;margin-right: 30px;">
         <div class="border my-2" >
             <skeleton :width="`240px`" :height="`250px`"></skeleton>
             <skeleton :width="`240px`" :height="`50px`" cs_class="my-1"></skeleton>
