@@ -262,24 +262,13 @@ import { Link, usePage } from "@inertiajs/vue3";
 import SearchBar from "./Components/SearchBar.vue";
 import { common_store } from "../Store/common_store";
 import { auth_store } from "../Store/auth_store";
-import { mapActions, mapState } from "pinia";
+import { mapActions, mapState, mapWritableState } from "pinia";
 import Skeleton from '../Components/Skeleton.vue';
 export default {
     components: { Link, SearchBar, Skeleton },
     data: () => ({
         order_track_show: false
     }),
-    created: async function () {
-
-        await this.check_is_auth();
-        await this.get_all_website_settings();
-        await this.get_all_website_navbar_menu();
-
-        if (this.is_auth) {
-            this.get_all_cart_data();
-        }
-
-    },
     methods: {
         toggle_nav: function () {
             this.$refs.main_menu.classList.toggle("active");
@@ -304,7 +293,6 @@ export default {
         TrackOrderForm: function () {
             this.track_customer_order()
         }
-
     },
     computed: {
         ...mapState(common_store, {
@@ -316,6 +304,9 @@ export default {
         ...mapState(auth_store, {
             "is_auth": "is_auth",
         }),
+        ...mapWritableState(common_store, [
+            'website_settings_data',
+        ])
     },
 };
 </script>
