@@ -54,8 +54,6 @@ export default {
         Skeleton
     },
 
-
-
     SkeletonSkeletondata: () => ({
         is_loaded: false
     }),
