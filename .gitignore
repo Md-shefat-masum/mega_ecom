@@ -2,7 +2,7 @@
 /node_modules
 /public/build
 /public/hot
-/public/uploads/d_products
+/public/uploads
 /public/storage
 /storage/*.key
 /vendor
@@ -26,10 +26,5 @@ public/backend/assets/css/fontawesome.css
 eteksql.sql
 
 public/uploads/products
-public/uploads/medicines
 public/product_source
-public/build
 public/arogga
-public/medicines
-public/uploads/*
-public/uploads/medicines/*
