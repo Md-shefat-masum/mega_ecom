@@ -71,10 +71,17 @@
                                 </div>
                                 <div class="footer-contant">
                                     <ul class="contact-list">
-                                        <li><i class="fa fa-map-marker"></i>{{ get_setting_value('address') }}
+                                        <li>
+                                            <i class="fa fa-map-marker"></i>
+                                            {{ get_setting_value('address') }}
                                         </li>
-                                        <li><i class="fa fa-phone"></i>call us: <span>{{
-                                            get_setting_value('phone_numbers') }}</span></li>
+                                        <li>
+                                            <i class="fa fa-phone"></i>
+                                            call us:
+                                            <span>
+                                                {{ get_setting_value('phone_numbers') }}
+                                            </span>
+                                        </li>
                                         <li><i class="fa fa-envelope-o"></i>email us: {{ get_setting_value('emails') }}
                                         </li>
                                         <li><i class="fa fa-fax"></i>fax <span>{{ get_setting_value('fax') }}</span>
