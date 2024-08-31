@@ -122,17 +122,17 @@ export const use_home_page_store = defineStore("use_home_page_store", {
 
         get_all_category_groups: async function () {
             this.preloader.category_group = true;
-            try {
-                if (this.all_category_groups.length > 0) {
-                    return
-                }
-                let response = await axios.get('/get-all-category-groups?get_all=1')
-                if (response.data.status === "success") {
-                    this.all_category_groups = response.data.data
-                }
-            } finally {
-                this.preloader.category_group = false;
-            }
+            let response = await axios.get('/get-all-category-groups?get_all=1')
+            this.all_category_groups = response.data
+            // try {
+            //     if (this.all_category_groups.length > 0) {
+            //         return
+            //     }
+            //     if (response.data.status === "success") {
+            //     }
+            // } finally {
+            //     this.preloader.category_group = false;
+            // }
         },
 
         get_all_featured_products: async function () {
