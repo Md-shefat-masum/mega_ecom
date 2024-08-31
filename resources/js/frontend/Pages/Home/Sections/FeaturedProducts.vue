@@ -23,7 +23,7 @@
 
     <section class="my-5 py-5">
         <div class="custom-container">
-            <template v-if="preloader">
+            <template v-if="!feature_products.length">
                 <product-card-skeleton v-for="i in 30" :key="i"></product-card-skeleton>
             </template>
             <template v-else>
