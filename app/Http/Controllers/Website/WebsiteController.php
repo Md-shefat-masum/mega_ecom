@@ -12,12 +12,19 @@ class WebsiteController extends Controller
 {
     public function home()
     {
+        $hero_slider = \App\Modules\WebsiteApi\SliderAndBanner\Actions\HeroSlider::execute();
+        $hero_side_slider = \App\Modules\WebsiteApi\SliderAndBanner\Actions\HeroSliderSideBanner::execute();
+        $left_nave_category = \App\Modules\WebsiteApi\Category\Actions\GetAllNavCategory::execute();
+
         return Inertia::render('Home/Index', [
             'event' => [
                 'title' => 'ETEK Enterprise - Leading Electronics and Gadgets',
                 'image' => 'https://etek.com.bd/cache/frontend/images/etek_logo.png',
-                'description' => 'Best eCommerce in bangladesh'
-            ]
+                'description' => 'Best eCommerce in bangladesh',
+            ],
+            'hero_slider' => $hero_slider->items(),
+            'hero_side_slider' => $hero_side_slider,
+            'left_nave_category' => $left_nave_category,
         ]);
     }
 
