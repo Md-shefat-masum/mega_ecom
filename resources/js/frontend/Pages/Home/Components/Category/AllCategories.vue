@@ -55,8 +55,8 @@ import { router } from '@inertiajs/vue3'
 import { use_home_page_store } from "../../Store/home_page_store";
 import { mapState } from 'pinia';
 import axios from 'axios';
-export default {
 
+export default {
     data: () => ({
         selected: {},
         sub_categories: [],
@@ -66,8 +66,10 @@ export default {
             this.get_sub_categories();
         }
     },
+    created: function(){
+        console.log('all ctegories');
+    },
     methods: {
-
         load_image: window.load_image,
         close_category: function () {
             document.querySelector('.modal_category_all_page').classList.toggle('active');
@@ -80,13 +82,11 @@ export default {
             router.visit(`/category/${slug}`);
         },
         get_sub_categories: function () {
-
             axios.get(`get-all-sub-category-by-category-id/${this.selected.slug}?get_all=1`)
                 .then(res => {
                     this.sub_categories = res.data?.data;
                 });
         }
-
     },
     computed: {
         ...mapState(use_home_page_store, {
