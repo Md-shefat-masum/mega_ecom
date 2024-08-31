@@ -20,29 +20,27 @@ class GetAllNavCategory
 
             $data = self::$CategoryModel::query()->where('parent_id', 0)->where('is_nav', 1);
 
-            if (request()->has('get_all') && (int)request()->input('get_all') === 1) {
-                $data = $data
-                    ->with($with)
-                    ->select($fields)
-                    ->where($condition)
-                    ->where('status', $status)
-                    ->limit(12)
-                    ->orderBy($orderByColumn, $orderByType)
-                    ->get();
-            } else {
-                $data = $data
-                    ->with($with)
-                    ->select($fields)
-                    ->where($condition)
-                    ->where('status', $status)
-                    ->orderBy($orderByColumn, $orderByType)
-                    ->paginate($pageLimit);
-            }
+            $data = $data
+                ->with($with)
+                ->select($fields)
+                ->where($condition)
+                ->where('status', $status)
+                ->limit(12)
+                ->orderBy($orderByColumn, $orderByType)
+                ->get();
 
-            $response = entityResponse($data);
-            $response->header('Cache-Control', 'public, max-age=300')
-                ->header('Expires', now()->addMinutes(25)->toRfc7231String());
-            return $response;
+            // if (request()->has('get_all') && (int)request()->input('get_all') === 1) {
+            // } else {
+            //     $data = $data
+            //         ->with($with)
+            //         ->select($fields)
+            //         ->where($condition)
+            //         ->where('status', $status)
+            //         ->orderBy($orderByColumn, $orderByType)
+            //         ->paginate($pageLimit);
+            // }
+
+            return $data;
         } catch (\Exception $e) {
             return messageResponse($e->getMessage(), [], 500, 'server_error');
         }
