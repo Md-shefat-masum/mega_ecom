@@ -9,6 +9,7 @@ use App\Modules\WebsiteApi\Category\Actions\GetAllCategoryGroup;
 use App\Modules\WebsiteApi\Category\Actions\GetAllCategoryByCategoryGroupId;
 
 use App\Modules\WebsiteApi\Category\Actions\GetAllCategory;
+use App\Modules\WebsiteApi\Category\Actions\GetAllCategoryParent;
 use App\Modules\WebsiteApi\Category\Actions\GetSingelCategory;
 use App\Modules\WebsiteApi\Category\Actions\GetAllNavCategory;
 use App\Modules\WebsiteApi\Category\Actions\GetAllFeaturedCategory;
@@ -35,7 +36,18 @@ class Controller extends ControllersController
     public function GetAllCategory()
     {
         $data = GetAllCategory::execute();
-        return $data;
+        $response = entityResponse($data);
+        $response->header('Cache-Control', 'public, max-age=300')
+            ->header('Expires', now()->addMinutes(60)->toRfc7231String());
+        return $response;
+    }
+    public function GetAllCategoryParent()
+    {
+        $data = GetAllCategoryParent::execute();
+        $response = entityResponse($data);
+        $response->header('Cache-Control', 'public, max-age=300')
+            ->header('Expires', now()->addMinutes(60)->toRfc7231String());
+        return $response;
     }
     public function GetSingelCategory($slug)
     {
@@ -50,7 +62,10 @@ class Controller extends ControllersController
     public function GetAllNavCategory()
     {
         $data = GetAllNavCategory::execute();
-        return $data;
+        $response = entityResponse($data);
+        $response->header('Cache-Control', 'public, max-age=300')
+            ->header('Expires', now()->addMinutes(25)->toRfc7231String());
+        return $response;
     }
     public function GetAllSubCategoryByCategoryId($slug)
     {
