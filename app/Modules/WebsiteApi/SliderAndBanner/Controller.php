@@ -14,14 +14,17 @@ class Controller extends ControllersController
     public function HeroSlider()
     {
         $data = HeroSlider::execute();
-        return $data;
+        $response = entityResponse($data);
+        $response->header('Cache-Control', 'public, max-age=3000')
+            ->header('Expires', now()->addMinutes(60)->toRfc7231String());
+        return $response;
     }
     public function HeroSliderSideBanner()
     {
         $data = HeroSliderSideBanner::execute();
-        return $data;
+        $response = entityResponse($data);
+        $response->header('Cache-Control', 'public, max-age=60')
+            ->header('Expires', now()->addMinutes(60)->toRfc7231String());
+        return $response;
     }
-
-
-
 }
