@@ -1,23 +1,24 @@
 <template>
     <Layout>
-        <Head>
+        <!-- <Head>
             <title>ETEK Enterprise - Leading Electronics and Gadgets</title>
-        </Head>
+        </Head> -->
+
         <HeroSlider />
 
-        <!-- <BreakingNews /> -->
+        <BreakingNews />
 
-        <!-- <TopCategories /> -->
+        <TopCategories />
 
-        <!-- <OurServiceType /> -->
+        <OurServiceType />
 
-        <!-- <FeaturedProducts /> -->
+        <FeaturedProducts />
 
-        <!-- <Brands /> -->
+        <Brands />
 
-        <!-- <JoinNewsLetter /> -->
+        <JoinNewsLetter />
 
-        <!-- <BottomDescription /> -->
+        <BottomDescription />
     </Layout>
 
 </template>
@@ -32,10 +33,17 @@ import BottomDescription from "./Sections/BottomDescription.vue";
 import Brands from "./Sections/Brands.vue";
 import JoinNewsLetter from "./Sections/JoinNewsLetter.vue";
 
-import { mapActions, mapState } from 'pinia';
+import { mapActions, mapState, mapWritableState } from 'pinia';
 import {use_home_page_store} from "./Store/home_page_store";
+import {common_store} from "../../Store/common_store";
 
 export default {
+    props: [
+        'hero_slider',
+        'hero_side_slider',
+        'settings',
+        'left_nave_category',
+    ],
     components: {
         Layout,
         HeroSlider,
@@ -49,34 +57,40 @@ export default {
     },
 
     created: async function () {
-        await this.get_side_nav_categories()
-        await this.get_parent_categories()
-        this.get_all_home_hero_sliders();
-        this.get_home_slider_side_banner();
-        let that = this;
+        
+        this.side_nav_categories = this.left_nave_category;
+        this.home_hero_sliders = this.hero_slider;
+        this.home_hero_slider_side_banner = this.hero_side_slider;
 
-        setTimeout(async function() {
-            await that.get_all_top_products_offer();
-            await that.get_all_category_groups();
-            await that.get_all_featured_products();
-            await that.get_all_brands();
-        }, 500);
+        let that = this;
+        that.get_all_top_products_offer();
+        that.get_all_category_groups();
+        that.get_all_brands();
+        that.get_all_featured_products();
     },
 
     methods: {
         ...mapActions(use_home_page_store,{
             get_all_home_hero_sliders: "get_all_home_hero_sliders",
             get_home_slider_side_banner: "get_all_home_slider_side_banners",
-            get_side_nav_categories: "get_side_nav_categories",
-            get_parent_categories: "get_parent_categories",
+            // get_side_nav_categories: "get_side_nav_categories",
+            // get_parent_categories: "get_parent_categories",
             get_all_top_products_offer: "get_all_top_products_offer",
             get_all_category_groups: "get_all_category_groups",
             get_all_featured_products: "get_all_featured_products",
             get_all_brands: "get_all_brands",
         })
     },
-
-
+    computed: {
+        ...mapWritableState(use_home_page_store, [
+            'home_hero_sliders',
+            'home_hero_slider_side_banner',
+            'side_nav_categories'
+        ]),
+        ...mapWritableState(common_store, [
+            'website_settings_data',
+        ])
+    }
 };
 </script>
 <style lang="scss" scoped></style>
