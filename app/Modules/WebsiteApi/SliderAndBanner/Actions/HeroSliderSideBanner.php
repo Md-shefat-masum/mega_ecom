@@ -29,11 +29,7 @@ class HeroSliderSideBanner
                 ->orderBy($orderByColumn, $orderByType)
                 ->first();
 
-            $response = entityResponse($data);
-            $response->header('Cache-Control', 'public, max-age=60')
-                ->header('Expires', now()->addMinutes(60)->toRfc7231String());
-
-            return $response;
+            return $data;
         } catch (\Exception $e) {
             return messageResponse($e->getMessage(), [], 500, 'server_error');
         }
