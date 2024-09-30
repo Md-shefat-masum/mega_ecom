@@ -44,23 +44,31 @@
     <meta name="twitter:image" content="https://etek.com.bd/frontend/images/etek_logo.png">
     <meta name="twitter:card" content="summary_large_image">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="/frontend/assets/css/website.css">
     <link rel="stylesheet" href="/frontend/assets/css/lightbox.css">
     <link rel="stylesheet" href="/frontend/assets/css/custom.css">
+    <link rel="stylesheet" href="/frontend/assets/css/appstyle.css">
 
     <script>
         // if(window.innerWidth < 991){
         //     location.href = "https://m.etek.com.bd";
         // }
-        window.load_image = function (url, cache = true) {
+        window.load_image = function (url, cache = true, resize=false, height=400, width=400) {
 
             try {
                 new URL(url);
                 return url;
             } catch (error) {
-                let full_url = `{{env('IMAGE_HOST')}}` + '/' + url;
+                let full_url = `{{env('IMAGE_HOST')}}/${url}`;
                 if(cache){
-                    full_url = `{{env('IMAGE_HOST')}}` + '/' + url;
+                    full_url = `{{env('IMAGE_HOST')}}/cache/${url}`;
+                }
+                if(resize){
+                    full_url = `{{env('IMAGE_HOST')}}/resize/cache/${url}?width=${width}&height=${height}`;
                 }
                 full_url.replaceAll('//', '/');
                 return full_url;
@@ -76,8 +84,6 @@
     <script defer src="/frontend/assets/js/script.js"></script>
     <script defer src="/frontend/assets/js/modal.js"></script>
     <script defer src="/plugins/sweet_alert.js"></script>
-
-    <script src="http://localhost:8098"></script>
 
     @vite(['resources/js/frontend/app.js'])
 </head>

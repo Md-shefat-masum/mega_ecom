@@ -21,9 +21,9 @@ export default {
         console.log('layout');
 
         // this.check_is_auth();
-        // if (this.is_auth) {
-        //     this.get_all_cart_data();
-        // }
+        if (this.is_auth) {
+            // this.get_all_cart_data();
+        }
         // this.get_setting_value();
     },
     methods: {

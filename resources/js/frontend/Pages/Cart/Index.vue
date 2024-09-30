@@ -40,20 +40,22 @@
                                         <td><a href="javascript:void(0)" @click="remove_cart_item(cart.id)"
                                                 class="icon"><i class="ti-close"></i></a></td>
                                         <td class="d-flex justify-content-center">
-                                            <div class="bg-dummy-image" style="height: 100px;width: 100px;background-color: white;">
-                                                <Link  :href="`/product-details/${cart?.product?.slug}`">
-                                                <img class="w-100 h-100"  :src="load_image(`${cart.product.product_image?.url}`)" alt="cart">
+                                            <div class="bg-dummy-image"
+                                                style="height: 100px;width: 100px;background-color: white;">
+                                                <Link :href="`/product-details/${cart?.product?.slug}`">
+                                                <img class="w-100 h-100"
+                                                    :src="load_image(`${cart.product.product_image?.url}`)" alt="cart">
                                                 </Link>
                                             </div>
                                         </td>
                                         <td style="width: 100px">
                                             <Link :href="`/product-details/${cart?.product?.slug}`">{{
-                                    cart.product.title }}
+                                                cart.product.title }}
                                             </Link>
 
                                         </td>
-                                        <td >
-                                            <h2>{{ get_price(cart.product).new_price }} ৳  </h2>
+                                        <td>
+                                            <h2>{{ get_price(cart.product).new_price }} ৳ </h2>
                                         </td>
                                         <td>
                                             <template v-if="cart.product.type == 'medicine'">
@@ -65,9 +67,11 @@
                                                             v-model="cart.quantity">
                                                             <option
                                                                 v-for="data in cart.product?.medicine_product_verient?.pv_b2c_max_qty"
-                                                                :key="data" :value="data">{{ data }} x {{
-                                    cart.product?.medicine_product_verient?.pu_b2c_sales_unit_label
-                                }}</option>
+                                                                :key="data" :value="data">
+                                                                {{ data }} x {{
+                                                                    cart.product?.medicine_product_verient?.pu_b2c_sales_unit_label
+                                                                }}
+                                                            </option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -78,12 +82,12 @@
                                                         <input type="number" name="quantity" min="1"
                                                             class="form-control input-number" v-model="cart.quantity"
                                                             @keyup="
-                                    cart_quantity_update(
-                                        cart.id,
-                                        null,
-                                        $event.target.value
-                                    )
-                                    ">
+                                                                cart_quantity_update(
+                                                                    cart.id,
+                                                                    null,
+                                                                    $event.target.value
+                                                                )
+                                                                ">
                                                     </div>
                                                 </div>
                                             </template>
@@ -91,8 +95,9 @@
                                         </td>
 
                                         <td>
-                                            <h2 class="td-color">{{ cart.quantity * get_price(cart.product).new_price
-                                                }}  ৳</h2>
+                                            <h2 class="td-color">
+                                                {{ cart.quantity * get_price(cart.product).new_price }} ৳
+                                            </h2>
                                         </td>
                                     </tr>
                                 </template>

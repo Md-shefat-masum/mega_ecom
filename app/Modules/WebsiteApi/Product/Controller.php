@@ -66,7 +66,11 @@ class Controller extends ControllersController
     public function GetInitialProductDetails($slug)
     {
         $data = GetInitialProductDetails::execute($slug);
-        return $data;
+        // if (!$data) {
+        //     return messageResponse('Data not found...', [], 404, 'error');
+        // }
+        $response = entityResponse($data);
+        return $response;
     }
     public function GetAllProductOffers()
     {

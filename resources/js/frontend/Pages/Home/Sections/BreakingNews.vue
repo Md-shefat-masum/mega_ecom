@@ -1,11 +1,9 @@
 <template>
-    <section class="   mt-5">
-        <div class="custom-container">
-            <div class="marquee_body py-3" @mouseover="is_paused = true" @mouseleave="is_paused = false">
-                <marquee-text :paused="is_paused" :duration="60">
-                    {{ get_setting_value('breaking_news') }}
-                </marquee-text>
-            </div>
+    <section class="mt-2">
+        <div class="marquee_body py-lg-2 bn" @mouseover="is_paused = true" @mouseleave="is_paused = false">
+            <marquee-text :paused="is_paused" :duration="60">
+                {{ get_setting_value('breaking_news') }}
+            </marquee-text>
         </div>
     </section>
 </template>

@@ -78,15 +78,15 @@ export default {
         OtpVerifyFormHandler: async function (event) {
             let formData = new FormData(event.target);
             formData.append("phone_number", this.phone_number);
-            let response = await axios.post('/verify-user-otp', formData)
+            // let response = await axios.post('/verify-user-otp', formData)
+            let url = location.origin + '/verify-user-otp';
+            let response = await axios.post(url, formData)
             if (response.data?.status === "success") {
-                console.log(response.data);
-
                 localStorage.setItem("token", response.data?.data?.access_token);
                 window.s_alert(response.data?.message);
                 setTimeout(() => {
                     window.s_alert("You are login successfully");
-                    window.location.reload();
+                    window.location.href = "/profile";
                 }, 1000)
 
             }

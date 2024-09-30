@@ -14,7 +14,7 @@
                     </a>
                 </div>
                 <div class="product-icon" v-if="product.is_available">
-                    <button @click="is_auth ? add_to_cart(product.id) : openAccount()" title="add to cart"
+                    <button @click="is_auth ? add_to_cart(product.id, product) : openAccount()" title="add to cart"
                         class="tooltip-left" data-tippy-content="Add to cart" tabindex="0">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -161,7 +161,7 @@ export default {
 
     },
 
-    
+
 
 
 };

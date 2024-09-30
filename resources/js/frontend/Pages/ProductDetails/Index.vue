@@ -7,17 +7,17 @@
             </title>
         </Head>
 
-        <section v-if="preloader">
+        <section v-if="!Object.keys(product_initial_data).length">
             <div class="custom-container">
                 <img src="/frontend/images/product_skeleton.png" class="w-100" alt="product-loading">
             </div>
         </section>
         <section v-else>
 
-            <template v-if="product_details.type == 'medicine'">
+            <template v-if="product_initial_data.type == 'medicine'">
                 <medicine-product></medicine-product>
             </template>
-            <template v-if="product_details.type == 'product'">
+            <template v-if="product_initial_data.type == 'product'">
                 <general-product></general-product>
             </template>
 
@@ -42,6 +42,7 @@ export default {
     components: { MedicineProduct, GeneralProduct, BreadCumb, Layout, TopProducts, },
     props: {
         slug: String,
+        product: Object,
     },
     data: () => ({
         preloader: true,
@@ -53,15 +54,16 @@ export default {
             },
         ],
     }),
+    mounted: function(){
+        this.product_initial_data = this.product;
+    },
     created: async function () {
         // console.log(this.slug);
-        await this.set_slug(this.slug);
+        this.set_slug(this.slug);
 
-        this.product_initial_data = {};
+        // await this.get_single_product_initial_data(this.slug);
 
-        await this.get_single_product_initial_data(this.slug);
-
-        await this.get_single_product_details(this.slug);
+        this.get_single_product_details(this.slug);
 
 
         let bread_cumb = [];
@@ -82,10 +84,9 @@ export default {
 
         this.bread_cumb = [...this.bread_cumb, ...bread_cumb];
 
-        await this.get_all_question_and_answers(this.slug);
+        this.get_all_question_and_answers(this.slug);
 
-
-        await this.get_top_products();
+        this.get_top_products();
 
         this.preloader = false;
 

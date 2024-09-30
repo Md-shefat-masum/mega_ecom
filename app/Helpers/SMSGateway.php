@@ -43,6 +43,6 @@ function SendOTPViaSMS($otp, $number)
             }
         }
     } catch (\Exception $e) {
-        dd($e->getMessage());
+        // dd($e->getMessage());
     }
 }

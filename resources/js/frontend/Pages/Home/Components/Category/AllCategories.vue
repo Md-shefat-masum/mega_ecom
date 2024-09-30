@@ -8,6 +8,9 @@
         </div>
 
         <div class="modal_category_left_side_show modal_category_all_page modal_category">
+            <div class="category_modal_back_button" @click="close_category">
+                <i class="fa fa-angle-left"></i>
+            </div>
             <div class="modal_category_all_page_content">
                 <div class="parent_categories">
                     <ul>
@@ -17,7 +20,7 @@
                             <div class="cat_item"
                                 @click="selected = category"
                                 :class="{active: selected.id == category.id}">
-                                <img :src="load_image(`${category.image}`)" :alt="category.title">
+                                <img :src="load_image(`${category.image}`, 1, 1, 100, 100)">
                                 <span class="link_title">
                                     {{ category.title }}
                                 </span>
@@ -31,7 +34,7 @@
                     </li>
                     <li v-if="sub_categories.length" v-for="category in sub_categories" :key="category.id">
                         <div @click="visit_category(category.slug)">
-                            <img :src="load_image(`${category.image}`)" :alt="category.title">
+                            <img :src="load_image(`${category.image}`,1, 1, 100, 100)">
                             <span class="link_title">
                                 {{ category.title }}
                             </span>
@@ -39,7 +42,7 @@
                     </li>
                     <li v-else v-for="category in nav_categories" :key="category.id">
                         <div @click="visit_category(category.slug)">
-                            <img :src="load_image(`${category.image}`)" :alt="category.title">
+                            <img :src="load_image(`${category.image}`, 1, 1, 100, 100)" :alt="category.title">
                             <span class="link_title">
                                 {{ category.title }}
                             </span>
@@ -66,7 +69,7 @@ export default {
             this.get_sub_categories();
         }
     },
-    created: function(){
+    created: function () {
         console.log('all ctegories');
     },
     methods: {

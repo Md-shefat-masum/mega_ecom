@@ -26,7 +26,7 @@
                     {{ order_info.delivery_address_details?.address }}.<br />
                     {{ order_info.delivery_address_details?.station_name }} ,
                     {{ order_info.delivery_address_details?.district_name }}, {{
-                                    order_info.delivery_address_details?.division_name }} <br><br>
+                        order_info.delivery_address_details?.division_name }} <br><br>
                 </td>
 
                 <td>
@@ -69,7 +69,11 @@
     <div class="text-center">
         <button id="printBtn" @click="printInvoice"
             class="btn btn-success mt-3 fw-bold text-white  py-2 px-5 my-5">Print
-            Invoice</button>
+            Invoice
+        </button>
+        <a href="/" class="btn btn-info mt-3 fw-bold text-white ms-2 ml-2 py-2 px-5 my-5">
+            Back To Shopping
+        </a>
     </div>
 </template>
 

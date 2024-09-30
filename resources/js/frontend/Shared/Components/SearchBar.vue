@@ -219,13 +219,5 @@ export default {
 </script>
 
 <style>
-.left {
-    background-image: url('/dummy.png');
-    height: 40px;
-    width: 80px;
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-color: white;
 
-}
 </style>

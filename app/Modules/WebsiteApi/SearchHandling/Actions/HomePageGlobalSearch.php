@@ -33,11 +33,27 @@ class HomePageGlobalSearch
                     "type"
                 ])
                 ->where("status", "active")
-                ->paginate(24);
+                ->paginate(request()->paginate ? request()->paginate : 12);
 
             $product->getCollection()->map(function ($item) {
                 if ($item->type == "medicine") {
-                    $item->load(['medicine_product', 'medicine_product_verient']);
+                    $item->medicine_product_verient = $item->medicine_product_verient()->select(
+                        [
+                            "product_id",
+                            "id",
+
+                            "pv_b2c_discount_percent",
+                            "pv_b2c_price",
+                            "pv_b2c_mrp",
+
+                            "pv_b2b_discount_percent",
+                            "pv_b2b_price",
+                            "pv_b2b_mrp",
+                        ]
+                    )->first();
+                    $item->load([
+                        'medicine_product:id,product_id,p_generic_name,p_brand',
+                    ]);
                 }
             });
 
@@ -47,7 +63,8 @@ class HomePageGlobalSearch
                 $q->where('title', $searchKey);
                 $q->orWhere('title', 'like', '%' . $searchKey . '%');
                 $q->orWhere('search_keywords', 'like', '%' . $searchKey . '%');
-            })->limit(10)
+            })
+                ->limit(10)
                 ->where("status", "active")
                 ->paginate(10, ['title', 'slug', 'image']);
 
@@ -56,7 +73,8 @@ class HomePageGlobalSearch
             $brand = self::$productBrandModel::where(function ($q) use ($searchKey) {
                 $q->where('title', $searchKey);
                 $q->orWhere('title', 'like', '%' . $searchKey . '%');
-            })->limit(10)
+            })
+                ->limit(10)
                 ->where("status", "active")
                 ->paginate(10, ['title', 'slug', 'image']);
 

@@ -6,7 +6,7 @@ class All
 {
     static $model = \App\Modules\WebsiteApi\Cart\Models\Model::class;
 
-    public static function execute()
+    public static function execute($all = false)
     {
         try {
 
@@ -28,7 +28,7 @@ class All
                 });
             }
 
-            if (request()->has('get_all') && (int)request()->input('get_all') === 1) {
+            if ( $all || (request()->has('get_all') && (int)request()->input('get_all') === 1) ) {
                 $data = $data
                     ->with($with)
                     ->where($condition)
@@ -37,9 +37,9 @@ class All
                     ->orderBy($orderByColumn, $orderByType)
                     ->get()
                     ->map(function ($item) {
-                        if ($item->product->type == 'medicine') {
-                            $item->product->load(['medicine_product', 'medicine_product_verient']);
-                        }
+                        // if ($item->product->type == 'medicine') {
+                        //     $item->product->load(['medicine_product', 'medicine_product_verient']);
+                        // }
                         return $item;
                     });
             } else {
@@ -50,7 +50,7 @@ class All
                     ->orderBy($orderByColumn, $orderByType)
                     ->paginate($pageLimit);
             }
-            return entityResponse($data);
+            return $data;
         } catch (\Exception $e) {
             return messageResponse($e->getMessage(), [], 500, 'server_error');
         }

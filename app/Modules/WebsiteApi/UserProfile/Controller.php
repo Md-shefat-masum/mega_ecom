@@ -10,11 +10,13 @@ use App\Modules\WebsiteApi\UserProfile\Actions\ChangePassword;
 use App\Modules\WebsiteApi\UserProfile\Actions\SetDefaultAddress;
 use App\Modules\WebsiteApi\UserProfile\Actions\GetContactPersonByAddressId;
 use App\Modules\WebsiteApi\UserProfile\Actions\GetSingleAddress;
+use App\Modules\WebsiteApi\UserProfile\Actions\AccountInfoUpdate;
 
 use App\Modules\WebsiteApi\UserProfile\Validations\AddressValidation;
 use App\Modules\WebsiteApi\UserProfile\Validations\PasswordValidation;
 
 use App\Http\Controllers\Controller as ControllersController;
+use Illuminate\Support\Facades\Request;
 
 class Controller extends ControllersController
 {
@@ -58,6 +60,11 @@ class Controller extends ControllersController
     public function GetSingleAddress($id)
     {
         $data = GetSingleAddress::execute($id);
+        return $data;
+    }
+    public function AccountInfoUpdate(Request $request)
+    {
+        $data = AccountInfoUpdate::execute($request);
         return $data;
     }
 

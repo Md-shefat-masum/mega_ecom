@@ -54,7 +54,8 @@
                     </span>
                     <span class="p-core-info-list-sub-title region-name" v-else>Bangladesh</span>
                 </div>
-                <div class="short-description" v-html="product.short_description">
+
+                <div class="short-description" v-html="get_short_description(product.short_description)">
 
                 </div>
                 <!-- <color-varient></color-varient> -->
@@ -156,6 +157,18 @@ export default {
                 }
             }
         },
+
+        get_short_description: function(description){
+            try{
+                let data = `<ul>`;
+                data += JSON.parse(description).map(i=>`<li>${i}</li>`).join('');
+                data += "</ul";
+                return data;
+            }
+            catch(e){
+                return description;
+            }
+        }
 
     },
 }

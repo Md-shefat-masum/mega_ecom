@@ -4,7 +4,7 @@
             <div class="product-imgbox">
                 <div class="product-front">
                     <Link :href="`/product-details/${product.slug}`">
-                    <img :src="load_image(`${product.product_image?.url}`)
+                    <img :src="load_image(`${product.product_image?.url}`,true,true)
                         " class="img-fluid" />
                     </Link>
                     <a v-if="product.is_available" @click="is_auth ? buyNow(product.id) : openAccount()"
@@ -14,7 +14,7 @@
                     </a>
                 </div>
                 <div class="product-icon" v-if="product.is_available">
-                    <button @click="is_auth ? add_to_cart(product.id) : openAccount()" title="add to cart"
+                    <button @click="is_auth ? add_to_cart(product.id, product) : openAccount()" title="add to cart"
                         class="tooltip-left" data-tippy-content="Add to cart" tabindex="0">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -159,13 +159,3 @@ export default {
 
 };
 </script>
-
-<style>
-.product-front {
-    background-image: url('/dummy.png');
-    height: 140px;
-    width: 100%;
-    background-size: contain;
-
-}
-</style>

@@ -13,7 +13,7 @@
                     <div class="multiple-form-group">
                         <div class="form-group required">
                             <label for="name">Name </label>
-                            <input type="text" name="name" id="name" placeholder="Name" :value="user_info.name"
+                            <input type="text" required name="name" id="name" placeholder="Name" :value="user_info.name"
                                 class="form-control">
                         </div>
                         <div class="form-group required">
@@ -29,7 +29,7 @@
                     </div>
                     <div class="form-group required">
                         <label for="phone_number">Phone Number</label>
-                        <input type="tel" name="phone_number" :value="user_info.phone_number" placeholder="Phone Number"
+                        <input type="tel" readonly name="phone_number" :value="user_info.phone_number" placeholder="Phone Number"
                             id="phone_number" class="form-control">
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>

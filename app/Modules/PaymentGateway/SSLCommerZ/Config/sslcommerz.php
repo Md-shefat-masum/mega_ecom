@@ -15,7 +15,7 @@ return [
         'refund_status' => "/validator/api/merchantTransIDvalidationAPI.php",
     ],
     'apiDomain' => env('SSLCZ_TESTMODE') ? "https://sandbox.sslcommerz.com" : "https://securepay.sslcommerz.com",
-    'connect_from_localhost' => env("IS_LOCALHOST", false), // For Sandbox, use "true", For Live, use "false"
+    'connect_from_localhost' => env("IS_LOCALHOST", true), // For Sandbox, use "true", For Live, use "false"
     'success_url' => '/success',
     'failed_url' => '/fail',
     'cancel_url' => '/cancel',

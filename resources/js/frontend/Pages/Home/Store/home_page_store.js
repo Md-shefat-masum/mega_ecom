@@ -140,7 +140,7 @@ export const use_home_page_store = defineStore("use_home_page_store", {
                 return
             }
             const fieldsQuery = this.fields.map((field, index) => `fields[${index}]=${field}`).join('&');
-            let res = await axios.get("/get-all-featured-products?get_all=1&limit=24&" + fieldsQuery);
+            let res = await axios.get("/get-all-featured-products?get_all=1&limit=40&" + fieldsQuery);
             if (res.data?.status === "success") {
                 this.feature_products = res.data?.data;
             }

@@ -23,43 +23,46 @@ class GetRelatedGenericProduct
             $condition = [];
 
             $data = self::$ProductModel::query()->with('medicine_product')->where('slug', $slug)->first();
-            $geniric = DB::table('product_medicine_generics')
-                ->where('title', $data->medicine_product->p_generic_name)
-                ->first();
-            $related_brand_product = [];
-            if ($geniric) {
 
-                $related_brand_product = MedicineProductModel::where('p_generic_id', $geniric->id)
-                    ->select([
-                        'product_id',
-                        'p_name',
-                        'p_brand',
-                        'p_manufacturer',
-                        'p_generic_id',
-                    ])
-                    ->with([
-                        'varient' => function ($q) {
-                            $q->select([
-                                'product_id',
-                                'pv_b2c_price',
-                                'pv_b2b_price'
-                            ]);
-                        },
-                        'product' => function ($q) {
-                            $q->select([
-                                'id',
-                                'title',
-                                'type',
-                                'slug',
-                            ])
-                                ->with(['product_image:id,product_id,url']);
-                        }
-                    ])
-                    ->get();
+            if ($data && $data->medicine_product) {
+                $geniric = DB::table('product_medicine_generics')
+                    ->where('title', $data->medicine_product->p_generic_name)
+                    ->first();
+
+                $related_brand_product = [];
+                if ($geniric) {
+
+                    $related_brand_product = MedicineProductModel::where('p_generic_id', $geniric->id)
+                        ->select([
+                            'product_id',
+                            'p_name',
+                            'p_brand',
+                            'p_manufacturer',
+                            'p_generic_id',
+                        ])
+                        ->with([
+                            'varient' => function ($q) {
+                                $q->select([
+                                    'product_id',
+                                    'pv_b2c_price',
+                                    'pv_b2b_price'
+                                ]);
+                            },
+                            'product' => function ($q) {
+                                $q->select([
+                                    'id',
+                                    'title',
+                                    'type',
+                                    'slug',
+                                ])
+                                    ->with(['product_image:id,product_id,url']);
+                            }
+                        ])
+                        ->get();
+                }
+                return entityResponse($related_brand_product);
             }
-
-
-            return entityResponse($related_brand_product);
+            return entityResponse([]);
         } catch (\Exception $e) {
             return messageResponse($e->getMessage(), [], 500, 'server_error');
         }

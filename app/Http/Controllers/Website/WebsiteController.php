@@ -105,8 +105,11 @@ class WebsiteController extends Controller
     public function products_details($slug)
     {
         // $product = ProductModel::where('slug', $slug)->first();
+        $initial_data = \App\Modules\WebsiteApi\Product\Actions\GetInitialProductDetails::class;
+        $product = $initial_data::execute($slug);
         return Inertia::render('ProductDetails/Index', [
             'slug' => $slug,
+            'product' => $product,
             // 'product_details' => $product,
             'event' => [
                 'title' => 'ETEK - Product Details',

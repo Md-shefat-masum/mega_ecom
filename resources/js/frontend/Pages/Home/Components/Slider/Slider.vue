@@ -1,19 +1,18 @@
 <template>
 
     <div class="theme-slider">
-        <carousel :items-to-show="1">
+        <carousel :items-to-show="1" :transition="2000" :pauseAutoplayOnHover="true" :wrapAround="true" :autoplay="3000">
             <slide v-for="slider in home_hero_sliders" :key="slider.id">
                 <div v-if="slider.image">
-                    <div class="slider-banner" style="min-height: 400px;background-image: url('/frontend/assets/images/banners/12.png');background-size:cover ;">
-                        <img  :src="`${check_image_url(slider.image, true)}`" alt="top gadgets in bd"
-                            class="w-100" />
+                    <div class="slider-banner">
+                        <img :src="`${check_image_url(slider.image, true)}`" alt="top gadgets in bd" class="w-100" />
                     </div>
                 </div>
             </slide>
-            <!-- <template #addons>
-                <navigation />
+            <template #addons>
+                <!-- <navigation /> -->
                 <pagination />
-            </template> -->
+            </template>
         </carousel>
 
         <!-- <div>

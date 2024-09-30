@@ -6,34 +6,9 @@
                     <left-category-list></left-category-list>
                 </div>
                 <div class="right">
-                    <div class="top_banner">
-                        <div class="top_banner_left">
-                            <slider></slider>
-                        </div>
-                        <div class="top_banner_right">
-                            <img :src="`${load_image(home_hero_slider_side_banner.banner_one, true)}`"
-                                alt="headphone collection" 
-                                class="w-100" />
-                        </div>
-                    </div>
-
-                    <div class="bottom_banner">
-                        <div class="bottom_banner_left">
-                            <div class="img">
-                                <img :src="`${load_image(home_hero_slider_side_banner.banner_two, true)}`"
-                                    alt="gadget collection" />
-                            </div>
-                            <div class="img">
-                                <img :src="`${load_image(home_hero_slider_side_banner.banner_three, true)}`"
-                                    alt="watch collection" />
-                            </div>
-                        </div>
-                        <div class="bottom_banner_right">
-                            <div class="img">
-                                <img :src="`${load_image(home_hero_slider_side_banner.banner_four, true)}`"
-                                    alt="camera collection" />
-                            </div>
-                        </div>
+                    <slider></slider>
+                    <div>
+                        <BreakingNews/>
                     </div>
                 </div>
             </div>
@@ -50,6 +25,7 @@ import LeftCategoryList from '../Category/LeftCategoryList.vue';
 import { mapState } from 'pinia';
 import { use_home_page_store } from '../../Store/home_page_store.js';
 import Skeleton from '../../../../Components/Skeleton.vue';
+import BreakingNews from "../../Sections/BreakingNews.vue";
 export default {
     components: {
         Skeleton,
@@ -59,6 +35,7 @@ export default {
         Pagination,
         Navigation,
         LeftCategoryList,
+        BreakingNews,
         // LazyComponent: defineAsyncComponent(() =>
         //     import('./Slider.vue')
         // ),

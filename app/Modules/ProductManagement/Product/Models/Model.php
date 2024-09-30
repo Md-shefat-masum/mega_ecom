@@ -173,14 +173,14 @@ class Model extends EloquentModel
         $price = 0;
         $userType = auth()->user() ?? auth()->user()->role->name ?? 'customer';
         if ($this->type == "medicine") {
+            // $varient = $this->load('medicine_product_verient:product_id,id,pv_b2c_discount_percent,pv_b2c_price,pv_b2c_mrp,pv_b2b_discount_percent,pv_b2b_price,pv_b2b_mrp');
+            $varient = $this->medicine_product_verient;
             if ($userType == 'customer') {
-                $price = $this->load('medicine_product_verient')->medicine_product_verient->pv_b2c_price;
+                $price =  $varient->pv_b2c_price ?? 0;
             } else {
-                $price =  $this->load('medicine_product_verient')->medicine_product_verient->pv_b2b_price;
+                $price =  $varient->pv_b2b_price;
             }
         }
-
-
 
         return $price;
     }
@@ -218,10 +218,11 @@ class Model extends EloquentModel
 
     public function getIsDiscountAttribute()
     {
-        if ($this->discount_type == 'off') {
-            return false;
-        } else {
+        // if ($this->discount_type == 'off') {
+        if ($this->discount_amount || $this->medicine_product_verient?->pv_b2c_discount_percent || $this->medicine_product_verient?->pv_b2b_discount_percent) {
             return true;
+        } else {
+            return false;
         }
     }
 }

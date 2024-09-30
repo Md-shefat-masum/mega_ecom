@@ -31,7 +31,7 @@ export const common_store = defineStore("common_store", {
         get_all_cart_data: async function () {
             let token = localStorage.getItem('token');
             if (token) {
-                this.total_cart_price = 0;
+                // this.total_cart_price = 0;
                 let that = this
                 const fieldsQuery = this.productFields.map((field, index) => `fields[${index}]=${field}`).join('&');
                 let response = await window.privateAxios(`/get-cart-items?get_all=1&${fieldsQuery}`);
@@ -49,8 +49,15 @@ export const common_store = defineStore("common_store", {
             }
         },
 
-        add_to_cart: async function (productId) {
+        add_to_cart: async function (productId, product) {
             // console.log(productId);
+
+            let temp = JSON.parse(JSON.stringify(product));
+            temp.quantity = 1;
+            temp.type = 'product';
+            temp.product = product;
+            this.all_cart_data.unshift(temp);
+
             const response = await window.privateAxios(`/add-to-cart`, 'post',
                 {
                     product_id: productId,
@@ -59,7 +66,7 @@ export const common_store = defineStore("common_store", {
 
             if (response?.status === "success") {
                 window.s_alert(response.message);
-                this.get_all_cart_data();
+                // this.get_all_cart_data();
             }
 
         },
@@ -76,11 +83,11 @@ export const common_store = defineStore("common_store", {
             );
 
             if (response.data.status === "success") {
-                window.s_alert(response.data.message);
+                // window.s_alert(response.data.message);
                 this.get_all_cart_data();
             }
             if (response.data.status === "warning") {
-                window.w_alert(response.data.message);
+                // window.w_alert(response.data.message);
             }
         },
 
@@ -91,7 +98,7 @@ export const common_store = defineStore("common_store", {
                     `/remove-cart-item/${cartId}`
                 );
                 if (response.data.status == "success") {
-                    window.s_alert(response.data.message);
+                    // window.s_alert(response.data.message);
                     this.get_all_cart_data();
                 }
             }
@@ -236,11 +243,36 @@ export const common_store = defineStore("common_store", {
             let old_price = 0;
             let new_price = 0;
 
+            if(!product){
+                return {
+                    old_price: old_price,
+                    new_price: new_price
+                }
+            }
 
             let authStore = mapState(auth_store, {
                 auth_info: "auth_info",
                 is_auth: "is_auth",
             });
+
+            if (product.type == "medicine") {
+
+                if (product.medicine_product_verient?.pv_b2c_discount_percent) {
+                    new_price = Math.round(product.medicine_product_verient?.pv_b2c_price)
+                    old_price = Math.round(product.medicine_product_verient?.pv_b2c_mrp)
+                } else {
+                    old_price = Math.round(product.medicine_product_verient?.pv_b2c_mrp)
+                }
+
+            } else if (product.type == "product") {
+
+                if (product.is_discount) {
+                    new_price = Math.round(product.current_price)
+                    old_price = Math.round(product.customer_sales_price)
+                } else {
+                    new_price = Math.round(product.current_price)
+                }
+            }
 
             if (authStore.is_auth()) {
                 let userType = authStore.auth_info().role?.name;
@@ -284,24 +316,6 @@ export const common_store = defineStore("common_store", {
 
                     }
 
-                }
-            } else {
-                if (product.type == "medicine") {
-
-                    if (product.medicine_product_verient?.pv_b2c_discount_percent) {
-                        new_price = Math.round(product.medicine_product_verient?.pv_b2c_price)
-                        old_price = Math.round(product.medicine_product_verient?.pv_b2c_mrp)
-                    } else {
-                        old_price = Math.round(product.medicine_product_verient?.pv_b2c_mrp)
-                    }
-
-                } else if (product.type == "product") {
-                    if (product.is_discount) {
-                        new_price = Math.round(product.current_price)
-                        old_price = Math.round(product.customer_sales_price)
-                    } else {
-                        old_price = Math.round(product.current_price)
-                    }
                 }
             }
 

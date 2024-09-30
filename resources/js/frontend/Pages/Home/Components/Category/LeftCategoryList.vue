@@ -1,10 +1,13 @@
 <template>
     <div class="modal_category_left_side_show">
+        <div class="left_category_title">
+            All Categories
+        </div>
         <ul class="category_list">
             <li class="category_modal_close" @click="close_category">
                 <i class="fa fa-close"></i>
             </li>
-            
+
             <li v-for="category in side_nav_categories" :key="category.id">
                 <Link :href="`/products/${category.slug}`">
                     <img :src="load_image(`${category.image}`)" :alt="category.title">

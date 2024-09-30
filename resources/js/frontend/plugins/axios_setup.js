@@ -24,17 +24,17 @@ window.publicAxios = async function (apiEndPoint = null, type = 'get', payload =
 
 window.privateAxios = async function (apiEndPoint = null, type = 'get', payload = {}) {
     window.axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem('token')}`;
-    try {
-        await axios.get("/auth-check");
+    // try {
+    //     await axios.get("/auth-check");
 
-    } catch (error) {
-        localStorage.removeItem("token");
-        let myaccount = document.getElementById("myAccount");
-        if (myaccount) {
-            // myaccount.classList.add('open-side');
-        }
-        return false;
-    }
+    // } catch (error) {
+    //     localStorage.removeItem("token");
+    //     let myaccount = document.getElementById("myAccount");
+    //     if (myaccount) {
+    //         // myaccount.classList.add('open-side');
+    //     }
+    //     return false;
+    // }
 
     try {
         let response;

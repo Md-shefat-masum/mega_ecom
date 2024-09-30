@@ -13,6 +13,11 @@
     z-index: 101;
     box-shadow: 0px 0px 10px #00000080;
 
+    @media (max-width: 991.9px) {
+        height: 50px;
+        width: 50px;
+    }
+
     /* padding-bottom: 36px; */
     &:hover {
         background-color: #f15838;
@@ -20,6 +25,10 @@
 
     img {
         width: 36px;
+
+        @media (max-width: 991.9px) {
+            width: 19px;
+        }
     }
 
     .text {
@@ -27,6 +36,10 @@
         display: block;
         margin-top: 4px;
         font-size: 14px;
+
+        @media (max-width: 991.9px) {
+            font-size: 8px;
+        }
     }
 }
 
@@ -77,6 +90,7 @@
             }
 
             &:hover {
+
                 >div,
                 >a {
                     color: #ff6000;
@@ -95,8 +109,7 @@
     }
 }
 
-
-@media screen and (max-width: 1199.9px) {
+@media screen and (max-width: 991.9px) {
     .website_banner {
         .left {
             display: none;
@@ -118,7 +131,7 @@
     box-shadow: 0px 0px 10px #0000003d;
     top: 150px;
     left: 15px;
-    z-index: 102;
+    z-index: 1007;
 
     transition-duration: .3s;
 
@@ -142,6 +155,7 @@
         padding: 15px;
 
         li {
+
             div,
             a {
                 flex-direction: column;
@@ -205,13 +219,38 @@
     background-color: white;
 
     .parent_categories {
-        height: calc(100vh - 70px);
+        height: calc(100vh - 30px);
         overflow-y: auto;
         overflow-x: hidden;
         border-right: 1px solid #ed573730;
+        padding-left: 10px;
 
-        ul{
-            li{
+        @media (max-width: 991.9px) {
+            padding-left: 0;
+        }
+
+        /* width */
+        &::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        /* Track */
+        &::-webkit-scrollbar-track {
+            background: #f1f1f161;
+        }
+
+        /* Handle */
+        &::-webkit-scrollbar-thumb {
+            background: #88888859;
+        }
+
+        /* Handle on hover */
+        &::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        ul {
+            li {
                 display: block;
                 margin-bottom: 10px;
             }
@@ -229,6 +268,7 @@
             &.active,
             &:hover {
                 color: #ff6000;
+
                 >img {
                     border: 2px solid #ff6000;
                 }
@@ -262,11 +302,85 @@
         margin-bottom: 0px;
         position: relative;
 
-        &.d_grid{
+        &.d_grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 17px;
             row-gap: 80px;
         }
     }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .website_banner {
+        .left {
+            width: 100%;
+            max-width: 245px;
+        }
+    }
+}
+
+@media (max-width: 911.9px) {
+    .modal_category {
+        height: 100svh;
+        width: 100svw;
+        top: 0;
+        left: -150px;
+
+        &.active {
+            top: 0;
+            left: 0;
+        }
+
+
+        .category_list {
+            gap: 14px;
+
+            li {
+
+                div,
+                a {
+                    width: 85px;
+                }
+            }
+
+            .category_modal_close {
+                display: none;
+            }
+        }
+    }
+
+    .modal_category_all_page_content {
+        grid-template-columns: 100px 1fr;
+        gap: 0;
+
+        .parent_categories {
+            height: calc(100vh - 75px);
+
+            .cat_item {
+                text-align: center;
+                padding: 10px;
+                border: 1px solid #0000001f;
+                margin: 4px;
+                height: 86px;
+                width: 86px;
+                display: block;
+                overflow: hidden;
+
+                img {
+                    margin: 0;
+                }
+            }
+        }
+    }
+}
+
+.category_modal_back_button {
+    padding: 10px 20px;
+    background-color: white;
+    font-size: 30px;
+    color: black;
+    font-weight: bold;
+    border-bottom: 1px solid #00000042;
+    margin-bottom: 15px;
 }

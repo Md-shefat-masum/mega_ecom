@@ -16,7 +16,7 @@ class Controller extends ControllersController
     public function index()
     {
         $data = All::execute();
-        return $data;
+        return entityResponse($data);
     }
 
     public function store()

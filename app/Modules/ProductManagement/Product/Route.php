@@ -25,8 +25,6 @@ Route::prefix('v1')->group(function () {
         Route::get('{barandSlug}/count', [Controller::class, 'bulkAction']);
         Route::get('{barandSlug}/count', [Controller::class, 'bulkAction']);
 
-
-
         Route::get('{slug}', [Controller::class, 'show']);
     });
 });

@@ -71,17 +71,32 @@
 
                 <div class="tab-content nav-material" id="top-tabContent">
 
-                    <div class="tab-pane fade active show" v-if="product.product_varient_price?.length" id="top-home" role="tabpanel" aria-labelledby="top-home-tab">
+                    <div class="tab-pane fade active show" v-if="product.specification" id="top-home" role="tabpanel" aria-labelledby="top-home-tab">
+                        <table class="table data-table flex-table" cellpadding="0" cellspacing="0">
+                            <tbody v-for="item in get_specification(product.specification)" :key="item.id">
+                                <tr>
+                                    <th colspan="2">
+                                        {{ item.heading }}
+                                    </th>
+                                </tr>
+                                <tr v-for="(value, index) in item.values" :key="index">
+                                    <td class="name">{{ value.key }}</td>
+                                    <td class="value ">{{ value.value }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- <div class="tab-pane fade active show" v-if="product.product_varient_price?.length" id="top-home" role="tabpanel" aria-labelledby="top-home-tab">
                         <table class="table data-table flex-table" cellpadding="0" cellspacing="0">
                             <tbody>
                                 <tr v-for="item in product.product_varient_price" :key="item.id">
-                                    <!-- <td class="name">{{ item.product_varient_group_title?.title }}</td> -->
                                     <td class="name fw-bold">{{ item.varient_title }}</td>
                                     <td class="value ">{{ item.product_varient_values?.title }}</td>
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
+                    </div> -->
 
                     <div class="tab-pane fade" v-if="product.description" id="top-profile" role="tabpanel" aria-labelledby="profile-top-tab">
                         <div v-html="product.description"></div>
@@ -219,6 +234,13 @@ export default {
     },
 
     methods: {
+        get_specification: function(data){
+            try {
+                return JSON.parse(data);
+            } catch (error) {
+                return [];
+            }
+        },
         getEmbedUrl(url) {
             if (url) {
                 const videoId = url.split('v=')[1];

@@ -23,7 +23,7 @@
 
                                         </ul>
                                         <Link :href="`product-details/${item.slug}`" tabindex="0">
-                                        <p>{{ item.title }}</p>
+                                            <p>{{ item.title }}</p>
                                         </Link>
                                         <template v-if="item.current_price > 0">
                                             <h6>$ {{ item.current_price }} <span>$ {{ item.customer_sales_price

@@ -11,6 +11,7 @@ class EcommerceOrder
     static $model = \App\Modules\SalesManagement\SalesEcommerceOrder\Models\Model::class;
     static $orderProductmodel = \App\Modules\SalesManagement\SalesEcommerceOrder\Models\SalesEcommerceOrderProductModel::class;
     static $cartModel = \App\Modules\WebsiteApi\Cart\Models\Model::class;
+    static $userModel = \App\Modules\UserManagement\User\Models\Model::class;
 
     public static function execute($request)
     {
@@ -20,7 +21,9 @@ class EcommerceOrder
             $orderDetails = $request->all();
 
 
-            $userType = auth()->user()->role?->name;
+            // $userType = auth()->user()?->role?->name;
+            $user = self::$userModel::where('id',auth()->user()->id)->with('role')->first();
+            $userType = $user->role->name;
 
             $cartItems = self::$cartModel::with(['product', 'product.medicine_product_verient'])
                 ->where('user_id', auth()->id())
@@ -36,10 +39,7 @@ class EcommerceOrder
                 return 0;
             });
 
-
-
             $total = $cartSubtotal;
-
 
             // dd($orderDetails, auth()->user()->toArray(), $cartItems->toArray(), $cartSubtotal);
             $delivery_address_details = [
@@ -47,9 +47,9 @@ class EcommerceOrder
                 "phone" => $request->phone,
                 "email" => $request->email,
                 "address" => $request->address,
-                "division_name" => DB::table('location_state_divisions')->where('id', $request->state_division_id)->first()->name,
-                "district_name" => DB::table('location_districts')->where('id', $request->district_id)->first()->name,
-                "station_name" => DB::table('location_stations')->where('id', $request->station_id)->first()->name,
+                "division_name" => DB::table('location_state_divisions')->where('id', $request->state_division_id)->first()?->name,
+                "district_name" => DB::table('location_districts')->where('id', $request->district_id)->first()?->name,
+                "station_name" => DB::table('location_stations')->where('id', $request->station_id)->first()?->name,
             ];
 
             $orderInfo = [
@@ -75,8 +75,6 @@ class EcommerceOrder
                 "subtotal" => $cartSubtotal,
                 "total" =>  $total + $orderDetails["delivery_charge"] ?? 0,
             ];
-
-
 
             if ($order = self::$model::create($orderInfo)) {
                 $product_items = "";
@@ -114,7 +112,7 @@ class EcommerceOrder
 
             return messageResponse('Order Successfully completed', $payload, 200, 'success');
         } catch (\Exception $e) {
-            dd($e);
+            // dd($e);
             return messageResponse($e->getMessage(), [], 500, 'server_error');
         }
     }

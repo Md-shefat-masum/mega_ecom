@@ -74,7 +74,7 @@
                                                         :value="division.id"
                                                         :selected="division.id == user_address_info?.state_division_id ? 'selected' : ''">
                                                         {{
-                            division.name }}</option>
+                                                        division.name }}</option>
                                                 </select>
                                             </div>
                                             <div class="form-group required">
@@ -128,7 +128,7 @@
 
                                                         <td width="250px">
                                                             <Link :href="`/product-details/${cart?.product?.slug}`">{{
-                            cart.product.title }}
+                                                            cart.product.title }}
                                                             </Link>
                                                         </td>
                                                         <td>
@@ -140,7 +140,7 @@
 
                                                         <td>
                                                             <p class="td-color">{{ cart.quantity *
-                            get_price(cart?.product).new_price }}</p>
+                                                                get_price(cart?.product).new_price }}</p>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -381,7 +381,8 @@ export default {
             let payload = JSON.stringify(data);
             let payment_res = await window.axios.get(`pay-via-ajax?payload=${payload}`);
             this.payment_link = payment_res.data?.data;
-            window.open(this.payment_link, "_blank");
+            window.location.href = this.payment_link;
+            // window.open(this.payment_link, "_blank");
 
         }
 

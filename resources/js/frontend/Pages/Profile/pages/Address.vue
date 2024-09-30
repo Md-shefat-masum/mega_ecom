@@ -48,7 +48,6 @@
 
             </div>
 
-
             <div v-if="contact_person_modal_show" class="contact-person-modal">
                 <div class="">
                     <div class="card">
@@ -86,7 +85,6 @@
                     </div>
                 </div>
             </div>
-
 
             <div v-if="address_contact_form_show" class="address-contact-form">
                 <span @click="address_contact_form_show = fasle"
@@ -130,10 +128,6 @@ export default {
         contact_person_modal_show: false,
         address_contact_form_show: false,
         contact_person: [],
-
-
-
-
     }),
     created: async function () {
         const authStore = auth_store();
@@ -172,12 +166,7 @@ export default {
     }
 }
 
-
-
-
-
 </script>
-
 <style>
 .contact-person-modal {
     position: absolute;

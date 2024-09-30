@@ -6,11 +6,9 @@
 
         <HeroSlider />
 
-        <BreakingNews />
-
         <TopCategories />
 
-        <OurServiceType />
+        <!-- <OurServiceType /> -->
 
         <FeaturedProducts />
 
@@ -25,7 +23,6 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import HeroSlider from "./Components/Slider/HeroSlider.vue";
-import BreakingNews from "./Sections/BreakingNews.vue";
 import TopCategories from "./Components/Category/TopCategories.vue";
 import OurServiceType from "../../Components/OurServiceType.vue";
 import FeaturedProducts from "./Sections/FeaturedProducts.vue";
@@ -47,7 +44,6 @@ export default {
     components: {
         Layout,
         HeroSlider,
-        BreakingNews,
         TopCategories,
         OurServiceType,
         FeaturedProducts,
@@ -57,7 +53,7 @@ export default {
     },
 
     created: async function () {
-        
+
         this.side_nav_categories = this.left_nave_category;
         this.home_hero_sliders = this.hero_slider;
         this.home_hero_slider_side_banner = this.hero_side_slider;

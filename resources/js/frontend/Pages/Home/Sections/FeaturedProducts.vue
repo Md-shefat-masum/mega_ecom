@@ -1,5 +1,5 @@
 <template>
-    <section class="discount-banner">
+    <!-- <section class="discount-banner">
         <div class="container">
             <div class="row">
                 <div class="col-12">
@@ -19,10 +19,15 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
 
-    <section class="my-5 py-5">
+    <section class="my-lg-5 py-5">
         <div class="custom-container">
+
+            <div class="section_title">
+                <h4 class="text mb-5">Featured Products</h4>
+            </div>
+
             <template v-if="!feature_products.length">
                 <product-card-skeleton v-for="i in 30" :key="i"></product-card-skeleton>
             </template>
