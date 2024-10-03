@@ -70,7 +70,6 @@ export default {
         }
     },
     created: function () {
-        console.log('all ctegories');
     },
     methods: {
         load_image: window.load_image,

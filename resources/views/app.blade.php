@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @inertiaHead
     @if (isset($page['props']['event']))
-    <title>
+    <title inertia>
         {{ isset($page['props']['event']['title']) ? $page['props']['event']['title'] : 'ETEK Enterprise' }}
     </title>
     <meta name="twitter:card"
@@ -64,6 +64,9 @@
                 return url;
             } catch (error) {
                 let full_url = `{{env('IMAGE_HOST')}}/${url}`;
+
+                return full_url;
+
                 if(cache){
                     full_url = `{{env('IMAGE_HOST')}}/cache/${url}`;
                 }

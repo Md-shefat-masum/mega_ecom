@@ -36,7 +36,7 @@ class Controller extends ControllersController
     public function GetAllFeaturedProduct()
     {
         $data = GetAllFeaturedProduct::execute();
-        return $data;
+        return entityResponse($data);
     }
     public function GetAllFeaturedProductsByCategoryId($slug)
     {

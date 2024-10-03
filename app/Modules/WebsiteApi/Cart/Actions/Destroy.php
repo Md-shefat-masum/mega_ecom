@@ -9,10 +9,9 @@ class Destroy
     public static function execute($id)
     {
         try {
-            if (!$data=self::$model::where('id', $id)->first()) {
-                return messageResponse('Data not found...',$data, 404, 'error');
+            if(auth()->check()){
+                self::$model::where('product_id', $id)->where('user_id',auth()->user()->id)->delete();
             }
-            $data->delete();
             return messageResponse('Cart item successfully deleted',[], 200, 'success');
         } catch (\Exception $e) {
             return messageResponse($e->getMessage(),[], 500, 'server_error');

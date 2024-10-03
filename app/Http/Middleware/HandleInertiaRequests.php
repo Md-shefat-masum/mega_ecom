@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Illuminate\Support\Facades\Cache;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -35,77 +36,83 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        $fields = [
-            'header_logo',
-            'footer_logo',
+        $data = Cache::remember('shared_data', (5 * 60), function(){
+            $fields = [
+                'header_logo',
+                'footer_logo',
 
-            'title',
-            'site_name',
-            'tag',
-            'keywords',
-            'image',
-            'map_link',
-            'address',
+                'title',
+                'site_name',
+                'tag',
+                'keywords',
+                'image',
+                'map_link',
+                'address',
 
-            // 'sitemap' ,
-            // 'terms_and_condition' ,
+                // 'sitemap' ,
+                // 'terms_and_condition' ,
 
-            'youtube',
-            'whatsapp',
-            'telegram',
-            'facebook',
-            'phone_numbers',
-            'emails',
+                'youtube',
+                'whatsapp',
+                'telegram',
+                'facebook',
+                'phone_numbers',
+                'emails',
 
-            'short_intro',
-            'shiping_on_order',
-            'shiping_and_delivery',
+                'short_intro',
+                'shiping_on_order',
+                'shiping_and_delivery',
 
-            // 'schema_tag' ,
+                // 'schema_tag' ,
 
-            'return_and_exchange',
-            'payment_gateway_logo',
+                'return_and_exchange',
+                'payment_gateway_logo',
 
-            'outside_dhaka',
-            'inside_dhaka',
+                'delivery_charge',
 
-            'home_page_description',
-            'description',
+                'home_page_descrption',
+                'description',
 
-            'fabicon',
-            'copy_right',
-            'breaking_news',
+                'fabicon',
+                'copy_right',
+                'breaking_news',
 
-            // 'cookies_policy' ,
-            // 'about_us' ,
-        ];
+                // 'cookies_policy' ,
+                // 'about_us' ,
+            ];
 
-        $SettingModel = \App\Modules\ConfigurationManagement\WebsiteConfiguration\Models\SettingTitleModel::class;
-        $settings = $SettingModel::query()
-            ->select('id', 'title')
-            ->whereIn('title', $fields)
-            ->with('setting_values:id,setting_title_id,value')
-            ->get();
+            $SettingModel = \App\Modules\ConfigurationManagement\WebsiteConfiguration\Models\SettingTitleModel::class;
+            $settings = $SettingModel::query()
+                ->select('id', 'title')
+                ->whereIn('title', $fields)
+                ->with([
+                    'setting_values:id,setting_title_id,title,value',
+                ])
+                ->get();
 
-        $all_category_parents = \App\Modules\WebsiteApi\Category\Actions\GetAllCategoryParent::execute();
-        $user = null;
-        $all_cart_data = [];
-        $select = ['role_id', 'slug', 'name', 'user_name', 'email', 'phone_number', 'photo'];
-        if (auth()->check()) {
-            $user = \App\Modules\UserManagement\User\Models\Model::select($select)
-                ->with('role')
-                ->where('id', auth()->user()->id)
-                ->first();
-            $all_cart_data = \App\Modules\WebsiteApi\Cart\Actions\All::execute(true);
-        }
-        return array_merge(parent::share($request), [
-            // 'auth' => function () use ($request, $user) {
-            //     return $user;
-            // },
-            'all_cart_data' => $all_cart_data,
-            'auth' => $user,
-            'settings' => $settings,
-            'all_category_parents' => $all_category_parents,
-        ]);
+            $all_category_parents = \App\Modules\WebsiteApi\Category\Actions\GetAllCategoryParent::execute();
+            $user = null;
+            $all_cart_data = [];
+            $select = ['role_id', 'slug', 'name', 'user_name', 'email', 'phone_number', 'photo', 'id'];
+            if (auth()->check()) {
+                $user = \App\Modules\UserManagement\User\Models\Model::select($select)
+                    ->with('role:id,name,serial')
+                    ->where('id', auth()->user()->id)
+                    ->first();
+                $user->user_delivery_address = $user->user_delivery_address()->where('is_default', 1)->first();
+                $all_cart_data = \App\Modules\WebsiteApi\Cart\Actions\All::execute(true);
+            }
+
+            $data = [
+                'all_cart_data' => $all_cart_data,
+                'auth' => $user,
+                'settings' => $settings,
+                'all_category_parents' => $all_category_parents,
+            ];
+
+            return $data;
+        });
+
+        return array_merge(parent::share($request), $data);
     }
 }

@@ -7,25 +7,41 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\modules\ProductManagement\Product\Models\Model as ProductModel;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class WebsiteController extends Controller
 {
     public function home()
     {
-        $hero_slider = \App\Modules\WebsiteApi\SliderAndBanner\Actions\HeroSlider::execute();
-        $hero_side_slider = \App\Modules\WebsiteApi\SliderAndBanner\Actions\HeroSliderSideBanner::execute();
-        $left_nave_category = \App\Modules\WebsiteApi\Category\Actions\GetAllNavCategory::execute();
 
-        return Inertia::render('Home/Index', [
-            'event' => [
-                'title' => 'ETEK Enterprise - Leading Electronics and Gadgets',
-                'image' => 'https://etek.com.bd/cache/frontend/images/etek_logo.png',
-                'description' => 'Best eCommerce in bangladesh',
-            ],
-            'hero_slider' => $hero_slider->items(),
-            'hero_side_slider' => $hero_side_slider,
-            'left_nave_category' => $left_nave_category,
-        ]);
+        $data = Cache::remember('home_page', (5 * 60), function(){
+            $hero_slider = \App\Modules\WebsiteApi\SliderAndBanner\Actions\HeroSlider::execute();
+            // $hero_side_slider = \App\Modules\WebsiteApi\SliderAndBanner\Actions\HeroSliderSideBanner::execute();
+            $left_nave_category = \App\Modules\WebsiteApi\Category\Actions\GetAllNavCategory::execute();
+            $all_featured_categories = \App\Modules\WebsiteApi\Category\Actions\GetAllFeaturedCategory::execute(true, 20);
+            $category_group = \App\Modules\WebsiteApi\Category\Actions\GetAllCategoryGroup::execute(true);
+            $featured_products = \App\Modules\WebsiteApi\Product\Actions\GetAllFeaturedProduct::execute(true, 30);
+            $heighlight_products = \App\Modules\WebsiteApi\Product\Actions\GetAllHeighlightProduct::execute(true, 10);
+
+            $data = [
+                'event' => [
+                    'title' => 'ETEK Enterprise - Leading Electronics and Gadgets',
+                    'image' => 'https://etek.com.bd/cache/frontend/images/etek_logo.png',
+                    'description' => 'Best eCommerce in bangladesh',
+                ],
+                'hero_slider' => $hero_slider->items(),
+                'hero_side_slider' => $hero_side_slider ?? [],
+                'left_nave_category' => $left_nave_category,
+                'category_group' => $category_group,
+                'all_featured_products' => $featured_products,
+                'all_featured_categories' => $all_featured_categories,
+                'heighlight_products' => $heighlight_products,
+            ];
+
+            return $data;
+        });
+
+        return Inertia::render('Home/Index', $data);
     }
 
     public function blogs()
@@ -53,6 +69,7 @@ class WebsiteController extends Controller
     public function products($slug)
     {
         $category = DB::table('product_categories')->select('title', 'slug')->where('slug', $slug)->first();
+
         $page = request()->page ? request()->page : 1;
         return Inertia::render('Products/Index', [
             'slug' => $slug,

@@ -3,17 +3,13 @@
 use Illuminate\Support\Facades\Route;
 use App\Modules\PaymentGateway\SSLCommerZ\Controller\SslCommerzPaymentController;
 
-// SSLCOMMERZ Start
-// Route::get('/payment', [SslCommerzPaymentController::class, 'exampleEasyCheckout']);
-// Route::get('/example2', [SslCommerzPaymentController::class, 'exampleHostedCheckout']);
+/*
+|--------------------------------------------------------------------------
+| SSLCOMMERZ Routes
+|--------------------------------------------------------------------------
+|
+*/
 
-// Route::post('/pay', [SslCommerzPaymentController::class, 'index']);
-Route::any('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
 
-Route::post('/success', [SslCommerzPaymentController::class, 'success']);
-Route::post('/fail', [SslCommerzPaymentController::class, 'fail']);
-Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel']);
+require_once __DIR__ . '/../app/Modules/PaymentGateway/SSLCommerZ/Route.php';
 
-Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
-
-//SSLCOMMERZ END

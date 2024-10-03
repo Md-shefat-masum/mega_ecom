@@ -57,7 +57,10 @@ class Controller extends ControllersController
     public function GetAllFeaturedCategory()
     {
         $data = GetAllFeaturedCategory::execute();
-        return $data;
+        $response = entityResponse($data);
+        $response->header('Cache-Control', 'public, max-age=300')
+            ->header('Expires', now()->addMinutes(25)->toRfc7231String());
+        return $response;
     }
     public function GetAllNavCategory()
     {

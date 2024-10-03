@@ -12,9 +12,6 @@ class GetSingleOrderDetails
     public static function execute($orderId)
     {
         try {
-
-
-
             $orderInfo = self::$model::with(
                 'order_products',
                 'order_products.product_image',
@@ -24,15 +21,13 @@ class GetSingleOrderDetails
                 'order_delivery_address.station:id,name',
                 'user',
             )
-                ->where('order_id', $orderId)->where('user_id', auth()->id())
+                ->where('order_id', $orderId)
                 ->first();
             if (!$orderInfo) {
                 return messageResponse('No order found', [], 200, 'success');
             }
 
-
-
-            return entityResponse($orderInfo);
+            return $orderInfo;
         } catch (\Exception $e) {
 
             return messageResponse($e->getMessage(), [], 500, 'server_error');

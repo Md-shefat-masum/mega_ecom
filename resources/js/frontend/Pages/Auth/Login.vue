@@ -13,9 +13,9 @@
                         <div class="theme-card">
                             <h3 class="text-center">Login</h3>
                             <form class="theme-form" @submit.prevent="loginFormHandler($event)" method="post">
-                                <label>Enter your Phone</label>
-                                <input type="number" name="phone_number" id="phone_number" class="form-control"
-                                    placeholder="Enter your phone number" />
+                                <label>Enter your phone number or email</label>
+                                <input type="text" name="phone_number" id="phone_number" class="form-control"
+                                    placeholder="phone number or email" />
 
                                 <!-- <div class="form-group">
                                     <label>Email</label>
@@ -45,7 +45,9 @@
                             <h3 class="text-center">Verify otp</h3>
                             <form class="theme-form" @submit.prevent="OtpVerifyFormHandler($event)" method="post">
                                 <div class="form-group">
-                                    <label>Enter your otp</label>
+                                    <label>
+                                        Enter your otp
+                                    </label>
                                     <input type="number" name="otp" id="otp" class="form-control">
                                 </div>
                                 <button class="btn btn-normal">Send</button>

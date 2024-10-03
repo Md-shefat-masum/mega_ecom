@@ -13,9 +13,9 @@
             <div class="p-2 alert-danger mx-2 my-4">Please login to perform this action</div>
             <template v-if="is_login">
                 <form class="theme-form" @submit.prevent="loginFormHandler($event)" method="post">
-                    <label>Enter your Phone</label>
-                    <input type="number" name="phone_number" id="phone_number" class="form-control"
-                        placeholder="Enter your phone number" v-model="phone_number" />
+                    <label>Enter your Phone Number or Email</label>
+                    <input type="text" name="phone_number" id="phone_number" class="form-control"
+                        placeholder="phone number or email" v-model="phone_number" />
                     <button class="btn btn-normal my-2">Login</button>
 
                     <div class="accout-fwd">

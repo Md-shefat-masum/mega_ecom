@@ -17,14 +17,7 @@ import {use_home_page_store} from "../Pages/Home/Store/home_page_store";
 export default {
     components: { Header, Footer },
     created: async function () {
-        this.get_parent_categories();
-        console.log('layout');
-
-        // this.check_is_auth();
-        if (this.is_auth) {
-            // this.get_all_cart_data();
-        }
-        // this.get_setting_value();
+        // this.get_parent_categories();
     },
     methods: {
         ...mapActions(common_store, {

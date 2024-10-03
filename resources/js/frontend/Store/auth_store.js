@@ -7,7 +7,11 @@ export const auth_store = defineStore("auth_store", {
         auth_info: {},
         role: {},
     }),
-    getters: {},
+    getters: {
+        get_auth_info: function(){
+            return this.auth_info
+        },
+    },
     actions: {
 
         set_is_auth: function (status) {
@@ -23,11 +27,14 @@ export const auth_store = defineStore("auth_store", {
         },
         check_is_auth: async function () {
             let response = await window.privateAxios("/check_user");
+
             if (response.status == 'success') {
                 this.auth_info = response.data;
                 this.is_auth = 1;
                 this.role = response.data.role;
             }
+
+            return response;
         },
         auth_check: async function () {
             let response = await window.privateAxios("/auth_check");

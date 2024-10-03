@@ -29,8 +29,7 @@
             <div class="collection-wrapper">
                 <div class="custom-container">
                     <div class="row">
-                        <div class="col-sm-3 collection-filter category-page-side">
-
+                        <div class="col-lg-3 collection-filter category-page-side">
                             <div
                                 class="collection-filter-block filter_varient_group creative-card creative-inner category-side">
                                 <div class="collection-mobile-back">
@@ -39,28 +38,20 @@
                                         back
                                     </span>
                                 </div>
-
                                 <PriceRange />
                                 <template v-if="preloader">
                                     <skeleton :width="`300px`" :height="`100vh`"></skeleton>
                                 </template>
                                 <BrandVarients v-else />
-
                                 <AllVarients />
                             </div>
-
                         </div>
-                        <div class="collection-content col">
+                        <div class="collection-content col-lg-9">
                             <div class="page-main-content">
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="top-banner-wrapper mb-2">
-                                            <skeleton v-if="preloader" :width="`100%`" :height="`300px`"></skeleton>
-                                            <img v-else-if="advertise" :src="load_image(advertise?.image)"
-                                                class="img-fluid" :alt="advertise?.title">
-                                            <img v-else src="/dummy.png" class="img-fluid border"
-                                                style="max-height: 200px; width: 100%;">
-
+                                            <page-banner />
                                         </div>
                                         <div class="top-bar ws-box">
                                             <div class="row">
@@ -104,7 +95,7 @@
 
                                         <div class="collection-product-wrapper">
 
-                                            <div class="py-5">
+                                            <div class="py-4">
                                                 <template v-if="preloader">
                                                     <product-card-skeleton v-for="i in 30"
                                                         :key="i"></product-card-skeleton>
@@ -185,8 +176,15 @@ import { mapActions, mapState } from 'pinia';
 import Skeleton from '../../Components/Skeleton.vue';
 import ProductCardSkeleton from '../../Components/Skeliton/ProductCardSkeleton.vue';
 
+import PageBanner from "./Components/PageBanner.vue";
+
 export default {
-    components: { Layout, PriceRange, BrandVarients, AllVarients, ProductItem, BreadCumb, Skeleton, ProductCardSkeleton },
+    components: {
+        Layout, PriceRange, BrandVarients,
+        AllVarients, ProductItem, BreadCumb,
+        Skeleton, ProductCardSkeleton,
+        PageBanner,
+    },
     props: ['slug', 'page'],
 
     data: () => ({

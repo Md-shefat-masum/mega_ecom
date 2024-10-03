@@ -27,6 +27,6 @@ class Controller extends ControllersController
     public function GetSingleOrderDetails($orderId)
     {
         $data = GetSingleOrderDetails::execute($orderId);
-        return $data;
+        return entityResponse($data);
     }
 }

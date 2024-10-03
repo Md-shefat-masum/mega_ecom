@@ -10,7 +10,7 @@
                 <div class="col-12">
                     <div class="custom-container">
                         <div class="product_list">
-                            <div v-for="i in products" :key="i.name">
+                            <div v-for="i in products" :key="i.id">
                                 <ProductItem :product="i" />
                             </div>
                         </div>

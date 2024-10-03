@@ -29,6 +29,10 @@ export const useProductDetailsStore = defineStore("useProductDetailsStore", {
             "sku",
             "type",
             "slug",
+            'is_available',
+            'retailer_sales_price',
+            'b2b_discount_price',
+            'b2c_discount_price',
         ]
 
 

@@ -16,23 +16,16 @@
                         <SearchBar />
                     </div>
                     <div class="header-right ">
-                        <template v-if="is_auth">
+                        <template v-if="auth_info">
                             <div class="header_right_profile">
-                                <div class="cart">
-                                    <a href="#" onclick="openCart()">
-                                        <img src="/icons/cart.png" />
-                                        <div class="cart_count">
-                                            {{ all_cart_data?.length }}
-                                        </div>
-                                    </a>
-                                </div>
+                                <header-cart-count />
                                 <div class="auth">
                                     <Link href="/profile">
-                                        <img v-if="auth_info.image" :src="load_image(auth_info.image)" />
+                                        <img v-if="auth_info?.photo" :src="load_image(auth_info.photo)" />
                                         <div v-else>
                                             <img src="/icons/profile.png" />
                                             <span>
-                                                {{ auth_info.name }}
+                                                {{ auth_info?.name }}
                                             </span>
                                         </div>
                                     </Link>
@@ -41,16 +34,9 @@
                         </template>
                         <template v-else>
                             <div class="header_right_profile">
-                                <div class="cart">
-                                    <a href="">
-                                        <img src="/icons/cart.png" />
-                                        <div class="cart_count">
-                                            0
-                                        </div>
-                                    </a>
-                                </div>
+                                <header-cart-count />
                                 <div class="auth">
-                                    <a href="">
+                                    <a href="#" onclick="openAccount()">
                                         <img src="/icons/profile.png" />
                                         <span>Login</span>
                                     </a>
@@ -77,14 +63,15 @@ import { common_store } from "../Store/common_store";
 import { auth_store } from "../Store/auth_store";
 import { mapActions, mapState, mapWritableState } from "pinia";
 import Skeleton from '../Components/Skeleton.vue';
+import HeaderCartCount from "./Components/HeaderCartCount.vue";
 export default {
-    components: { Link, SearchBar, Skeleton },
+    components: { Link, SearchBar, Skeleton, HeaderCartCount },
     data: () => ({
         order_track_show: false
     }),
     watch: {
         all_cart_data: function(v){
-            console.log({v: v});
+
         }
     },
     methods: {

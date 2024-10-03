@@ -83,14 +83,6 @@
                         <span>{{ product.warranty }}</span>
                     </span>
                 </div>
-                <!-- <div class="product-core-info-list">
-                        <span class="p-core-info-list-title">
-                            EMI facilities
-                        </span>
-                        <span class="p-core-info-list-sub-title emi-facility">
-                            <a target="_blank" href="#">Check EMI facility</a>
-                        </span>
-                        </div> -->
             </div>
             <div class="ps-3">
                 <h6 class="product-title d-block mt-3">quantity</h6>
@@ -103,9 +95,15 @@
                 </div>
             </div>
             <div class="product-buttons ps-3 d-flex flex-wrap gap-2 mt-4">
-                <button @click="is_auth ? add_to_cart(product.id) : openAccount()" class="btn btn-normal">
+                <button @click="add_to_cart(product, +quantity)" class="btn btn-normal">
                     <i class="icon icon-shopping-cart"></i>
                     Add to Cart
+
+                    <span v-if="is_in_cart(product).status" class="d-none">
+                        {{ set_default_qty(is_in_cart(product).qty) }}
+                        ( {{ is_in_cart(product).qty }} )
+                    </span>
+
                 </button>
                 <a @click="is_auth ? add_to_wish_list(product.id) : openAccount()"
                     class="btn px-4 btn-normal btn-outline add-to-wish tooltip-top"
@@ -122,8 +120,9 @@ import ColorVarient from '../Components/ColorVarient.vue'
 import CommonVarient from '../Components/CommonVarient.vue'
 import ProductImage from '../Components/ProductImage.vue'
 
-import { mapActions } from "pinia";
+import { mapActions, mapState } from "pinia";
 import { common_store } from "../../../Store/common_store";
+import { cart_store } from '../../../Store/cart_store';
 
 export default {
     components: { ProductImage, ColorVarient, CommonVarient },
@@ -136,17 +135,22 @@ export default {
     created: async function () {
         this.is_auth = localStorage.getItem("token") ? true : false;
     },
+    mounted: function () {
+    },
+    watch: {
+        quantity: function (v) {
+            this.add_to_cart(this.product, v);
+        }
+    },
     methods: {
-
         ...mapActions(common_store, {
             add_to_wish_list: "add_to_wish_list",
-            get_all_cart_data: "get_all_cart_data",
-            add_to_cart: "add_to_cart",
         }),
 
-        openAccount() {
-            document.getElementById("myAccount").classList.add('open-side');
-        },
+        ...mapActions(cart_store, [
+            "add_to_cart",
+            "is_in_cart",
+        ]),
 
         AdujustQuantity: function (type) {
             if (type == "plus") {
@@ -158,23 +162,36 @@ export default {
             }
         },
 
-        get_short_description: function(description){
-            try{
+        openAccount() {
+            document.getElementById("myAccount").classList.add('open-side');
+        },
+
+        set_default_qty: function (qty) {
+            this.quantity = qty;
+        },
+
+        get_short_description: function (description) {
+            try {
                 let data = `<ul>`;
-                data += JSON.parse(description).map(i=>`<li>${i}</li>`).join('');
+                data += JSON.parse(description).map(i => `<li>${i}</li>`).join('');
                 data += "</ul";
                 return data;
             }
-            catch(e){
+            catch (e) {
                 return description;
             }
         }
 
     },
+    computed: {
+        ...mapState(cart_store, [
+            "carts"
+        ])
+    }
 }
 </script>
 
-<style>
+<style scoped>
 .short-description ul {
     display: grid;
     gap: 10px;

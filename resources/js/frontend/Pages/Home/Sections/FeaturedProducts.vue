@@ -23,7 +23,6 @@
 
     <section class="my-lg-5 py-5">
         <div class="custom-container">
-
             <div class="section_title">
                 <h4 class="text mb-5">Featured Products</h4>
             </div>

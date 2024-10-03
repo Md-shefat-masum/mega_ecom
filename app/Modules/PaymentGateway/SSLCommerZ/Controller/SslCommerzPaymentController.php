@@ -8,6 +8,7 @@ use App\Modules\PaymentGateway\SSLCommerZ\Library\SslCommerz\SslCommerzNotificat
 use Illuminate\Support\Facades\DB;
 use App\Modules\SalesManagement\SalesEcommerceOrder\Models\Model as SalesEcommerceOrder;
 
+
 class SslCommerzPaymentController extends Controller
 {
 
@@ -96,10 +97,17 @@ class SslCommerzPaymentController extends Controller
         # Here you have to receive all the order data to initate the payment.
         # Lets your oder trnsaction informations are saving in a table called "orders"
         # In orders table order uniq identity is "transaction_id","status" field contain status of the transaction, "amount" is the order amount to be paid and "currency" is for storing Site Currency which will be checked with paid currency.
+        $payload = SalesEcommerceOrder::where('order_id', $request->order_id)->first();
 
-        $payload = json_decode($request->payload);
-        $order_details = $payload->order_details;
-        $address_details = $payload->address_details;
+        $order_details = $payload;
+
+        $address_details = ($payload->delivery_address_details);
+        try {
+            $address_details = json_decode($payload->delivery_address_details);
+        } catch (\Throwable $th) {
+            $address_details = ($payload->delivery_address_details);
+        }
+
         $post_data = array();
         $post_data['total_amount'] = $order_details->total; # You cant not pay less than 10
         $post_data['currency'] = "BDT";
@@ -119,8 +127,8 @@ class SslCommerzPaymentController extends Controller
 
         # SHIPMENT INFORMATION
         $post_data['ship_name'] = "Store Test";
-        $post_data['ship_add1'] = $address_details->address;
-        $post_data['ship_add2'] = $address_details->address;
+        $post_data['ship_add1'] = $address_details->address ?? " customer address";
+        $post_data['ship_add2'] = $address_details->address ?? " customer address";
         $post_data['ship_city'] = "Dhaka";
         $post_data['ship_state'] = "Dhaka";
         $post_data['ship_postcode'] = "1000";
@@ -133,10 +141,10 @@ class SslCommerzPaymentController extends Controller
         $post_data['product_profile'] = "physical-goods";
 
         # OPTIONAL PARAMETERS
-        $post_data['value_a'] = "ref001";
-        $post_data['value_b'] = "ref002";
-        $post_data['value_c'] = "ref003";
-        $post_data['value_d'] = "ref004";
+        $post_data['value_a'] = "";
+        $post_data['value_b'] = "";
+        $post_data['value_c'] = "";
+        $post_data['value_d'] = "";
 
 
         #Before  going to initiate the payment order status need to update as Pending.
@@ -160,7 +168,6 @@ class SslCommerzPaymentController extends Controller
         $payment_options = $sslc->makePayment($post_data, 'checkout', 'json');
 
 
-
         if (!is_array($payment_options)) {
             print_r($payment_options);
             $payment_options = array();
@@ -180,6 +187,9 @@ class SslCommerzPaymentController extends Controller
         $order_details = DB::table('orders')
             ->where('transaction_id', $tran_id)
             ->select('transaction_id', 'status', 'currency', 'amount')->first();
+
+        $order = SalesEcommerceOrder::where('order_id', $order_details->transaction_id)->first();
+        $user = $order->user()->first();
 
         if ($order_details->status == 'Pending') {
             $validation = $sslc->orderValidate($request->all(), $tran_id, $amount, $currency);
@@ -203,13 +213,15 @@ class SslCommerzPaymentController extends Controller
                 $orderInfo->paid_status = "paid";
                 $orderInfo->paid_amount = $amount;
                 $orderInfo->save();
+
+                if($user){
+                    DB::table('carts')->where('user_id',$user->id)->delete();
+                }
+
                 return redirect()->to('invoice?order_id=' . $tran_id . '&status=success');
             }
         } else if ($order_details->status == 'Processing' || $order_details->status == 'Complete') {
 
-            /*
-             That means through IPN Order status already updated. Now you can just show the customer that transaction is completed. No need to udate database.
-             */
             $orderInfo = SalesEcommerceOrder::with(
                 'order_products',
                 'order_products.product',
@@ -219,6 +231,11 @@ class SslCommerzPaymentController extends Controller
             $orderInfo->paid_status = "paid";
             $orderInfo->paid_amount = $amount;
             $orderInfo->save();
+
+            if($user){
+                DB::table('carts')->where('user_id',$user->id)->delete();
+            }
+
             return redirect()->to('invoice?order_id=' . $tran_id . '&status=success');
         } else {
             $orderInfo = SalesEcommerceOrder::with(
@@ -234,7 +251,7 @@ class SslCommerzPaymentController extends Controller
 
     public function fail(Request $request)
     {
-        dd($request->all());
+
         $tran_id = $request->input('tran_id');
 
         $order_details = DB::table('orders')
@@ -246,10 +263,13 @@ class SslCommerzPaymentController extends Controller
                 ->where('transaction_id', $tran_id)
                 ->update(['status' => 'Failed']);
             echo "Transaction is Falied";
+            return redirect()->to('/');
         } else if ($order_details->status == 'Processing' || $order_details->status == 'Complete') {
             echo "Transaction is already Successful";
+            return redirect()->to('/');
         } else {
             echo "Transaction is Invalid";
+            return redirect()->to('/');
         }
     }
 
@@ -266,10 +286,13 @@ class SslCommerzPaymentController extends Controller
                 ->where('transaction_id', $tran_id)
                 ->update(['status' => 'Canceled']);
             echo "Transaction is Cancel";
+            return redirect()->to('/');
         } else if ($order_details->status == 'Processing' || $order_details->status == 'Complete') {
             echo "Transaction is already Successful";
+            return redirect()->to('/');
         } else {
             echo "Transaction is Invalid";
+            return redirect()->to('/');
         }
     }
 

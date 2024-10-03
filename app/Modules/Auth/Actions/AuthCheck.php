@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Modules\Auth\Actions;
-
+use App\Modules\UserManagement\User\Models\Model as UserModel;
 
 class AuthCheck
 {

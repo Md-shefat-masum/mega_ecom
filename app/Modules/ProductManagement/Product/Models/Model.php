@@ -22,21 +22,25 @@ class Model extends EloquentModel
     static $MedicineProductModel = \App\Modules\ProductManagement\Product\Models\MedicineProductModel::class;
     static $MedicineProductVerientModel = \App\Modules\ProductManagement\Product\Models\MedicineProductVerientModel::class;
 
-
     protected $table = "products";
     protected $guarded = [];
     protected $appends = [
         'current_price',
-        'amount_in_percent',
-        'is_discount',
-        'average_rating',
+        'current_discount_price',
+        'final_price',
         'total_views',
-        'medicine_price',
+        'product_id',
     ];
     protected $casts = [
-        'specifications' => 'array'
+        'specifications' => 'array',
     ];
 
+    protected $hidden = [
+        'customer_sales_price',
+        'retailer_sales_price',
+        'b2b_discount_price',
+        'b2c_discount_price',
+    ];
 
     protected static function booted()
     {
@@ -149,7 +153,6 @@ class Model extends EloquentModel
         );
     }
 
-
     public function product_varient_price()
     {
         return $this->hasMany(self::$productVariantPriceModel, 'product_id', 'id');
@@ -158,71 +161,57 @@ class Model extends EloquentModel
     {
         return $this->hasMany(self::$productCategoryBrandModel, 'product_brand_id');
     }
+
     /**
      * accessors.
      */
-
 
     public function getAverageRatingAttribute()
     {
         return $this->product_reviews()->avg('rating') ?? 0;
     }
 
-    public function getMedicinePriceAttribute()
+
+    public function getCurrentDiscountPriceAttribute()
     {
-        $price = 0;
-        $userType = auth()->user() ?? auth()->user()->role->name ?? 'customer';
-        if ($this->type == "medicine") {
-            // $varient = $this->load('medicine_product_verient:product_id,id,pv_b2c_discount_percent,pv_b2c_price,pv_b2c_mrp,pv_b2b_discount_percent,pv_b2b_price,pv_b2b_mrp');
-            $varient = $this->medicine_product_verient;
-            if ($userType == 'customer') {
-                $price =  $varient->pv_b2c_price ?? 0;
-            } else {
-                $price =  $varient->pv_b2b_price;
+        if (auth()->check()) {
+            if (auth()->user()->role_serial == 3) {
+                return $this->b2c_discount_price;
+            }
+            if (auth()->user()->role_serial == 6) {
+                return $this->b2b_discount_price;
             }
         }
-
-        return $price;
+        return $this->b2c_discount_price;
     }
 
     public function getCurrentPriceAttribute()
     {
-        $price = $this->customer_sales_price;
-
-        if ($this->discount_amount && $this->discount_type) {
-            switch ($this->discount_type) {
-                case 'percent':
-                    $price -= ($this->customer_sales_price * ($this->discount_amount / 100));
-                    break;
-                case 'flat':
-                    $price -= $this->discount_amount;
-                    break;
+        if (auth()->check()) {
+            if (auth()->user()->role_serial == 3) {
+                return $this->customer_sales_price;
+            }
+            if (auth()->user()->role_serial == 6) {
+                return $this->retailer_sales_price;
             }
         }
-
-        return $price;
+        return $this->customer_sales_price;
     }
 
-
-    public function getAmountInPercentAttribute()
+    public function getFinalPriceAttribute()
     {
-        if (($this->discount_amount && $this->discount_type) && $this->discount_type != 'percent') {
-            switch ($this->discount_type) {
-                case 'flat':
-                    return ($this->discount_amount / $this->customer_sales_price) * 100;
+        if (auth()->check()) {
+            if (auth()->user()->role_serial == 3) {
+                return $this->b2c_discount_price ? $this->b2c_discount_price : $this->customer_sales_price;
+            }
+            if (auth()->user()->role_serial == 6) {
+                return $this->b2b_discount_price ? $this->b2b_discount_price : $this->customer_sales_price;;
             }
         }
-
-        return 0;
+        return $this->customer_sales_price;
     }
 
-    public function getIsDiscountAttribute()
-    {
-        // if ($this->discount_type == 'off') {
-        if ($this->discount_amount || $this->medicine_product_verient?->pv_b2c_discount_percent || $this->medicine_product_verient?->pv_b2b_discount_percent) {
-            return true;
-        } else {
-            return false;
-        }
+    public function getProductIdAttribute(){
+        return $this->id;
     }
 }

@@ -1,7 +1,10 @@
 <?php
 
+use App\Mail\OrderSuccessEmail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -74,22 +77,42 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
 });
 
 Route::post('verify-user-otp', [\App\Modules\Auth\Controller::class, 'VerifyOtp']);
-Route::post('logout', function(){
+Route::post('logout', function () {
     auth()->logout();
 });
 
-Route::get('/auth-info',function(){
+Route::get('/auth-info', function () {
     dd(auth()->user());
 });
+Route::post('/custom-auth', function () {
+    $user = App\Modules\UserManagement\User\Models\Model::where('slug', request()->slug)->first();
+    auth()->login($user);
+    return '';
+});
+
+Route::view('email', 'mails.order_success', ["order" => $order_details = \App\Modules\WebsiteApi\Order\Actions\GetSingleOrderDetails::execute("ETEK280933206")]);
 
 Route::group([
     'prefix' => '',
     'namespace' => 'App\Http\Controllers',
 ], function () {
-    Route::get('/cache/{file_name}', 'AssetController@cache')->where('file_name','.*');
+    Route::get('/cache/{file_name}', 'AssetController@cache')->where('file_name', '.*');
     Route::get('/resize/cache/{file_name}', 'AssetController@cache_resize')->where('file_name', '.*');
 });
 
+Route::get('/c-products', function () {
+    $products = \App\Modules\ProductManagement\Product\Models\Model::with('product_image','product_images','product_categories','product_brand')
+        ->limit(50)->get();
+    return $products;
+});
+Route::get('/c-set', function () {
+    $products = \App\Modules\ProductManagement\Product\Models\Model::with('product_image','product_images','product_categories','product_brand')
+        ->limit(50)->get();
+    Cache::put('products', $products, (5 * 60));
+});
+Route::get('/c-get', function () {
+    return Cache::get('products');
+});
 
 require_once __DIR__ . '/ssl_route.php';
 require_once __DIR__ . '/test_route.php';
@@ -152,5 +175,3 @@ require_once __DIR__ . '/test_route.php';
 //     }
 //     dd($fileList);
 // });
-
-

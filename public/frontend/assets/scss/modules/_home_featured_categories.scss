@@ -1,0 +1,48 @@
+.home_featured_categories {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(178px, 1fr));
+
+    @media (max-width: 991.9px) {
+        grid-template-columns: repeat(auto-fit, minmax(89px, 1fr));
+        gap: 10px;
+    }
+
+    .item {
+        a {
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            gap: 20px;
+            align-content: center;
+            text-align: center;
+            height: 137px;
+            font-size: 16px;
+            text-transform: capitalize;
+            cursor: pointer;
+            color: black;
+
+            &:hover {
+                color: orange;
+            }
+
+            @media (max-width: 575.9px) {
+                padding: 10px;
+                gap: 4px;
+                height: 90px;
+                font-size: 10px;
+
+                img {
+                    height: 30px;
+                    width: 30px;
+
+                }
+            }
+        }
+    }
+
+}

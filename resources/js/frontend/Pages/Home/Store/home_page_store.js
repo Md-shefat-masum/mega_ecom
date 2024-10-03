@@ -11,6 +11,12 @@ export const use_home_page_store = defineStore("use_home_page_store", {
         sub_categories: [],
         all_top_products_offer: [],
         all_category_groups: [],
+        all_heighlight_products: {
+            "best_selling_products" : [],
+            "new_products" : [],
+            "trending_products" : [],
+        },
+        home_featured_categories:[],
         feature_products: [],
         all_brands: [],
         preloader: {

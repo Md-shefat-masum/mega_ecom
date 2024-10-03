@@ -16,7 +16,11 @@ class Login
             // dd($request->all());
             $requestData = $request->validated();
 
-            $user = self::$model::where('phone_number', $requestData['phone_number'])->first();
+            /** find user */
+            $user = self::$model::whereAny([
+                'phone_number',
+                'email',
+            ], $requestData['phone_number'])->first();
 
             if (!$user) {
                 return messageResponse('User not found please register', $requestData, 400, 'error');
@@ -24,13 +28,25 @@ class Login
 
             $otp = self::generateOTPCode();
 
-            $isExist = DB::table('otp_codes')->where('phone_number', $requestData['phone_number'])->exists();
+            /** check otp */
+            $isExist = DB::table('otp_codes')
+                ->whereAny([
+                    'phone_number',
+                    'email',
+                ], $requestData['phone_number'])->exists();
+
+            /** delete existing otp */
             if ($isExist) {
-                DB::table('otp_codes')->where('phone_number', $requestData['phone_number'])->delete();
+                DB::table('otp_codes')
+                    ->whereAny([
+                        'phone_number',
+                        'email',
+                    ], $requestData['phone_number'])->delete();
             }
 
             DB::table('otp_codes')->insert([
                 'phone_number' => $requestData['phone_number'],
+                'email' => $requestData['phone_number'],
                 'type' => 'login',
                 'otp' => $otp,
                 'created_at' => now(),
@@ -38,7 +54,8 @@ class Login
             ]);
 
             SendOTPViaSMS($otp, $requestData['phone_number']);
-            
+            SendOTPViaEmail($requestData['phone_number'], "ETEK OTP - " . $otp, $otp);
+
             return messageResponse('OTP sent successfully', ['phone_number' => $requestData['phone_number']]);
         } catch (\Exception $e) {
             return messageResponse($e->getMessage(), [], 500, 'server_error');
@@ -46,7 +63,7 @@ class Login
     }
     public static function generateOTPCode()
     {
-        return rand(100000, 9999999);
+        return rand(1000, 9999);
     }
 }
 

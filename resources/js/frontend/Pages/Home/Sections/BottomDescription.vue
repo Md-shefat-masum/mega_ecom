@@ -11,11 +11,18 @@
 import { common_store } from "../../../Store/common_store";
 import { mapActions, mapState } from "pinia";
 export default {
-
+    created: function(){
+        // console.log(this.website_settings_data)
+    },
     methods: {
         ...mapActions(common_store, {
             get_setting_value: "get_setting_value",
         }),
     },
+    computed: {
+        ...mapState(common_store,[
+            'website_settings_data'
+        ]),
+    }
 }
 </script>

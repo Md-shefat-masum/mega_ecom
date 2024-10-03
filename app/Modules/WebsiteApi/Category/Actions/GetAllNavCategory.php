@@ -14,7 +14,15 @@ class GetAllNavCategory
             $orderByColumn = request()->input('sort_by_col') ?? 'id';
             $orderByType = request()->input('sort_type') ?? 'asc';
             $status = request()->input('status') ?? 'active';
-            $fields = request()->input('fields') ?? '*';
+            $fields = request()->input('fields') ?? [
+                'id',
+                'title',
+                'slug',
+                'image',
+                'is_nav',
+                'parent_id',
+                'image',
+            ];
             $with = [];
             $condition = [];
 

@@ -6,21 +6,29 @@ class GetAllFeaturedCategory
 {
     static $CategoryModel = \App\Modules\ProductManagement\ProductCategory\Models\Model::class;
 
-    public static function execute()
+    public static function execute($all = false, $limit = 10)
     {
         try {
 
-            $pageLimit = request()->input('limit') ?? 10;
-            $orderByColumn = request()->input('sort_by_col') ?? 'id';
+            $pageLimit = request()->input('limit') ?? $limit;
+            $orderByColumn = request()->input('sort_by_col') ?? 'serial';
             $orderByType = request()->input('sort_type') ?? 'asc';
             $status = request()->input('status') ?? 'active';
-            $fields = request()->input('fields') ?? '*';
+            $fields = request()->input('fields') ?? [
+                'id',
+                'slug',
+                'title',
+                'image',
+                'is_featured',
+            ];
             $with = [];
-            $condition = [];
+            $condition = [
+                "is_featured" => 1,
+            ];
 
-            $data = self::$CategoryModel::query()->where('parent_id', 0)->where('is_featured', 1);
+            $data = self::$CategoryModel::query();
 
-            if (request()->has('get_all') && (int)request()->input('get_all') === 1) {
+            if ($all || (request()->has('get_all') && (int)request()->input('get_all') === 1)) {
                 $data = $data
                     ->with($with)
                     ->select($fields)
@@ -39,10 +47,7 @@ class GetAllFeaturedCategory
                     ->paginate($pageLimit);
             }
 
-            $response = entityResponse($data);
-            $response->header('Cache-Control', 'public, max-age=300')
-                ->header('Expires', now()->addMinutes(25)->toRfc7231String());
-            return $response;
+            return $data;
         } catch (\Exception $e) {
             return messageResponse($e->getMessage(), [], 500, 'server_error');
         }

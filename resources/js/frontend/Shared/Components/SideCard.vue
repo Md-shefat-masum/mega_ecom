@@ -3,104 +3,77 @@
         <a href="javascript:void(0)" class="overlay" onclick="closeCart()"></a>
         <div class="cart-inner">
             <div class="cart_top">
-                <h3>my cart</h3>
+                <h3>
+                    CART
+                    <span style="font-size: 16px;">
+                        ({{ carts.length }} Items)
+                    </span>
+
+                </h3>
                 <div class="close-cart">
                     <a href="javascript:void(0)" onclick="closeCart()">
                         <i class="fa fa-times" aria-hidden="true"></i>
                     </a>
                 </div>
             </div>
-            <div class="cart_media">
-                <ul class="cart_product">
-                    <li v-for="cart in all_cart_data" :key="cart.id">
-                        <div class="media">
-                            <Link :href="`/product-details/${cart?.product?.slug}`" class="dummy-image-render">
-                            <img class="me-3" :src="load_image(`${cart.product.product_image?.url}`)" />
-                            </Link>
-                            <div class="media-body">
-                                <Link :href="`/product-details/${cart?.product?.slug}`">
-                                <h4>{{ cart?.product?.title }}</h4>
-                                </Link>
-                                <h6 class="d-flex gap-1">
-                                    <p>
-                                        {{ get_price(cart?.product).new_price }} ৳
-                                    </p>
-                                    <p class="text-decoration-line-through text-secondary">
-                                        {{ get_price(cart?.product).old_price }} ৳
-                                    </p>
+            <div class="cart_media cart_scroll">
+                <table class="w-100">
+                    <tbody>
+                        <tr v-for="cart in carts" :key="cart.product_id" class="sidebar_cart_item_tr">
+                            <td style="width: 50px; vertical-align: top;">
+                                <i @click="delete_item(cart)" class="fa fa-trash btn btn-sm btn-outline-danger"></i>
+                            </td>
+                            <td>
+                                <div class="side_cart_item">
 
-                                </h6>
-                                <div class="addit-box">
-                                    <div class="qty-box">
-                                        <div class="input-group">
-                                            <button class="qty-minus" @click="
-                        cart_quantity_update(
-                            cart.id,
-                            'minus',
-                            null
-                        )
-                        "></button>
-                                            <input class="qty-adj form-control" type="number" min="1"
-                                                v-model="cart.quantity" @keyup="
-                        cart_quantity_update(
-                            cart.id,
-                            null,
-                            $event.target.value
-                        )
-                        " />
-                                            <button class="qty-plus" @click="
-                        cart_quantity_update(
-                            cart.id,
-                            'plus',
-                            null
-                        )
-                        "></button>
+                                    <h5 class="side_cart_product_title">{{ cart.title }}</h5>
+
+                                    <img class="me-3" :src="load_image(`${cart?.product_image?.url}`)"
+                                        style="height: 50px;width: 50px;" />
+
+                                    <div class="d-flex align-items-center cart_quantity_wraper">
+                                        <div class="cart_current_price">
+                                            {{ number_format(cart.final_price) }} ৳
+                                        </div>
+                                        <div>
+                                            <i class="fa fa-close"></i>
+                                        </div>
+                                        <div class="cart_qty_updater">
+                                            <button class="btn" @click="
+                                                add_to_cart(
+                                                    cart,
+                                                    cart.qty - 1,
+                                                )
+                                                ">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                            <input type="text" :value="cart.qty" @keyup="validate_number(cart)">
+                                            <button class="btn" @click="
+                                                add_to_cart(
+                                                    cart,
+                                                    cart.qty + 1,
+                                                )
+                                                ">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
                                         </div>
                                     </div>
-                                    <div class="pro-add">
-                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                            data-bs-target="#edit-product">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round"
-                                                class="feather feather-edit">
-                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7">
-                                                </path>
-                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z">
-                                                </path>
-                                            </svg>
-                                        </a>
-                                        <a href="javascript:void(0)" @click="remove_cart_item(cart.id)">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round"
-                                                class="feather feather-trash-2">
-                                                <polyline points="3 6 5 6 21 6"></polyline>
-                                                <path
-                                                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                                                </path>
-                                                <line x1="10" y1="11" x2="10" y2="17"></line>
-                                                <line x1="14" y1="11" x2="14" y2="17"></line>
-                                            </svg>
-                                        </a>
-                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-                <ul class="cart_total">
+                            </td>
+                            <td class="text-end side_bar_last_child">
+                                <div class="active_price">
+                                    {{ number_format(cart.qty * (cart.final_price)) }} ৳
+                                </div>
 
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <ul class="cart_total">
                     <li>
                         <div class="total">
-                            total<span> {{ total_cart_price }} ৳</span>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="buttons">
-                            <Link href="/cart" class="btn btn-solid btn-sm">view cart
-                            </Link>
                             <Link href="/checkout" class="btn btn-solid btn-sm">checkout</Link>
+                            <span> {{ number_format(total_price) }} ৳</span>
                         </div>
                     </li>
                 </ul>
@@ -109,61 +82,41 @@
     </div>
 </template>
 <script>
-import { mapActions, mapState } from "pinia";
-import { common_store } from "../../Store/common_store";
-import { auth_store } from "../../Store/auth_store";
+import { mapActions, mapState, mapGetters } from "pinia";
+import { cart_store } from "../../Store/cart_store";
 
 export default {
-
     data: () => ({
         user_type: 'customer'
     }),
-
     methods: {
-
-        ...mapActions(common_store, {
-            get_all_cart_data: "get_all_cart_data",
-            remove_cart_item: "remove_cart_item",
-            cart_quantity_update: "cart_quantity_update",
-        }),
         load_image: window.load_image,
+        ...mapActions(cart_store, [
+            "add_to_cart",
+            "delete_item",
+        ]),
+        validate_number: function (cart) {
+            let input = event.target.value;
+            let cleanedInput = input.replace(/[a-zA-Z]/g, '');
+            const isValidNumber = !isNaN(cleanedInput) && cleanedInput.trim() !== '';
 
+            if (isValidNumber) {
+                if (cleanedInput < 1) cleanedInput = 1;
+                cart.qty = parseInt(cleanedInput);
+                event.target.value = parseInt(cleanedInput)
+            } else {
+                cart.qty = 1;
+                event.target.value = 1
+            }
+        }
     },
-
     computed: {
-
-        ...mapState(common_store, {
-            all_cart_data: "all_cart_data",
-            total_cart_price: "total_cart_price",
-            get_price: "get_price",
-        }),
-
-        ...mapState(auth_store, {
-            "auth_info": "auth_info",
-        }),
-
-
+        ...mapGetters(cart_store, [
+            "total_price",
+        ]),
+        ...mapState(cart_store, [
+            "carts",
+        ])
     },
-    watch: {
-        is_auth: {
-            handler: function () {
-                if (this.is_auth) {
-                    this.user_type = this.auth_info?.role?.name ?? 'customer';
-                }
-            },
-            immediate: true,
-        },
-    },
-
 };
 </script>
-
-<style>
-.dummy-image-render {
-    background-image: url('/dummy.png');
-    height: 40px;
-    width: 80px;
-    background-repeat: no-repeat;
-    background-size: contain;
-}
-</style>

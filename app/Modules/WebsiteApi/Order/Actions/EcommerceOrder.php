@@ -5,6 +5,7 @@ namespace App\Modules\WebsiteApi\Order\Actions;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use App\Modules\ProductManagement\Product\Models\Model as ProductModel;
 
 class EcommerceOrder
 {
@@ -16,32 +17,41 @@ class EcommerceOrder
     public static function execute($request)
     {
         try {
-
-            // dd($request->all());
             $orderDetails = $request->all();
+            $user = null;
+            $cartItems = json_decode(request()->cart_items);
+            $user_type = 'ecommerce'; // ('ecommerce','retail_order')
+            $user_slug = null;
 
+            if(request()->user_slug){
+                $user_slug = request()->user_slug;
+            }
+            if (auth()->check()) {
+                $user_slug = auth()->user()->user_slug;
+            }
 
-            // $userType = auth()->user()?->role?->name;
-            $user = self::$userModel::where('id',auth()->user()->id)->with('role')->first();
-            $userType = $user->role->name;
+            if($user_slug){
+                $user = self::$userModel::where('slug', $user_slug)->with('role')->first();
 
-            $cartItems = self::$cartModel::with(['product', 'product.medicine_product_verient'])
-                ->where('user_id', auth()->id())
-                ->get();
-
-            $cartSubtotal = $cartItems->sum(function ($cartItem) use ($userType) {
-                if ($cartItem->product_type == 'medicine') {
-                    return $cartItem->product->medicine_price * $cartItem->quantity;
-                } else {
-                    return $cartItem->product->current_price * $cartItem->quantity;
+                if ($user->role_serial == 6) {
+                    $user_type = 'retail_order';
                 }
+            }
 
-                return 0;
-            });
+            // dd($request->all(), $cartItems);
 
-            $total = $cartSubtotal;
+            $total = $cartSubtotal = 0;
+            foreach ($cartItems as $key => $item) {
+                $product = ProductModel::where('id', $item->product_id)->first();
+                $total += $product->current_price * $item->qty;
+                $cartSubtotal = $total;
 
-            // dd($orderDetails, auth()->user()->toArray(), $cartItems->toArray(), $cartSubtotal);
+                $cartItems[$key]->current_price = $product->current_price;
+                $cartItems[$key]->product_price = $product->product_price ?? $product->current_price;
+                $cartItems[$key]->product_name = $product->title;
+                $cartItems[$key]->final_price = $product->final_price;
+            }
+
             $delivery_address_details = [
                 "user_name" => $request->user_name,
                 "phone" => $request->phone,
@@ -55,62 +65,61 @@ class EcommerceOrder
             $orderInfo = [
                 "order_id" => self::generateUniqueOrderId(),
                 "date" => Carbon::now()->toDateString(),
-                "user_type" => "ecommerce",
-                "user_id" => auth()->user()->id,
+                "user_type" => $user_type,
+                "user_id" => $user->id ?? null,
                 "is_delivered" => 0,
-                "delivery_address_details" => ($delivery_address_details),
+                "delivery_address_details" => json_encode($delivery_address_details),
                 "order_status" => 'pending',
                 "delivery_method" => "home_delivery",
-                "delivery_charge" => $orderDetails["delivery_charge"] ?? 0,
+                "delivery_charge" => request()->delivery_charge ?? 0,
                 "additional_charge" => 0,
                 "product_coupon_id" => null,
                 "coupon_discount" => null,
                 "discount" => null,
                 "discount_type" => null,
                 "is_paid" => 0,
-                "paid_amount" => null,
+                "paid_amount" => 0,
                 "paid_status" => 'due',
                 "payment_method" => $orderDetails["payment_type"],
 
                 "subtotal" => $cartSubtotal,
-                "total" =>  $total + $orderDetails["delivery_charge"] ?? 0,
+                "total" =>  $total + (request()->delivery_charge ?? 0),
             ];
 
-            if ($order = self::$model::create($orderInfo)) {
-                $product_items = "";
-                foreach ($cartItems as $key => $cartItem) {
+            $order = self::$model::create($orderInfo);
 
-                    self::$orderProductmodel::create([
-                        'sales_ecommerce_order_id' => $order->id,
-                        'product_id' => $cartItem->product_id,
-                        'product_price' => $cartItem->product->type == 'medicine' ? $cartItem->product->medicine_price : $cartItem->product->current_price,
-                        'product_name' => $cartItem->product->title,
-                        'discount_type' => null,
-                        'tax' => null,
-                        'price' => $cartItem->product->type == 'medicine' ? $cartItem->product->medicine_price : $cartItem->product->current_price,
-                        'qty' => $cartItem->quantity,
-                        'subtotal' => $order->subtotal,
-                        'tax_total' =>  0,
-                        'total' => $order->total,
-                    ]);
+            $product_items = "";
+            foreach ($cartItems as $key => $cartItem) {
 
-                    $product_items .= $key + 1 . ". " . $cartItem->product->title . "\n";
-                    $product_items .= "৳ " . ($cartItem->product->current_price) . " x $cartItem->quantity = ৳ " . $cartItem->product->current_price * $cartItem->quantity . "\n";
-                    $product_items .=  "\n";
-                }
+                $sub_total = $cartItem->qty * $cartItem->current_price;
+                $total = $cartItem->qty * $cartItem->current_price;
+                self::$orderProductmodel::create([
+                    'sales_ecommerce_order_id' => $order->id,
+                    'product_id' => $cartItem->product_id,
+                    'product_price' => $cartItem->product_price,
+                    'product_name' => $cartItem->product_name,
+                    'discount_type' => null,
+                    'tax' => null,
+                    'price' => $cartItem->current_price,
+                    'qty' => $cartItem->qty,
+                    'subtotal' => $sub_total,
+                    'tax_total' =>  0,
+                    'total' => $total,
+                ]);
 
-
-                self::$cartModel::where('user_id', auth()->id())->delete();
+                $product_items .= $key + 1 . ". " . $cartItem->product_name . "\n";
+                $product_items .= "৳ " . ($cartItem->current_price) . " x $cartItem->qty = ৳ " . $sub_total . "\n";
+                $product_items .=  "\n";
             }
 
-            $order_details = self::$model::with('user')->where('order_id', $orderInfo['order_id'])->first();
+            if ($user && $order->payment_method != 'online') {
+                self::$cartModel::where('user_id', $user->id)->delete();
+            }
 
-            $payload = [
-                "order_details" => $order_details,
-                "address_details" =>  $orderDetails,
-            ];
+            // $order_details = self::$model::with('user')->where('order_id', $orderInfo['order_id'])->first();
+            $order_details = \App\Modules\WebsiteApi\Order\Actions\GetSingleOrderDetails::execute($order->order_id);
 
-            return messageResponse('Order Successfully completed', $payload, 200, 'success');
+            return messageResponse('Order Successfully completed', $order_details, 200, 'success');
         } catch (\Exception $e) {
             // dd($e);
             return messageResponse($e->getMessage(), [], 500, 'server_error');

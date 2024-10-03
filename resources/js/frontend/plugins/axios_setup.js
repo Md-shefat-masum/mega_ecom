@@ -22,7 +22,7 @@ window.publicAxios = async function (apiEndPoint = null, type = 'get', payload =
     }
 }
 
-window.privateAxios = async function (apiEndPoint = null, type = 'get', payload = {}) {
+export const privateAxios = async function (apiEndPoint = null, type = 'get', payload = {}) {
     window.axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem('token')}`;
     // try {
     //     await axios.get("/auth-check");
@@ -51,6 +51,8 @@ window.privateAxios = async function (apiEndPoint = null, type = 'get', payload 
     }
 
 }
+
+window.privateAxios = privateAxios;
 
 axios.interceptors.request.use(
     async function (config) {

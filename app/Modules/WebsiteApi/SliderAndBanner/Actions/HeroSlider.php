@@ -13,9 +13,15 @@ class HeroSlider
             $orderByColumn = request()->input('sort_by_col') ?? 'id';
             $orderByType = request()->input('sort_type') ?? 'desc';
             $status = request()->input('status') ?? 'active';
-            $fields = request()->input('fields') ?? '*';
+            $fields = request()->input('fields') ?? [
+                'id',
+                'image',
+                'is_show',
+            ];
             $with = [];
-            $condition = [];
+            $condition = [
+                'is_show' => 1,
+            ];
 
             $data = self::$model::query();
 

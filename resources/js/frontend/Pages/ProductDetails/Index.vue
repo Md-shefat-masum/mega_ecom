@@ -54,10 +54,10 @@ export default {
             },
         ],
     }),
-    mounted: function(){
+    created: function(){
         this.product_initial_data = this.product;
     },
-    created: async function () {
+    mounted: async function () {
         // console.log(this.slug);
         this.set_slug(this.slug);
 

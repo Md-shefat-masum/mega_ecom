@@ -53,7 +53,7 @@ class VerifyOtp
                 }
             }
 
-            auth()->guard('web')->login($user);
+            auth()->guard('web')->login($user, 1);
             // request()->session()->regenerate();
 
             return messageResponse('Your OTP successfully Matched', $data, 200, 'success');

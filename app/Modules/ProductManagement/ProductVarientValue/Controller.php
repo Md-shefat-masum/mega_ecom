@@ -19,7 +19,6 @@ use App\Http\Controllers\Controller as ControllersController;
 
 class Controller extends ControllersController
 {
-
     public function index(GetAllValidation $request)
     {
         $data = All::execute($request);

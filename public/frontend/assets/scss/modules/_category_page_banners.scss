@@ -1,0 +1,13 @@
+.category_page_banners {
+    max-height: 300px;
+    margin-bottom: 30px;
+    overflow: hidden;
+    border-radius: 5px;
+
+    img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+}

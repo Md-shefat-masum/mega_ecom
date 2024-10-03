@@ -1,11 +1,13 @@
 <?php
 
+use App\Mail\OrderSuccessEmail;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Illuminate\support\Str;
 use Faker\Factory as Faker;
+use Illuminate\Support\Facades\Mail;
 
 if (!function_exists('entityResponse')) {
     function entityResponse($data = null, $statusCode = 200, $status = 'success', $message = null)
@@ -47,31 +49,32 @@ if (!function_exists('additionalValidation')) {
 
 
 if (!function_exists('sendToTelegram')) {
-    function sendToTelegram($chatId = '6555657006', $content = [])
+    function sendToTelegram($content = [], $chatId = '812239513')
     {
-        $date = $content['date'];
-        $order_id =  $content['order_id'];
-        $name =  $content['user_name'];
-        $phone =  $content['phone'];
-        $address =  $content['address'];
-        $product_items =  $content['product_items'];
-        $total =  $content['total'];
-        $message = "
-আসসালামু আলাইকুম ওয়ারহমাতুল্লাহ।
-নতুন অর্ডার এসেছে
-অর্ডার এর সময়: $date
-অর্ডার এর বিবরণ
--------------------
-$product_items
--------------------
-সর্বমোট মূল্য - ৳ $total
--------------------
-অর্ডারকারীর বিবরণ
-নাম : $name
-মোবাইল নাম্বার : $phone
-ঠিকানা : $address
--------------------
-বিস্তারিত : https://etek.com.bd/invoice/$order_id";
+        $date = Carbon::parse($content['date'])->format('D d M, Y') ?? '';
+        $order_id =  $content['order_id'] ?? '';
+        $name =  $content['user_name'] ?? '';
+        $phone =  $content['phone'] ?? '';
+        $address =  $content['address'] ?? '';
+        $product_items =  $content['product_items'] ?? '';
+        $total =  $content['total'] ?? '';
+
+        $message = "আসসালামু আলাইকুম ওয়ারহমাতুল্লাহ। \n";
+        $message .= "একটি নতুন অর্ডার এসেছে \n";
+        $message .= "অর্ডার এর সময়: $date \n\n";
+        $message .= "অর্ডার এর বিবরণ \n";
+        $message .= "------------------- \n";
+        $message .= "$product_items";
+        $message .= "------------------- \n";
+        $message .= "সর্বমোট মূল্য: ৳ $total \n";
+        $message .= "------------------- \n \n";
+        $message .= "অর্ডারকারীর বিবরণ \n";
+        $message .= "নাম : $name \n";
+        $message .= "মোবাইল নাম্বার : $phone \n";
+        $message .= "ঠিকানা : $address \n";
+        $message .= "------------------- \n\n";
+        $message .= "বিস্তারিত : https://etek.com.bd/invoice?order_id=$order_id \n";
+        $message .= "";
 
         $bot_token = env('BOT_TOKEN');
         $method = "sendMessage";
@@ -84,7 +87,6 @@ $product_items
         $response = Http::get($url . '?chat_id=' . $parameters['chat_id'] . '&text=' . $parameters['text']);
         return $response->json();
     }
-
 
 
     // try {
@@ -104,14 +106,6 @@ $product_items
     // } catch (\Exception $e) {
     //     dd($e);
     // }
-
-
-
-
-
-
-
-
 
 }
 
@@ -164,9 +158,6 @@ if (!function_exists('uploader')) {
         return $full_name;
     }
 }
-
-
-
 
 
 function numercToAlphabet($number)
@@ -265,32 +256,18 @@ function numercToAlphabet($number)
 
 function facker()
 {
-
     return   Faker::create();
 }
 
-/**
- * ```js
-  logEntry([
-        "user_id" => $data['user_id'],
-        "user_type" => $data['user_type'],
-        "date" => $data['date'],
-        "name" => $data['name'],
-        "amount" => $data['amount'],
-        "category_id" => $data['category_id'],
-        "account_id" => $data['account_id'],
-        "account_number_id" => $data['account_number_id'],
-        "trx_id" => $data['trx_id'],
-        "receipt_no" => $data['receipt_no'],
-        "is_income" => $data['is_income'],
-        "is_expense" => $data['is_expense'],
-        "description" => $data['description'],
-        "random_user" => $data['random_user'],
-    ])
- */
+
+function send_order_mail($order, $to="myphoto288@gmail.com"){
+    Mail::to($to)
+    ->send(new OrderSuccessEmail($order));
+}
 
 
 // dd(__DIR__);
 include_once(__DIR__ . '/Stock.php');
 include_once(__DIR__ . '/Product.php');
 include_once(__DIR__ . '/SMSGateway.php');
+include_once(__DIR__ . '/SendOTPViaEmail.php');

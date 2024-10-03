@@ -4,26 +4,14 @@
             <div class="product-imgbox">
                 <div class="product-front">
                     <Link :href="`/product-details/${product.slug}`">
-                    <img :src="load_image(`${product.product_image?.url}`,true,true)
+                    <img :src="load_image(`${product.product_image?.url}`, true, true)
                         " class="img-fluid" />
                     </Link>
-                    <a v-if="product.is_available" @click="is_auth ? buyNow(product.id) : openAccount()"
-                        class="buy_now_btn c-pointer">
-                        <i class="icon-shopping-cart icon"></i>
-                        Buy Now
-                    </a>
+                    <buy-now-button :product="product" />
                 </div>
-                <div class="product-icon" v-if="product.is_available">
-                    <button @click="is_auth ? add_to_cart(product.id, product) : openAccount()" title="add to cart"
-                        class="tooltip-left" data-tippy-content="Add to cart" tabindex="0">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="feather feather-shopping-cart">
-                            <circle cx="9" cy="21" r="1"></circle>
-                            <circle cx="20" cy="21" r="1"></circle>
-                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                        </svg>
-                    </button>
+                <div class="product-icon">
+                    <AddToCartButton :product="product" v-if="product.is_available" />
+
                     <a @click="is_auth ? add_to_wish_list(product.id) : openAccount()" href="javascript:void(0)"
                         title="add to wish list" class="add-to-wish tooltip-left" data-tippy-content="Add to Wishlist"
                         tabindex="0">
@@ -49,8 +37,8 @@
                 <div class="new-label" v-if="product.is_new">
                     <div>new</div>
                 </div>
-                <div class="on-sale" v-if="product.discount_amount > 0">
-                    save {{ product.discount_amount }} ৳
+                <div class="on-sale" v-if="product.current_discount_price > 0">
+                    save {{ product.current_discount_price }} ৳
                 </div>
             </div>
             <div class="product-detail">
@@ -58,24 +46,23 @@
                     <div class="detail-left">
                         <Link :href="`/product-details/${product.slug}`">
                         <h6 class="price-title">
-
                             {{ product.title.substring(0, 50) }}
                         </h6>
                         </Link>
                     </div>
 
                     <div class="detail-right" v-if="product.is_available">
-                        <template v-if="product.is_discount">
+                        <template v-if="product.current_discount_price">
                             <div class="price">
-                                {{ get_price(product)?.new_price }} ৳
+                                {{ product.current_discount_price }} ৳
                             </div>
                             <div class="check-price">
-                                {{ get_price(product)?.old_price }} ৳
+                                {{ product.current_price }} ৳
                             </div>
                         </template>
                         <template v-else>
                             <div class="price">
-                                {{ get_price(product)?.new_price }} ৳
+                                {{ product.current_price }} ৳
                             </div>
                         </template>
                     </div>
@@ -95,7 +82,13 @@
 import { mapActions, mapState } from "pinia";
 import { common_store } from '../Store/common_store';
 import { auth_store } from '../Store/auth_store';
+import AddToCartButton from "./ProductItemComponents/AddToCartButton.vue";
+import BuyNowButton from "./ProductItemComponents/BuyNowButton.vue";
 export default {
+    components: {
+        AddToCartButton,
+        BuyNowButton,
+    },
     props: ["product"],
 
     data: () => ({
@@ -103,7 +96,6 @@ export default {
     }),
 
     created: async function () {
-
 
     },
 

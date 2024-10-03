@@ -9,7 +9,10 @@ class GetAllCategoryParent
     public static function execute()
     {
         try {
-            $data = self::$CategoryModel::query()->whereIn('parent_id', [0, null])->get();
+            $data = self::$CategoryModel::query()
+            ->select('id','slug','title','parent_id','image')
+            ->whereIn('parent_id', [0, null])
+            ->get();
             return $data;
         } catch (\Exception $e) {
             return messageResponse($e->getMessage(), [], 500, 'server_error');

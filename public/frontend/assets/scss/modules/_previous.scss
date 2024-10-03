@@ -30,9 +30,11 @@ header {
     }
 }
 
-@media (max-width: 991.9px) {
-    .layout-header2 .main-menu-block .menu-nav {
-        display: block;
+.layout-header2 .main-menu-block .menu-nav {
+    display: none;
+
+    @media (max-width: 991.9px) {
+        display: none;
     }
 }
 
@@ -59,5 +61,67 @@ header {
 @media (max-width: 1199px) {
     .layout-header2 {
         background-color: white;
+    }
+}
+
+.section_title {
+    .text {
+        font-size: 30px;
+        text-transform: uppercase;
+        color: #3e3e3e;
+
+        @media (max-width: 574.9px) {
+            font-size: 16px;
+        }
+    }
+}
+
+.tap-top.top-cls {
+    @media (max-width: 500px) {
+        display: none !important;
+    }
+}
+
+.contact-page .theme-form {
+    background-color: white;
+    border: 0;
+    padding: 20px;
+}
+
+.checkout-page .checkout-form .check-out .form-group:last-child label {
+    margin-bottom: 10px;
+}
+
+.checkout-page .checkout-form textarea {
+    height: 100px;
+}
+
+@media (max-width: 420px) {
+    .checkout-page .checkout-form textarea {
+        height: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    .contact-page .theme-form input {
+        margin-bottom: 0;
+    }
+}
+
+@media (max-width: 420px) {
+    .checkout-page .checkout-form .form-group {
+        margin-bottom: 10px;
+    }
+}
+
+body{
+    scroll-behavior: unset;
+}
+html {
+    scroll-behavior: unset;
+}
+@media (prefers-reduced-motion: no-preference) {
+    :root {
+        scroll-behavior: auto;
     }
 }

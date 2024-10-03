@@ -3,7 +3,7 @@
         <div class="custom-container">
             <h2 class="title">Brands We Are Working With</h2>
             <div class="brand_items">
-                <carousel :breakpoints="breakpoints" :pauseAutoplayOnHover="true" :autoplay="300" :wrapAround="true" :transition="500">
+                <carousel :breakpoints="breakpoints" :pauseAutoplayOnHover="true" :autoplay="500" :wrapAround="true" :transition="500">
                     <slide v-for="item in brands" :key="item.id">
                         <div class="item">
                             <Link :href="`/brand/${item.slug}`">

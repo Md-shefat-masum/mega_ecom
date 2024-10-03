@@ -2,7 +2,7 @@
     <Layout>
 
         <Head>
-            <title>{{ slug }} Price in Bangladesh</title>
+            <title>{{ category?.title }}</title>
         </Head>
         <div class="breadcrumb-main py-3">
             <div class="custom-container">
@@ -18,13 +18,11 @@
                             <div class="page-main-content">
                                 <div class="row">
                                     <div class="col-sm-12">
+
                                         <div class="top-banner-wrapper mb-2">
-                                            <skeleton v-if="preloader" :width="`100%`" :height="`300px`"></skeleton>
-                                            <img v-else-if="category.image" :src="load_image(category?.image)"
-                                                class="img-fluid" :alt="category?.title">
-                                            <img v-else src="/dummy.png" class="img-fluid border"
-                                                style="max-height: 200px; width: 100%;">
+                                            <page-banner />
                                         </div>
+
                                         <div class="top-bar ws-box">
                                             <div class="row">
                                                 <div class="col-sm-4 col-xs-2 actions">
@@ -67,12 +65,7 @@
 
                                         <div class="collection-product-wrapper">
                                             <div class="py-5">
-                                                <template v-if="preloader">
-                                                    <product-card-skeleton v-for="i in 30"
-                                                        :key="i"></product-card-skeleton>
-                                                </template>
-                                                <div v-else class="product_list"
-                                                    :class="{ product_left: products.data?.length < 5 }">
+                                                <div class="product_list" :class="{ product_left: products.data?.length < 5 }">
                                                     <div v-for="i in products.data" :key="i.id">
                                                         <ProductItem :product="i" />
                                                     </div>
@@ -117,25 +110,24 @@
                     </div>
                 </div>
             </div>
-            <div class="py-4"></div>
+            <div class="py-2"></div>
         </section>
     </Layout>
 </template>
 
 <script>
+
 import Layout from "../../Shared/Layout.vue";
-
 import ProductItem from "../../Components/ProductItem.vue";
-
 import BreadCumb from '../../Components/BreadCumb.vue';
 import { category_store } from "./Store/category_store.js"
 import { mapActions, mapState } from 'pinia';
-
 import Skeleton from '../../Components/Skeleton.vue';
 import ProductCardSkeleton from '../../Components/Skeliton/ProductCardSkeleton.vue';
+import PageBanner from "./Components/PageBanner.vue";
 
 export default {
-    components: { Layout, ProductItem, BreadCumb, Skeleton, ProductCardSkeleton },
+    components: { Layout, ProductItem, BreadCumb, Skeleton, ProductCardSkeleton, PageBanner },
     props: ['slug', 'page'],
 
     data: () => ({
