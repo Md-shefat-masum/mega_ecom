@@ -2,9 +2,9 @@
     <nav class="app_container nav_list">
         <ul>
             <li>
-                <a href="/search">
-                    <i class="icon icon-search"></i>
-                    <span>Search</span>
+                <a @click.prevent="toggle_category()" href="/products">
+                    <i class="icon icon-list"></i>
+                    <span>categories</span>
                 </a>
             </li>
             <li>
@@ -59,6 +59,11 @@ import { cart_store } from '../../Store/cart_store';
 import { auth_store } from '../../Store/auth_store';
 import { mapState } from 'pinia';
 export default {
+    methods: {
+        toggle_category: function () {
+            document.querySelector('.modal_category_all_page').classList.toggle('active');
+        },
+    },
     computed: {
         ...mapState(auth_store, [
             "is_auth"

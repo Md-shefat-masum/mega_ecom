@@ -10,8 +10,10 @@ class GetAllCategoryParent
     {
         try {
             $data = self::$CategoryModel::query()
+            ->active()
             ->select('id','slug','title','parent_id','image')
             ->whereIn('parent_id', [0, null])
+            ->where('parent_id',"!=", -1)
             ->get();
             return $data;
         } catch (\Exception $e) {

@@ -27,16 +27,12 @@ class HandleInertiaRequests extends Middleware
         return parent::version($request);
     }
 
-    /**
-     * Define the props that are shared by default.
-     *
-     * @see https://inertiajs.com/shared-data
-     *
-     * @return array<string, mixed>
-     */
+
+
     public function share(Request $request): array
     {
-        $data = Cache::remember('shared_data', (5 * 60), function(){
+
+        $data = Cache::remember('shared_data', (5 * 60), function () {
             $fields = [
                 'header_logo',
                 'footer_logo',

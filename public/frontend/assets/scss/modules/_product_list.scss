@@ -4,7 +4,7 @@
     grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
 
     &.product_left {
-        grid-template-columns: repeat(auto-fit, minmax(210px, 250px));
+        grid-template-columns: repeat(auto-fit, minmax(210px, 210px));
     }
 
     >div {

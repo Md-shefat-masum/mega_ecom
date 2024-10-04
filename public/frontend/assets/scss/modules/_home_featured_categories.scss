@@ -26,6 +26,10 @@
             cursor: pointer;
             color: black;
 
+            img{
+                width: 48px;
+            }
+
             &:hover {
                 color: orange;
             }

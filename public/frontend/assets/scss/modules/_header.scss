@@ -1,8 +1,50 @@
-.layout-header2 .main-menu-block .brand-logo{
-    a{
+@media (max-width: 574.9px) {
+    header {
+        display: none;
+    }
+}
+
+.layout-header2 .main-menu-block .brand-logo {
+    a {
         display: inline-block;
-        img{
+
+        img {
             height: 40px;
+        }
+    }
+}
+
+.mobile_header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    background: white;
+    box-shadow: 0px -6px 16px rgb(0 0 0 / 10%);
+
+    .header_search_wrapper {
+        position: relative;
+
+        .header_search_icon {
+            position: absolute;
+            top: calc(50% - 1px);
+            left: 11px;
+            transform: translateY(-50%);
+            font-weight: 300;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            margin: 6px 0px;
+            border-radius: 25px;
+            border: 1px solid #8080804a;
+            padding: 8px 8px 8px 33px;
+            font-size: 12px;
+
+            &:focus {
+                outline: 0;
+            }
         }
     }
 }

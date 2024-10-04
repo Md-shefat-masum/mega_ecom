@@ -81,7 +81,7 @@ export default {
         },
         visit_category: function (slug) {
             this.close_category();
-            router.visit(`/category/${slug}`);
+            router.visit(`/products/${slug}`);
         },
         get_sub_categories: function () {
             axios.get(`get-all-sub-category-by-category-id/${this.selected.slug}?get_all=1`)
@@ -95,6 +95,7 @@ export default {
             parent_categories: "parent_categories",
             nav_categories: "side_nav_categories",
         }),
+        
     },
 }
 </script>

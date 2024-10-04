@@ -8,22 +8,12 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
 // git rm --cached --ignore-unmatch storage/log/oauth-private.zip
 
 Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
     Route::get('/', 'Website\WebsiteController@home')->name('website_home');
+    Route::get('/search-products', 'Website\WebsiteController@mobile_search')->name('website_mobile_search');
 
     Route::get('/blogs', 'Website\WebsiteController@blogs')->name('website_blogs');
     Route::get('/blog-details/{slug}', 'Website\WebsiteController@blogDetails')->name('website_blog_details');
@@ -64,16 +54,16 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('/register', 'Website\AuthController@register')->name('register');
     Route::get('/retailer-register', 'Website\AuthController@retailerRegister')->name('retailerRegister');
 
-    Route::get('/uploads_variant', 'Website\TestController@uploads_variant');
-    Route::get('/attach_category_into_products', 'Website\TestController@attach_category_into_products');
+    // Route::get('/uploads_variant', 'Website\TestController@uploads_variant');
+    // Route::get('/attach_category_into_products', 'Website\TestController@attach_category_into_products');
 
-    Route::get('/product_and_category_upload', 'Website\TestController@product_and_category_upload');
+    // Route::get('/product_and_category_upload', 'Website\TestController@product_and_category_upload');
     // Route::get('/upload_categories', 'Website\TestController@upload_categories');
-    Route::get('/set_category_image', 'Website\TestController@set_category_image');
-    Route::get('/set_nav_category', 'Website\TestController@set_nav_category');
+    // Route::get('/set_category_image', 'Website\TestController@set_category_image');
+    // Route::get('/set_nav_category', 'Website\TestController@set_nav_category');
 
-    Route::get('/upload_product_list', 'Website\TestController@upload_product_list');
-    Route::get('/upload_product', 'Website\TestController@upload_product');
+    // Route::get('/upload_product_list', 'Website\TestController@upload_product_list');
+    // Route::get('/upload_product', 'Website\TestController@upload_product');
 });
 
 Route::post('verify-user-otp', [\App\Modules\Auth\Controller::class, 'VerifyOtp']);
@@ -90,7 +80,7 @@ Route::post('/custom-auth', function () {
     return '';
 });
 
-Route::view('email', 'mails.order_success', ["order" => $order_details = \App\Modules\WebsiteApi\Order\Actions\GetSingleOrderDetails::execute("ETEK280933206")]);
+Route::view('email', 'mails.order_success', ["order" => \App\Modules\WebsiteApi\Order\Actions\GetSingleOrderDetails::execute("ETEK280933206")]);
 
 Route::group([
     'prefix' => '',
@@ -100,78 +90,5 @@ Route::group([
     Route::get('/resize/cache/{file_name}', 'AssetController@cache_resize')->where('file_name', '.*');
 });
 
-Route::get('/c-products', function () {
-    $products = \App\Modules\ProductManagement\Product\Models\Model::with('product_image','product_images','product_categories','product_brand')
-        ->limit(50)->get();
-    return $products;
-});
-Route::get('/c-set', function () {
-    $products = \App\Modules\ProductManagement\Product\Models\Model::with('product_image','product_images','product_categories','product_brand')
-        ->limit(50)->get();
-    Cache::put('products', $products, (5 * 60));
-});
-Route::get('/c-get', function () {
-    return Cache::get('products');
-});
-
 require_once __DIR__ . '/ssl_route.php';
 require_once __DIR__ . '/test_route.php';
-
-
-// Route::get('/tt', function () {
-
-//     Storage::disk('etek')->putFileAs("uploads/banner", public_path("avatar.png"), "shefat-text.png");
-
-//     return 0;
-//     $images = DB::table('product_images')
-//         ->where('url', 'LIKE', '%\%20%')
-//         // ->where('product_id', 67553)
-//         // ->take(2)
-//         ->get();
-
-//     foreach ($images as $key => $image) {
-//         $currentFilePath = public_path($image->url);
-//         $newFileName = str_replace('%20', '-', basename($currentFilePath)); // Replace '%20' with '-'
-//         $newFilePath = dirname($currentFilePath) . '/' . $newFileName;
-
-//         if (rename($currentFilePath, $newFilePath)) {
-//             DB::table('product_images')
-//                 ->where('id', $image->id)
-//                 ->update([
-//                     'url' => "uploads/products/".$image->product_id."/".$newFileName,
-//                 ]);
-//             echo "File renamed successfully to: $newFilePath </br>";
-//         } else {
-//             echo "<mark>Failed to rename file.</mark>";
-//         }
-//         // dd($newFileName, $newFilePath);
-//     }
-//     // dd($images);
-// });
-// Route::get('/t', function () {
-//     function readAllFilesFromFolder($directory)
-//     {
-//         $files = [];
-//         $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory));
-//         foreach ($iterator as $file) {
-//             if ($file->isDir()) {
-//                 continue;
-//             }
-//             $files[] = str_replace('\\', '/', $file->getPathname());
-//         }
-//         return $files;
-//     }
-//     $directory = public_path('uploads/files');
-//     $fileList = readAllFilesFromFolder($directory);
-
-//     foreach ($fileList as $currentFilePath) {
-//         $newFileName = str_replace('%20', '-', basename($currentFilePath)); // Replace '%20' with '-'
-//         $newFilePath = dirname($currentFilePath) . '/' . $newFileName;
-//         if (rename($currentFilePath, $newFilePath)) {
-//             echo "File renamed successfully to: $newFilePath";
-//         } else {
-//             echo "Failed to rename file.";
-//         }
-//     }
-//     dd($fileList);
-// });

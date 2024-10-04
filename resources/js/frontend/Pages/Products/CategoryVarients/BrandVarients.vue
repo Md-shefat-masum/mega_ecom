@@ -1,9 +1,10 @@
 <template>
 
-    <div class="mb-3 bg-white card filter_card">
+    <div class="mb-3 bg-white card filter_card" 
+        v-if="product_category_wise_brands && product_category_wise_brands.length">
         <div @click.prevent="toggle_list" class="card-header bg-white d-flex justify-content-between">
             <b>
-                brand
+                Brand
             </b>
             <b>
                 <i class="fa filter_toggler fa-angle-down"></i>
@@ -21,7 +22,7 @@
                                 :for="`brand` + brand.id">
                                 <span class="d-flex justify-content-between">
                                     <span>{{ brand.title }}</span>
-                                    <span>({{ brand.product_category_brands_sum_total_product }})</span>
+                                    <span>({{ brand.total_products }})</span>
                                 </span>
                             </label>
                         </div>

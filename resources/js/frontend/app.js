@@ -14,7 +14,13 @@ import axios from "axios";
 
 const pinia = createPinia();
 
-window.page_data = () => JSON.parse(document.querySelector('#app').dataset.page);
+window.page_data = () => {
+    try {
+        return JSON.parse(document.querySelector('#app').dataset.page);
+    } catch (error) {
+        return {};
+    }
+};
 
 window.set_default_data = async function () {
     let auth_stores = auth_store();

@@ -5,7 +5,7 @@
             <div class="cart_top">
                 <h3>
                     CART
-                    <span style="font-size: 16px;">
+                    <span style="font-size: 13px;">
                         ({{ carts.length }} Items)
                     </span>
 

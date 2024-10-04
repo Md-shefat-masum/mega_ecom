@@ -2,7 +2,9 @@
 @import "./modules/banner";
 @import "./modules/container";
 @import "./modules/header_top_login";
+
 @import "./modules/header";
+@import "./modules/header_top";
 
 @import "./modules/all_category_component";
 @import "./modules/left_categories";
@@ -24,3 +26,6 @@
 
 @import "./modules/invoice";
 @import "./modules/category_page_banners";
+
+@import "./modules/category_page_filter";
+

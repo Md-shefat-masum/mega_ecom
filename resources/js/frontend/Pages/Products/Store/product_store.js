@@ -11,6 +11,8 @@ export const product_store = defineStore("product_store", {
         category: {},
         childrens: [],
         advertise: null,
+        paginate: 32,
+        priceOrderByType: "ASC",
         bread_cumb: [
             {
                 title: 'category',
@@ -32,10 +34,6 @@ export const product_store = defineStore("product_store", {
     }),
     getters: {},
     actions: {
-        /**
-        ## Product information
-        ## start
-        **/
         get_all_top_offer_products_by_offer_id: async function (url) {
             if (url) {
                 let response = await axios.get(url);
@@ -46,8 +44,6 @@ export const product_store = defineStore("product_store", {
                     this.products = response.data.data
                 }
             }
-
-            // console.log(this.search_data)
         },
         get_all_products_and_single_group_by_category_group_id: async function (url) {
             if (url) {
@@ -59,8 +55,6 @@ export const product_store = defineStore("product_store", {
                     this.products = response.data.data
                 }
             }
-
-            // console.log(this.search_data)
         },
         get_product_category_varients: async function (slug) {
             let response = await axios.get(`/get-product-category-varients/${slug}`, {
@@ -85,11 +79,6 @@ export const product_store = defineStore("product_store", {
                 this.max_price = response.data.data?.max_price
             }
         },
-        /**
-        ## Product information
-        ## end
-        **/
-
         get_products_by_category_id: async function (url) {
             if (url) {
                 let response = await axios.get(url);
@@ -97,10 +86,13 @@ export const product_store = defineStore("product_store", {
             } else {
                 let set_query_params = new URL(location.origin + `/api/v1/get-all-products-by-category-id-with-verient-and-brand/${this.slug}`);
                 set_query_params.searchParams.set('page', 1);
+                set_query_params.searchParams.set('priceOrderByType', this.priceOrderByType);
+                set_query_params.searchParams.set('paginate', this.paginate);
 
                 if (this.variant_values_id.length > 0) {
                     set_query_params.searchParams.set('variant_values_id', this.variant_values_id.join(','));
                 }
+
                 if (this.brand_id.length > 0) {
                     set_query_params.searchParams.set('brand_id', this.brand_id.join(','));
                 }
@@ -113,23 +105,26 @@ export const product_store = defineStore("product_store", {
                 let res = await axios.get(set_query_params.href);
                 let data = res.data;
 
-                this.category = data.category;
-                this.products = data.products;
-                this.advertise = res.data.advertise;
-                this.childrens = res.data.childrens;
+                this.set_category_data(data);
+            }
+        },
 
-                if (data.min_price < this.price_range.min_price) {
-                    this.price_range.min_price = data.min_price
-                }
+        set_category_data: function (data) {
+            this.category = data.category;
+            this.products = data.products;
+            this.advertise = data.advertise;
+            this.childrens = data.childrens;
 
-                if (data.max_price > this.price_range.max_price) {
-                    this.price_range.max_price = data.max_price
-                }
-                this.min_price = res.data.min_price
-                this.max_price = res.data.max_price
-
+            if (data.min_price < this.price_range.min_price) {
+                this.price_range.min_price = data.min_price;
             }
 
+            if (data.max_price > this.price_range.max_price) {
+                this.price_range.max_price = data.max_price;
+            }
+
+            this.min_price = data.min_price;
+            this.max_price = data.max_price;
         },
 
         set_bread_cumb: function () {
@@ -173,21 +168,23 @@ export const product_store = defineStore("product_store", {
         load_product: async function (link) {
             try {
                 let link_url = new URL(location.origin + link.url);
+                let page = link_url.searchParams.get('page');
 
                 let url = new URL(location.origin + `/api/v1/get-all-products-by-category-id-with-verient-and-brand/${this.slug}`);
-                url.searchParams.set('page', link_url.searchParams.get('page'));
+                url.searchParams.set('page', page);
+
+                window.history.pushState(null, '', `/products/${this.slug}?page=${page}`);
 
                 let res = await axios.get(url.href);
                 this.products = res.data.products;
                 window.scrollTo({
-                    top: 300,
+                    top: 50,
                     behavior: 'smooth'
                 });
             } catch (error) {
                 console.error('Error loading product:', error);
             }
         },
-
 
         set_varient_value_id: function (id) {
             this.min_price = 0
@@ -201,8 +198,9 @@ export const product_store = defineStore("product_store", {
 
         set_brand_id: function (id) {
 
-            this.min_price = 0
-            this.max_price = 0
+            this.min_price = 0;
+            this.max_price = 0;
+
             if (this.brand_id.includes(id)) {
                 this.brand_id.splice(this.brand_id.indexOf(id), 1);
             } else {
@@ -217,7 +215,7 @@ export const product_store = defineStore("product_store", {
                 max_price: max
             }
             this.get_products_by_category_id()
-            console.log(min, max);
+            // console.log(min, max);
         }
 
     }

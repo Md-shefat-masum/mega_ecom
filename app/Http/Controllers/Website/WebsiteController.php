@@ -44,6 +44,17 @@ class WebsiteController extends Controller
         return Inertia::render('Home/Index', $data);
     }
 
+    public function mobile_search()
+    {
+        return Inertia::render('MobileSearch/Index', [
+            'event' => [
+                'title' => 'ETEK - Search',
+                'image' => 'https://etek.com.bd/cache/frontend/images/etek_logo.png',
+                'description' => 'Best eCommerce in bangladesh'
+            ]
+        ]);
+    }
+
     public function blogs()
     {
         return Inertia::render('Blogs/Index', [
@@ -68,12 +79,14 @@ class WebsiteController extends Controller
 
     public function products($slug)
     {
-        $category = DB::table('product_categories')->select('title', 'slug')->where('slug', $slug)->first();
+        // $category = DB::table('product_categories')->select('title', 'slug')->where('slug', $slug)->first();
+        $data = \App\Modules\WebsiteApi\Product\Actions\GetAllProductsByCategoryIdWithVerientAndBrand::execute($slug);
 
         $page = request()->page ? request()->page : 1;
         return Inertia::render('Products/Index', [
             'slug' => $slug,
             'page' => $page,
+            'data' => $data,
             'event' => [
                 'title' => $category->title ?? 'ETEK - Products' . ' price in bangladesh',
                 'image' => 'https://etek.com.bd/cache/frontend/images/etek_logo.png',

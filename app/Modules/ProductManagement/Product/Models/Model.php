@@ -5,7 +5,7 @@ namespace App\Modules\ProductManagement\Product\Models;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-
+use \App\Modules\ProductManagement\Product\Models\ProductCategoryProductModel;
 class Model extends EloquentModel
 {
     static $productCategoryModel = \App\Modules\ProductManagement\ProductCategory\Models\Model::class;
@@ -16,6 +16,7 @@ class Model extends EloquentModel
     static $ProductRegionModel = \App\Modules\ProductManagement\Product\Models\ProductRegionModel::class;
     static $relatedCompareProductModel = \App\Modules\ProductManagement\Product\Models\RelatedCompareProductModel::class;
     static $ProductModel = \App\Modules\ProductManagement\Product\Models\Model::class;
+
     static $ProductReviewModel = \App\Modules\WebsiteApi\ProductReview\Models\Model::class;
     static $productCategoryBrandModel = \App\Modules\ProductManagement\Product\Models\ProductCategoryBrandModel::class;
     static $ProductReviewImageModel = \App\Modules\WebsiteApi\ProductReview\Models\ReviewImageModel::class;
@@ -71,6 +72,12 @@ class Model extends EloquentModel
     {
         return $this->belongsToMany(self::$productCategoryModel, 'product_category_products', 'product_id', 'product_category_id');
     }
+
+    public function product_category_many_though()
+    {
+        return $this->hasOneThrough(self::$productCategoryModel, ProductCategoryProductModel::class, 'product_category_id', 'id', 'id', 'product_id');
+    }
+
     public function product_category_group_products()
     {
         return $this->belongsToMany(self::$productCategoryGroupModel, 'product_category_products', 'product_id', 'product_category_group_id',  'id');
@@ -114,7 +121,6 @@ class Model extends EloquentModel
     {
         return $this->hasOne(self::$MedicineProductVerientModel, 'product_id', 'id');
     }
-
 
     public function related_compare_products()
     {

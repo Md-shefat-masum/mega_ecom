@@ -61,7 +61,7 @@
     .side_cart_item {
         padding: 15px 0px;
 
-        @media (min-width: 992px){
+        @media (min-width: 992px) {
             display: flex;
             gap: 10px;
             justify-content: space-between;
@@ -167,18 +167,18 @@
     font-size: 14px;
     text-align: right;
 
-    .checkout_cart_total_title{
+    .checkout_cart_total_title {
         color: #767a7a;
     }
 
-    .checkout_cart_total_amount{
+    .checkout_cart_total_amount {
         width: 100px;
         white-space: nowrap;
         color: #16346d;
     }
 }
 
-@media (max-width: 499.9px) {
+@media (max-width: 574.9px) {
     .add_to_cart.right {
         width: 100vw;
         right: -100vw;
@@ -198,29 +198,39 @@
     .add_to_cart.left .cart-inner .cart_media .cart_total,
     .add_to_cart.right .cart-inner .cart_media .cart_total {
         width: calc(100vw - 38px);
-        bottom: 7px;
+        bottom: 53px;
         padding: 8px;
     }
 
-    .add_to_cart .cart-inner .cart_media ul.cart_total li .total {
-        border-top: 0;
-        margin-top: 0;
-        padding-top: 0;
-        padding-bottom: 0;
-        font-size: 18px;
-        font-weight: 600;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+    .add_to_cart .cart-inner {
+        .cart-total {
+            margin-bottom: 10px;
+        }
+
+        .cart_media ul.cart_total li .total {
+            border-top: 0;
+            margin-top: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
     }
 
     .cart_scroll {
-        max-height: calc(100vh - 153px);
+        max-height: calc(100vh - 180px);
 
     }
 
     .active_price {
         font-size: 14px;
+    }
+
+    .cart_quantity_wraper {
+        justify-content: flex-end;
     }
 }
 

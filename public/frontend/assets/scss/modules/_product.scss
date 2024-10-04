@@ -5,6 +5,16 @@
     overflow: hidden;
     max-width: 250px;
 
+    @media (max-width: 574.9px) {
+        background-color: transparent;
+        border-radius: 10px;
+
+        &::after,
+        &::before{
+            display: none;
+        }
+    }
+
     &::after {
         content: '';
         width: 100%;
@@ -72,7 +82,7 @@
             height: 226px;
 
             @media (min-width: 320px) and (max-width: 400px) {
-                height: 150px;
+                height: 170px;
             }
 
             @media (min-width: 400px) and (max-width: 575px) {
@@ -104,6 +114,9 @@
                     bottom: 3px;
                     opacity: 1;
                     visibility: visible;
+                    width: 97%;
+                    display: flex;
+                    justify-content: center;
                 }
             }
         }
@@ -176,6 +189,10 @@
 
     &:hover {
         background-color: #f15838;
+    }
+
+    @media (max-width: 574.9px) {
+        display: none !important;
     }
 }
 

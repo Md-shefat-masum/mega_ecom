@@ -19,10 +19,16 @@ use App\Modules\WebsiteApi\Product\Actions\GetProductCategoryVarients;
 use App\Modules\WebsiteApi\Product\Actions\GetProductCategoryWiseBrands;
 use App\Modules\WebsiteApi\Product\Actions\GetAllProductsByCategoryIdWithVerientAndBrand;
 use App\Modules\WebsiteApi\Product\Actions\GetRelatedGenericProduct;
+use App\Modules\WebsiteApi\Product\Actions\SearchProducts;
 
 class Controller extends ControllersController
 {
 
+    public function SearchProducts()
+    {
+        $data = SearchProducts::execute();
+        return entityResponse($data);
+    }
     public function GetAllProduct()
     {
         $data = GetAllProduct::execute();
@@ -100,6 +106,10 @@ class Controller extends ControllersController
     public function GetAllProductsByCategoryIdWithVerientAndBrand($slug)
     {
         $data = GetAllProductsByCategoryIdWithVerientAndBrand::execute($slug);
-        return $data;
+        return response()
+                ->json($data)
+                ->header('Cache-Control', 'public, max-age=300')
+                ->header('Expires', now()->addMinutes(60)
+                ->toRfc7231String());
     }
 }

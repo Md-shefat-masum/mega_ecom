@@ -1,6 +1,5 @@
 <template>
     <header>
-
         <!-- middle part -->
         <div class="layout-header2">
             <div class="custom-container">
@@ -52,7 +51,6 @@
                 </div>
             </div>
         </div>
-
     </header>
 </template>
 

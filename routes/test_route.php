@@ -1,24 +1,29 @@
 <?php
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 Route::get('/set-question', function () {
+    return 0;
     DB::table('product_questions')->update(['is_approved' => 1]);
 });
 
 Route::get('/set-is-available', function () {
+    return 0;
     $data =  DB::table('products')->where('purchase_price', 0)->update(['is_available' => 0]);
 });
 Route::get('/pget', function () {
+    return 0;
     $data =  DB::table('products')->where('id', 184)->first();
     return $data;
 });
 
 Route::get('/fixed-discount-product', function () {
+    return 0;
     $products = DB::table('products')->select('id', 'customer_sales_price', 'discount_amount')->get();
 
     foreach ($products as $product) {
@@ -32,6 +37,7 @@ Route::get('/fixed-discount-product', function () {
 });
 
 Route::get('/set-related-products', function () {
+    return 0;
     DB::table('related_product')->truncate();
     for ($i = 1; $i <= 10; $i++) {
         DB::table('related_product')->insert([
@@ -41,6 +47,7 @@ Route::get('/set-related-products', function () {
     }
 });
 Route::get('/set-related-compare-products', function () {
+    return 0;
     DB::table('related_compare_product')->truncate();
     for ($i = 1; $i <= 10; $i++) {
         DB::table('related_compare_product')->insert([
@@ -51,6 +58,7 @@ Route::get('/set-related-compare-products', function () {
 });
 
 Route::get('/set-related-price-review-products', function () {
+    return 0;
     DB::table('price_review_product')->truncate();
     for ($i = 1; $i <= 10; $i++) {
         DB::table('price_review_product')->insert([
@@ -61,12 +69,14 @@ Route::get('/set-related-price-review-products', function () {
 });
 
 Route::get('/update-category-group-id', function () {
+    return 0;
     DB::table('product_category_products')->where('id', '>', '0')->update([
         'product_category_group_id' => 3,
     ]);
 });
 
 Route::get('/offer-product-create', function () {
+    return 0;
     DB::table('product_offer_product')->truncate();
     for ($i = 1; $i <= 100; $i++) {
         DB::table('product_offer_product')->insert([
@@ -78,6 +88,7 @@ Route::get('/offer-product-create', function () {
 
 
 Route::get('/product-category-brands', function () {
+    return 0;
     $model = \App\Modules\ProductManagement\ProductCategory\Models\Model::class;
     DB::table('product_category_brand')->truncate();
     $category = $model::with('products')->first();
@@ -108,12 +119,6 @@ Route::get('/product-category-brands', function () {
     }
 });
 
-Route::get('/product_category_varient', function () {
-    DB::table('product_category_varient')->where('product_category_id', 2)->update([
-        'product_category_id' => 1
-    ]);
-});
-
 
 Route::group([
     'prefix' => '',
@@ -133,14 +138,121 @@ Route::group([
 //     ]);
 // });
 
-
-// Route::get('/undefined', function () {
-// });
-// Route::get('/null', function () {
-// });
+Route::get('/undefined', function () {
+});
+Route::get('/null', function () {
+});
 Route::get('/f', function () {
-    Storage::disk('project_upload')->putFileAs("ehsan", public_path("uploads/products/-CW-9060039-WW-Gallery-H100i-RGB-PLATINUM-01-228x228.png"), "new.png");
+    // Storage::disk('project_upload')->putFileAs("ehsan", public_path("uploads/products/-CW-9060039-WW-Gallery-H100i-RGB-PLATINUM-01-228x228.png"), "new.png");
 });
 // Route::get('/role', function () {
 //  dd(config('role.customer'));
 // });
+
+Route::get('update-category-brand', function () {
+    return;
+    ini_set('max_execution_time', 99999999999999);
+    $category_brand = \App\Modules\ProductManagement\Product\Models\ProductCategoryBrandModel::class;
+    $categoryModel = \App\Modules\ProductManagement\ProductCategory\Models\Model::class;
+    // $brands = \App\Modules\ProductManagement\ProductBrand\Models\Model::select('id', 'title')->get();
+
+    $seleced_category = $categoryModel::where('slug', request()->slug)->first();
+    
+    if(!$seleced_category){
+        return 0;
+    }
+
+    $products = $seleced_category->products()
+        ->select([
+            'products.id',
+            'products.product_brand_id',
+        ])->get();
+        
+    $products = $products->unique('product_brand_id');
+
+    // dd($products->count());
+
+    foreach ($products as $key => $product) {
+        $check = $category_brand::where('product_category_id', $seleced_category->id)
+            ->where('product_brand_id', $product->product_brand_id)
+            ->first();
+
+        $total_product = $seleced_category->products()
+            ->select('id', 'product_brand_id')
+            ->where('product_brand_id', $product->product_brand_id)
+            ->count();
+
+        if ($check) {
+            $check->total_product = $total_product;
+            $check->save();
+        } else {
+            $category_brand::insert([
+                'product_category_id' => $seleced_category->id,
+                'product_brand_id' => $product->product_brand_id,
+                'total_product' => $total_product,
+            ]);
+        }
+    }
+});
+
+Route::get('/cache_clear',function(){
+    Cache::clear();
+});
+
+Route::get('/makeparent',function(){
+    $categoryModel = \App\Modules\ProductManagement\ProductCategory\Models\Model::class;
+    $cats = $categoryModel::where('parent_id',0)->get();
+    foreach ($cats as $item) {
+        $s_cats = $item->all_childrens()->get()->toArray();
+        $child_ids = collect($s_cats)->pluck('id');
+
+        foreach ($child_ids as $cat_id) {
+            $item = $categoryModel::where('id', $cat_id)->first();
+            try {
+                if(!$item->image){
+                    $product = $item->products()->first();
+                    $url = $product->product_image()->first()->url;
+                    $item->image = $url;
+                    $item->save();
+                }
+            } catch (\Throwable $th) {
+    
+                // $product = $item->products()->skip(1)->first();
+                // $url = $product->product_image()->first()->url;
+                // $item->image = $url;
+                // $item->save();
+                throw $th;
+            }
+    
+            // dd($item);
+        }
+    }
+
+    // dd($cats->toArray());
+});
+
+Route::get('/set-category-image',function(){
+    $categoryModel = \App\Modules\ProductManagement\ProductCategory\Models\Model::class;
+    $category = $categoryModel::where('slug', request()->slug)->with('all_childrens')->first()->toArray();
+    
+    $child_ids = collect($category['all_childrens'])->pluck('id');
+
+    foreach ($child_ids as $cat_id) {
+        $item = $categoryModel::where('id', $cat_id)->first();
+        try {
+            $product = $item->products()->first();
+            $url = $product->product_image()->first()->url;
+            $item->image = $url;
+            $item->save();
+        } catch (\Throwable $th) {
+
+            // $product = $item->products()->skip(1)->first();
+            // $url = $product->product_image()->first()->url;
+            // $item->image = $url;
+            // $item->save();
+            // throw $th;
+        }
+
+        // dd($item);
+    }
+})->name('route name');

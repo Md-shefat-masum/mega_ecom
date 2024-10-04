@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
 
+    Route::get('search-products', [Controller::class, 'SearchProducts']);
+
     Route::get('get-all-products', [Controller::class, 'GetAllProduct']);
     Route::get('get-all-best-selling-products', [Controller::class, 'GetAllBestSellingProduct']);
 

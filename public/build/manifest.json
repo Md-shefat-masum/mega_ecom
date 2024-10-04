@@ -2,9 +2,6 @@
   "__plugin-vue_export-helper-56175140.js": {
     "file": "assets/_plugin-vue_export-helper-56175140.js"
   },
-  "__plugin-vue_export-helper-6e2395e8.js": {
-    "file": "assets/_plugin-vue_export-helper-6e2395e8.js"
-  },
   "resources/js/backend/app.js": {
     "file": "assets/app-498d893a.js",
     "imports": [
@@ -21,7 +18,7 @@
     "css": [
       "assets/app-9ceff546.css"
     ],
-    "file": "assets/app-e528a754.js",
+    "file": "assets/app-2d18d27f.js",
     "imports": [
       "__plugin-vue_export-helper-56175140.js"
     ],

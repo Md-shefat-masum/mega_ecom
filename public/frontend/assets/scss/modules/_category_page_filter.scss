@@ -1,0 +1,32 @@
+.category_filter_search {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 10px 15px;
+
+    input,
+    button {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 574.9px) {
+    .category_filter_col {
+        padding: 0;
+
+        .top-bar {
+            margin-bottom: 0;
+            padding: 5px 10px;
+            border-radius: 0;
+            width: calc(100% + 7px);
+            margin-left: -5px;
+            position: fixed;
+            left: 0;
+            top: 45px;
+            left: 0;
+            z-index: 99;
+            border-top: 1px solid #80808014;
+        }
+    }
+}

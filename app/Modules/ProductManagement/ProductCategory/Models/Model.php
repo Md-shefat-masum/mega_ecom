@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Support\Str;
 use App\Modules\ProductManagement\ProductCategoryWiseAdvertise\Models\Model as AdvertiseModel;
 use App\Modules\ProductManagement\ProductCategoryGroup\Models\Model as ProductCategoryGroup;
+use \App\Modules\ProductManagement\ProductBrand\Models\Model as ProductBrand;
+use \App\Modules\ProductManagement\Product\Models\Model as Product;
 
 class Model extends EloquentModel
 {
@@ -73,4 +75,5 @@ class Model extends EloquentModel
     {
         return $q->where('status', 'inactive');
     }
+
 }
