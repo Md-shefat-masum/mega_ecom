@@ -54,7 +54,7 @@ export default {
                 // console.log(this.slider.noUiSlider.get());
                 min_price = parseInt(min_price);
                 max_price = parseInt(max_price);
-                
+
                 that.input_min = min_price;
                 that.input_max = max_price;
                 that.$refs.input_min.value = min_price;
@@ -75,7 +75,7 @@ export default {
             if(value < this.min_price){
                 value = this.min_price;
             }
-             
+
             if(value >= this.max_price - 100){
                 value = this.min_price;
             }
@@ -95,15 +95,15 @@ export default {
             if(value > this.max_price ){
                 value = this.max_price;
             }
-            
+
             if(value <= this.min_price + 100){
                 value = this.max_price;
             }
-            
+
             if(value <= this.input_min + 100){
                 value = this.max_price;
             }
-            
+
             e.target.value = value;
             this.input_max = value;
         },
@@ -119,7 +119,7 @@ export default {
                         'min': [+this.min_price],
                         'max': [+this.max_price]
                     }
-                }, 
+                },
                 true
             );
             // this.slider.noUiSlider.set([v, this.max_price]);
@@ -133,7 +133,7 @@ export default {
                         'min': [+this.min_price],
                         'max': [+this.max_price]
                     }
-                }, // Object
+                },
                 true // Boolean 'fireSetEvent'
             );
             // this.slider.noUiSlider.set([this.min_price, v]);

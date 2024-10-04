@@ -33,8 +33,12 @@ class Model extends EloquentModel
 
     public function products()
     {
-        return $this->belongsToMany(self::$productModel,'product_category_products',
-            'product_category_id', 'product_id');
+        return $this->belongsToMany(
+            self::$productModel,
+            'product_category_products',
+            'product_category_id',
+            'product_id'
+        );
     }
 
     public function parent()
@@ -43,7 +47,7 @@ class Model extends EloquentModel
     }
     public function parents()
     {
-        return $this->belongsTo(Model::class, 'parent_id')->with('parents')->select('id','title','parent_id','slug','status','image');
+        return $this->belongsTo(Model::class, 'parent_id')->with('parents')->select('id', 'title', 'parent_id', 'slug', 'status', 'image');
     }
 
     public function group()
@@ -61,6 +65,18 @@ class Model extends EloquentModel
         return $this->hasMany(Model::class, 'parent_id')->with('all_childrens');
     }
 
+    public function all_childrens_selected()
+    {
+        return $this->hasMany(Model::class, 'parent_id')->with('all_childrens_selected')->select([
+            'id',
+            'slug',
+            'title',
+            'image',
+            'parent_id',
+            'status',
+        ]);
+    }
+
     public function advertises()
     {
         return $this->hasMany(AdvertiseModel::class, 'product_category_id');
@@ -75,5 +91,4 @@ class Model extends EloquentModel
     {
         return $q->where('status', 'inactive');
     }
-
 }

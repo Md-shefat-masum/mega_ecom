@@ -5,6 +5,7 @@
         "dev": "vite",
         "build": "vite build",
         "build:watch": "vite build --watch --sourcemap",
+        "serve": "php artisan serve --host 0.0.0.0 --port 8007",
         "scss": "npx sass public/frontend/assets/scss/appstyle.scss public/frontend/assets/css/appstyle.css -w",
         "reload": "php artisan db:wipe && php artisan migrate && php artisan migrate --path=app/Modules/* && php artisan migrate --path=app/Modules/*/* && php artisan migrate --path=app/Modules/*/*/*  && php artisan migrate --path=app/Modules/*/*/*/*  && php artisan db:seed && php artisan passport:install",
         "migrate": "php artisan migrate --path=app/Modules/*/*/*"

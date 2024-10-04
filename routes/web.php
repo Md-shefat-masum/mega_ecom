@@ -18,6 +18,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('/blogs', 'Website\WebsiteController@blogs')->name('website_blogs');
     Route::get('/blog-details/{slug}', 'Website\WebsiteController@blogDetails')->name('website_blog_details');
 
+    Route::get('/products', 'Website\WebsiteController@all_products')->name('search_results');
     Route::get('/products/{slug}', 'Website\WebsiteController@products')->name('website_products');
     Route::get('/category/{slug}', 'Website\WebsiteController@categoryProducts')->name('category_products');
     Route::get('/brand/{slug}', 'Website\WebsiteController@brandProducts')->name('brand_products');
@@ -34,7 +35,6 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('/terms-conditions', 'Website\WebsiteController@terms_conditions')->name('website_terms_conditions');
     Route::get('/returns-exchanges', 'Website\WebsiteController@returns_exchanges')->name('website_returns_exchanges');
     Route::get('/shipping-delivery', 'Website\WebsiteController@shipping_delivery')->name('website_shipping_delivery');
-    Route::get('/search-results', 'Website\WebsiteController@search_results')->name('search_results');
     Route::get('/invoice', 'Website\WebsiteController@invoice');
 
     Route::get('/profile', 'Website\ProfileController@profile')->name('website_profile');

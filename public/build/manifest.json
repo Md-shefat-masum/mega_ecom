@@ -11,14 +11,14 @@
     "src": "resources/js/backend/app.js"
   },
   "resources/js/frontend/app.css": {
-    "file": "assets/app-9ceff546.css",
+    "file": "assets/app-25a1e1b5.css",
     "src": "resources/js/frontend/app.css"
   },
   "resources/js/frontend/app.js": {
     "css": [
-      "assets/app-9ceff546.css"
+      "assets/app-25a1e1b5.css"
     ],
-    "file": "assets/app-2d18d27f.js",
+    "file": "assets/app-a12e64f1.js",
     "imports": [
       "__plugin-vue_export-helper-56175140.js"
     ],

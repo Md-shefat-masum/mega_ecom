@@ -31,8 +31,7 @@ class HandleInertiaRequests extends Middleware
 
     public function share(Request $request): array
     {
-
-        $data = Cache::remember('shared_data', (5 * 60), function () {
+        $settings = Cache::remember('settings', (5 * 60), function () {
             $fields = [
                 'header_logo',
                 'footer_logo',
@@ -86,28 +85,41 @@ class HandleInertiaRequests extends Middleware
                 ])
                 ->get();
 
-            $all_category_parents = \App\Modules\WebsiteApi\Category\Actions\GetAllCategoryParent::execute();
-            $user = null;
-            $all_cart_data = [];
-            $select = ['role_id', 'slug', 'name', 'user_name', 'email', 'phone_number', 'photo', 'id'];
-            if (auth()->check()) {
+            return $settings;
+        });
+
+
+        $user = null;
+        $all_cart_data = [];
+        $select = ['role_id', 'slug', 'name', 'user_name', 'email', 'phone_number', 'photo', 'id'];
+        if (auth()->check()) {
+
+            $all_cart_data = Cache::remember('auth_user_cart_'.auth()->user()->id, (5 * 60), function () use($select) {
+                $all_cart_data = \App\Modules\WebsiteApi\Cart\Actions\All::execute(true);
+                return $all_cart_data;
+            });
+
+            $user = Cache::remember('auth_user_'.auth()->user()->id, (5 * 60), function () use($select) {
                 $user = \App\Modules\UserManagement\User\Models\Model::select($select)
                     ->with('role:id,name,serial')
                     ->where('id', auth()->user()->id)
                     ->first();
                 $user->user_delivery_address = $user->user_delivery_address()->where('is_default', 1)->first();
-                $all_cart_data = \App\Modules\WebsiteApi\Cart\Actions\All::execute(true);
-            }
+                return $user;
+            });
+        }
 
-            $data = [
-                'all_cart_data' => $all_cart_data,
-                'auth' => $user,
-                'settings' => $settings,
-                'all_category_parents' => $all_category_parents,
-            ];
-
-            return $data;
+        $all_category_parents = Cache::remember('all_category_parents', (5 * 60), function () {
+            $all_category_parents = \App\Modules\WebsiteApi\Category\Actions\GetAllCategoryParent::execute();
+            return $all_category_parents;
         });
+
+        $data = [
+            'all_cart_data' => $all_cart_data,
+            'auth' => $user,
+            'settings' => $settings,
+            'all_category_parents' => $all_category_parents,
+        ];
 
         return array_merge(parent::share($request), $data);
     }

@@ -76,14 +76,14 @@
                                                             <div class="product-search-count-bottom">
                                                                 <h5>Showing Products
                                                                     {{
-                    search_result?.product?.from
-                }}
+                                                                    search_result?.product?.from
+                                                                    }}
                                                                     -{{
-                                                                    search_result?.product?.to
+                                                                        search_result?.product?.to
                                                                     }}
                                                                     of
                                                                     {{
-                                                                    search_result?.product?.total
+                                                                        search_result?.product?.total
                                                                     }}
                                                                     Result
                                                                 </h5>

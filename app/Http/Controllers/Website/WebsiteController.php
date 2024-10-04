@@ -14,7 +14,7 @@ class WebsiteController extends Controller
     public function home()
     {
 
-        $data = Cache::remember('home_page', (5 * 60), function(){
+        $data = Cache::remember('home_page', (5 * 60), function () {
             $hero_slider = \App\Modules\WebsiteApi\SliderAndBanner\Actions\HeroSlider::execute();
             // $hero_side_slider = \App\Modules\WebsiteApi\SliderAndBanner\Actions\HeroSliderSideBanner::execute();
             $left_nave_category = \App\Modules\WebsiteApi\Category\Actions\GetAllNavCategory::execute();
@@ -72,6 +72,27 @@ class WebsiteController extends Controller
             'event' => [
                 'title' => 'ETEK - Blog Details',
                 'image' => 'https://etek.com.bd/cache/frontend/images/etek_logo.png',
+                'description' => 'Best eCommerce in bangladesh'
+            ]
+        ]);
+    }
+
+    public function all_products()
+    {
+        $search_key = "";
+        if (request()->has('search_key')) {
+            $search_key = request()->get('search_key');
+        }
+        // $all_products = \App\Modules\WebsiteApi\Product\Actions\GetProducts::execute($search_key);
+
+        // dd($data);
+        return Inertia::render('Products/SearchResults', [
+            'page_search_key' => $search_key,
+            "page" => request()->page,
+            'event' => [
+                // 'all_products' => $all_products,
+                'title' => 'ETEK - Products',
+                'image' => 'https://etek.com.bd/frontend/images/etek_logo.png',
                 'description' => 'Best eCommerce in bangladesh'
             ]
         ]);
@@ -226,17 +247,6 @@ class WebsiteController extends Controller
     public function shipping_Delivery()
     {
         return Inertia::render('ShippingDelivery/Index', [
-            'event' => [
-                'title' => 'ETEK - Shipping & Delivery',
-                'image' => 'https://etek.com.bd/frontend/images/etek_logo.png',
-                'description' => 'Best eCommerce in bangladesh'
-            ]
-        ]);
-    }
-
-    public function search_results()
-    {
-        return Inertia::render('GlobalSearchResult/Index', [
             'event' => [
                 'title' => 'ETEK - Shipping & Delivery',
                 'image' => 'https://etek.com.bd/frontend/images/etek_logo.png',

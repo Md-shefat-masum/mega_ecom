@@ -18,6 +18,8 @@ use App\Modules\WebsiteApi\Product\Actions\GetSingleCategoryGroupWithProduct;
 use App\Modules\WebsiteApi\Product\Actions\GetProductCategoryVarients;
 use App\Modules\WebsiteApi\Product\Actions\GetProductCategoryWiseBrands;
 use App\Modules\WebsiteApi\Product\Actions\GetAllProductsByCategoryIdWithVerientAndBrand;
+use App\Modules\WebsiteApi\Product\Actions\GetBrandsByProduct;
+use App\Modules\WebsiteApi\Product\Actions\GetProducts;
 use App\Modules\WebsiteApi\Product\Actions\GetRelatedGenericProduct;
 use App\Modules\WebsiteApi\Product\Actions\SearchProducts;
 
@@ -28,6 +30,29 @@ class Controller extends ControllersController
     {
         $data = SearchProducts::execute();
         return entityResponse($data);
+    }
+    public function GetProducts()
+    {
+        $data = GetProducts::execute();
+        return response()
+                ->json($data)
+                ->header('Cache-Control', 'public, max-age=300')
+                ->header('Expires', now()->addMinutes(60)
+                ->toRfc7231String());
+    }
+    public function GetBrandsByProduct()
+    {
+        $data = GetBrandsByProduct::execute();
+        return response()
+                ->json([
+                    "data" => $data,
+                    "status" => "success",
+                    "statusCode" => 200,
+                    "message" => ""
+                ]);
+                // ->header('Cache-Control', 'public, max-age=300')
+                // ->header('Expires', now()->addMinutes(60)
+                // ->toRfc7231String());
     }
     public function GetAllProduct()
     {

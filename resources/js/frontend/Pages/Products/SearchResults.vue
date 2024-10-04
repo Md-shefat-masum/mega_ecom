@@ -2,16 +2,16 @@
     <Layout>
 
         <Head>
-            <title>{{ category.title }} Price in Bangladesh</title>
+            <title>{{ search_key || 'Product' }}  Prices in Bangladesh</title>
         </Head>
 
         <div class="breadcrumb-main py-3" v-if="window_width >= 575">
             <div class="custom-container">
-                <BreadCumb :bread_cumb="bread_cumb" />
+                <BreadCumb :bread_cumb="[{title: 'products', url: '/products'}]" />
             </div>
         </div>
 
-        <section class="category_page_header" v-if="window_width >= 575 && (category.page_header_title || childrens?.length)">
+        <!-- <section class="category_page_header" v-if="window_width >= 575 && (category.page_header_title || childrens?.length)">
             <div class="custom-container">
                 <h2 class="page_header_title" v-if="category.page_header_title">
                     {{ category.page_header_title }}
@@ -26,7 +26,7 @@
                     </li>
                 </ul>
             </div>
-        </section>
+        </section> -->
 
         <section class="section-big-pt-space ratio_asos b-g-light">
             <div class="collection-wrapper">
@@ -51,7 +51,7 @@
                                 </div>
                                 <PriceRange />
                                 <BrandVarients/>
-                                <AllVarients />
+                                <!-- <AllVarients /> -->
                             </div>
                         </div>
 
@@ -65,7 +65,7 @@
                                             <div class="row">
                                                 <div class="col-sm-4 col-xs-2 actions">
                                                     <label class="page-heading m-hide">
-                                                        {{ category.title }}
+                                                        Products
                                                     </label>
                                                 </div>
                                                 <div class="col-sm-8 col-xs-10 show-sort">
@@ -90,7 +90,6 @@
                                                         <label class="rs-none">Sort By:</label>
                                                         <div class="custom-select">
                                                             <select id="input-sort" v-model="priceOrderByType">
-                                                                <option value="ASC">Default</option>
                                                                 <option value="ASC">
                                                                     Price (Low &gt; High)
                                                                 </option>
@@ -104,13 +103,14 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 product_category_list_col">
+
+                                    <div v-if="loaded" class="col-sm-12 product_category_list_col">
 
                                         <div class="collection-product-wrapper">
 
                                             <div class="py-4">
                                                 <div class="product_list"
-                                                    :class="{ product_left: products.data?.length < 5 }">
+                                                    :class="{ product_left: products?.data?.length < 5 }">
                                                     <div v-for="i in products.data" :key="i.id">
                                                         <ProductItem :product="i" />
                                                     </div>
@@ -128,7 +128,7 @@
                                                                         v-for="(link, index) in products.links"
                                                                         :key="index">
                                                                         <a :href="link.url"
-                                                                            @click.prevent="load_product(link)"
+                                                                            @click.prevent="load_all_product(link)"
                                                                             class="page-link text_no_wrap">
                                                                             <span v-html="link.label"></span>
                                                                         </a>
@@ -159,6 +159,11 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div v-else class=" py-5 text-center">
+                                        <img src="/loader.gif" style="height: 40px;" />
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -176,17 +181,13 @@ import PriceRange from "./CategoryVarients/PriceRange.vue";
 import BrandVarients from "./CategoryVarients/BrandVarients.vue";
 import AllVarients from "./CategoryVarients/AllVarients.vue";
 import ProductItem from "../../Components/ProductItem.vue";
-
 import BreadCumb from '../../Components/BreadCumb.vue';
 import { product_store } from "./Store/product_store.js"
 import { mapActions, mapState, mapWritableState } from 'pinia';
-
 import Skeleton from '../../Components/Skeleton.vue';
 import ProductCardSkeleton from '../../Components/Skeliton/ProductCardSkeleton.vue';
-
 import PageBanner from "./Components/PageBanner.vue";
-
-import debounce from 'debounce'
+import { use_global_search_store } from "../GlobalSearchResult/Store/global_search_store.js"
 
 export default {
     components: {
@@ -196,43 +197,34 @@ export default {
         PageBanner,
     },
     props: [
-        'slug',
-        'page',
-        'data',
+        'page_search_key',
+        "page",
     ],
 
     data: () => ({
-        preloader: true
+
     }),
 
-    setup(props) {
-        let use_product_store = product_store();
-        use_product_store.slug = props.slug;
-    },
-
     created: function () {
+        this.search_key = this.page_search_key;
         this.set_page(this.page);
-        if (this.data?.products) {
-            this.set_category_data(this.data);
-        }
+        this.topbar_search_key = "";
     },
 
     mounted: async function () {
-        // await this.get_products_by_category_id();
-        this.set_bread_cumb();
-        this.get_product_category_wise_brands(this.slug);
-        this.get_product_category_varients(this.slug);
+        this.get_product_brands();
+        await this.get_products();
+        this.loaded  = true;
     },
     methods: {
         ...mapActions(product_store, {
-            get_products_by_category_id: "get_products_by_category_id",
-            get_product_category_varients: "get_product_category_varients",
-            get_product_category_wise_brands: "get_product_category_wise_brands",
-            load_product: "load_product",
+            get_products: "get_products",
+            load_all_product: "load_all_product",
             set_bread_cumb: "set_bread_cumb",
             get_min_max_price: "get_min_max_price",
             set_category_data: "set_category_data",
             set_page: "set_page",
+            get_product_brands: "get_product_brands",
         }),
 
         toggle_list: function () {
@@ -252,26 +244,34 @@ export default {
             preloader: true,
             priceOrderByType: "priceOrderByType",
             paginate: "paginate",
+            slug: "slug",
+            search_key: "search_key",
+            loaded: "loaded",
+        }),
+        ...mapWritableState(use_global_search_store , {
+            topbar_search_key: "search_key",
         }),
         window_width: () => window.innerWidth,
     },
 
     watch: {
         paginate: function(){
-            this.get_products_by_category_id();
+            this.set_page(1);
+            this.get_products();
         },
         priceOrderByType: function(){
-            this.get_products_by_category_id();
+            this.set_page(1);
+            this.get_products();
         },
         variant_values_id: {
             handler: function () {
-                this.get_products_by_category_id();
+                this.get_products();
             },
             deep: true
         },
         brand_id: {
             handler: function () {
-                this.get_products_by_category_id();
+                this.get_products();
             },
             deep: true
         },

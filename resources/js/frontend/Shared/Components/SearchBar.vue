@@ -1,7 +1,7 @@
 <template>
 
     <div class="input-box header_search_area">
-        <form class="hungry_coder-form" :action="`/search-results?search_key=${search_key}`">
+        <form class="hungry_coder-form" @submit.prevent="visit_product_page" :action="`/search-results?search_key=${search_key}`">
             <div class="input-group ">
                 <div class="input-group-text">
                     <span class="search"><i class="fa fa-search"></i></span>
@@ -37,8 +37,8 @@
             </div>
 
             <div class="search_items">
-                <div v-if="preloader">
-                    <search-result-skeleton></search-result-skeleton>
+                <div v-if="preloader" class="my-3 text-center">
+                    <img src="/loader.gif" style="height: 30px;" />
                 </div>
                 <template v-else>
                     <div class="products" v-if="search_type == 'products'">
@@ -54,11 +54,18 @@
                                             {{ product.title }}
                                         </h3>
                                         <div v-if="product.is_available" class="price">
-                                            <div class="old">
-                                                {{ get_price(product)?.old_price }}৳
+                                            <div v-if="product.current_discount_price">
+                                                <div class="old">
+                                                    {{ product.current_price }}৳
+                                                </div>
+                                                <div class="new">
+                                                    {{ product.current_discount_price }}৳
+                                                </div>
                                             </div>
-                                            <div class="new">
-                                                {{ get_price(product)?.new_price }}৳
+                                            <div v-else>
+                                                <div class="new">
+                                                    {{ product.current_price }}৳
+                                                </div>
                                             </div>
                                         </div>
                                         <div v-else>
@@ -181,6 +188,7 @@ export default {
     },
     data: () => ({
         search_type: 'products',
+        router,
         // search_key: '',
 
     }),
@@ -193,6 +201,9 @@ export default {
         visit_product: function (url) {
             router.get(url);
             this.reset_search();
+        },
+        visit_product_page: function(){
+            router.visit(`/products?search_key=${this.search_key}`)
         }
     },
     created: function () {
@@ -204,16 +215,6 @@ export default {
             return path.includes('search-results')
         }
     }
-
-    // watch: {
-    //     search_key(newVal) {
-    //         clearTimeout(this.searchTimer);
-    //         this.searchTimer = setTimeout(async () => {
-    //             const global_search_store = use_global_search_store();
-    //             await global_search_store.global_search(newVal);
-    //         }, 1000);
-    //     },
-    // },
 
 }
 </script>

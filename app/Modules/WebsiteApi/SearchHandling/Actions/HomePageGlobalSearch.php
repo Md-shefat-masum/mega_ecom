@@ -18,6 +18,7 @@ class HomePageGlobalSearch
             $product = self::$productModel::with('product_image:product_id,url')
                 ->where(function ($q) use ($searchKey) {
                     $q->where('title', $searchKey)
+                        ->orWhere('title', 'like', '%' . $searchKey)
                         ->orWhere('title', 'like', '%' . $searchKey . '%')
                         ->orWhere('search_keywords', 'like', '%' . $searchKey . '%');
                 })
@@ -26,6 +27,7 @@ class HomePageGlobalSearch
                     'title',
                     'is_available',
                     'customer_sales_price',
+                    'retailer_sales_price',
                     'discount_type',
                     'discount_amount',
                     'slug',
@@ -33,29 +35,10 @@ class HomePageGlobalSearch
                     "type"
                 ])
                 ->where("status", "active")
+                ->where("is_available", "1")
+                ->where("customer_sales_price", '>', "0")
                 ->paginate(request()->paginate ? request()->paginate : 12);
 
-            $product->getCollection()->map(function ($item) {
-                if ($item->type == "medicine") {
-                    $item->medicine_product_verient = $item->medicine_product_verient()->select(
-                        [
-                            "product_id",
-                            "id",
-
-                            "pv_b2c_discount_percent",
-                            "pv_b2c_price",
-                            "pv_b2c_mrp",
-
-                            "pv_b2b_discount_percent",
-                            "pv_b2b_price",
-                            "pv_b2b_mrp",
-                        ]
-                    )->first();
-                    $item->load([
-                        'medicine_product:id,product_id,p_generic_name,p_brand',
-                    ]);
-                }
-            });
 
             $product->appends('search_key', $searchKey);
 

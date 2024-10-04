@@ -13,7 +13,7 @@ class SearchProducts
         try {
 
             $key = request()->key;
-            $pageLimit = request()->input('limit') ?? 40;
+            $pageLimit = request()->input('limit') ?? 100;
             $orderByColumn = request()->input('sort_by_col') ?? 'customer_sales_price';
             $orderByType = request()->input('sort_type') ?? 'asc';
             $status = request()->input('status') ?? 'active';
@@ -41,8 +41,8 @@ class SearchProducts
                 ->where(function ($q) use ($key) {
                     $q->where('title', $key);
                     $q->orWhere('title', 'LIKE', "%" . $key);
+                    $q->orWhere('title', 'LIKE', "%" . $key."%");
                     $q->orWhere('meta_keywords', 'LIKE', "%" . $key . "%");
-                    $q->orWhere('title', 'LIKE', "%" . $key . "%");
                     $q->orWhere(function ($pq) use ($key) {
                         $pq->whereHas('product_brand', function ($bq) use ($key) {
                             $bq->where('title', $key);
@@ -50,41 +50,22 @@ class SearchProducts
                             $bq->orWhere('title', 'LIKE', "%" . $key . "%");
                         });
                     });
-
-                    // slow query
-                    // $q->orWhere(function ($pq) use ($key) {
-                    //     $pq->whereHas('product_category_many_though', function ($cq) use ($key) {
-                    //         $cq->select('product_categories.id','product_categories.title');
-                    //         $cq->orWhere('product_categories.title', $key);
-                    //         $cq->orWhere('product_categories.title', 'LIKE', "%" . $key);
-                    //         $cq->orWhere('product_categories.title', 'LIKE', "%" . $key . "%");
-                    //     });
-                    // });
                 });
+
+            $data
+                ->with($with)
+                ->select($fields)
+                ->where($condition)
+                ->where('status', $status)
+                ->limit($pageLimit)
+                ->orderBy($orderByColumn, $orderByType);
 
             $res_data = Cache::remember(
                 'search_' . $key,
                 (5 * 60),
                 function ()
-                use (
-                    $data,
-                    $with,
-                    $fields,
-                    $condition,
-                    $status,
-                    $pageLimit,
-                    $orderByColumn,
-                    $orderByType
-                ) {
-
-                    return $data
-                        ->with($with)
-                        ->select($fields)
-                        ->where($condition)
-                        ->where('status', $status)
-                        ->limit($pageLimit)
-                        ->orderBy($orderByColumn, $orderByType)
-                        ->get();
+                use ($data) {
+                    return $data->get();
                 }
             );
 
